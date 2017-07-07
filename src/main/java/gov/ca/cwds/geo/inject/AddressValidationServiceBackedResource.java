@@ -11,11 +11,10 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation for binding to our a service backed address validation resource
- * 
+ *
  * @author CWDS API Team
  */
 @BindingAnnotation
 @Target({FIELD, PARAMETER, METHOD})
 @Retention(RUNTIME)
-public @interface AddressValidationServiceBackedResource {
-}
+public @interface AddressValidationServiceBackedResource {}

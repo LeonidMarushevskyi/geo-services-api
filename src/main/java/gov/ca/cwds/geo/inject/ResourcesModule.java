@@ -6,14 +6,14 @@ import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import gov.ca.cwds.geo.GeoServicesApiConfiguration;
 import gov.ca.cwds.geo.service.AddressValidationService;
-import gov.ca.cwds.geo.web.rest.AddressValidationResource;
+import gov.ca.cwds.geo.web.rest.AddressResource;
 import gov.ca.cwds.geo.web.rest.ApplicationResource;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
-import gov.ca.cwds.rest.resources.SwaggerResource;
 
 /**
- * Identifies all GEO Services API domain resource classes available for dependency injection by Guice.
+ * Identifies all GEO Services API domain resource classes available for dependency injection by
+ * Guice.
  *
  * @author TPT2 Team
  */
@@ -27,7 +27,7 @@ public class ResourcesModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(ApplicationResource.class);
-    bind(AddressValidationResource.class);
+    bind(AddressResource.class);
   }
 
   @Provides
@@ -47,5 +47,4 @@ public class ResourcesModule extends AbstractModule {
   public ResourceDelegate addressValidationServiceBackedResource(Injector injector) {
     return new ServiceBackedResourceDelegate(injector.getInstance(AddressValidationService.class));
   }
-
 }

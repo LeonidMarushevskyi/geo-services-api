@@ -22,9 +22,9 @@ server:
 shiro:
   iniConfigs: ["file:${SHIRO_CONFIG_PATH:-config/shiro.ini}"]
 
-smartystreets1:
-  clientId: ${SS_ID:-8721f357-6381-1001-4633-5157e84b68cb}
-  token: ${SS_TOKEN:-Q62NxpgzuBEUq3IalqVx}
+smartystreets:
+  clientId: ${SS_ID:-90a1b85a-b4f4-70cd-9134-14c2b0b7f9a3}
+  token: ${SS_TOKEN:-pCsUCGZ4ufEMjuE0tg3w}
   maxCandidates: ${SS_MAX:-10}
 
 swagger:
@@ -38,5 +38,5 @@ swagger:
   showSwagger: ${SHOW_SWAGGER:-true}
 
 logging:
-  level: ${LOGLEVEL:-WARN}
+  level: ${LOGLEVEL:-INFO}
 

@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Represents the configuration settings for SmartyStreets
- * 
+ *
  * @author CWDS API Team
  */
 public class SmartyStreetsConfig {
@@ -22,25 +22,18 @@ public class SmartyStreetsConfig {
   @JsonProperty("maxCandidates")
   private Integer maxCandidates;
 
-  /**
-   * @return the id
-   */
+  /** @return the id */
   public String getClientId() {
     return clientId;
   }
 
-  /**
-   * @return the token
-   */
+  /** @return the token */
   public String getToken() {
     return token;
   }
 
-  /**
-   * @return the maxCandidates
-   */
+  /** @return the maxCandidates */
   public Integer getMaxCandidates() {
     return maxCandidates;
   }
-
 }

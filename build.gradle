@@ -96,7 +96,7 @@ dependencies {
         exclude group: 'org.glassfish.jersey.core'
     }
 
-    compile group: "com.smartystreets.api", name: "smartystreets-java-sdk", version: "1.0.7"
+    compile group: "com.smartystreets.api", name: "smartystreets-java-sdk", version: "3.0.0"
     compile group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.46'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
     compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.25'
@@ -200,12 +200,6 @@ task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
     doLast {
         println 'Published'
     }
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs = [
-            '-Amapstruct.suppressGeneratorTimestamp=true'
-    ]
 }
 
 processResources {

@@ -7,6 +7,7 @@ import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 
 /**
@@ -15,23 +16,28 @@ import javax.validation.constraints.Size;
  * @author CWDS API Team
  */
 @JsonSnakeCase
-public class ValidatedAddress implements Request, Response {
+public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
   /**
    * Serialization version
    */
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("zip")
-  @ApiModelProperty(example = "95827")
+  @ApiModelProperty(example = "95661")
   private Integer zip;
 
+  @JsonProperty("zip_extension")
+  @ApiModelProperty(value = "Zip Extension", example = "123")
+  @Max(99999)
+  private Integer zipExtension;
+
   @JsonProperty("city")
-  @ApiModelProperty(example = "Sacramento")
+  @ApiModelProperty(example = "Roseville")
   @Size(max = 50)
   private String city;
 
   @JsonProperty("street_address")
-  @ApiModelProperty(example = "9500 Kiefer Blvd")
+  @ApiModelProperty(example = "202 Spurlock Ct")
   @Size(max = 50)
   private String streetAddress;
 
@@ -42,11 +48,11 @@ public class ValidatedAddress implements Request, Response {
   private String state;
 
   @JsonProperty("longitude")
-  @ApiModelProperty(example = "-121.34332")
+  @ApiModelProperty(example = "-121.25118")
   private Double longitude;
 
   @JsonProperty("lattitude")
-  @ApiModelProperty(example = "38.5445")
+  @ApiModelProperty(example = "38.74037")
   private Double lattitude;
 
   @JsonProperty("deliverable")
@@ -61,20 +67,22 @@ public class ValidatedAddress implements Request, Response {
    * @param city The validated city
    * @param state The validated state
    * @param zip The validated zip
+   * @param zipExtension The validated zip
    * @param longitude The longitude
    * @param lattitude The lattitude
    * @param deliverable The smarty street deliverable status
    */
   @JsonCreator
-  public ValidatedAddress(@JsonProperty("street_address") String streetAddress,
+  public ValidatedAddressDTO(@JsonProperty("street_address") String streetAddress,
       @JsonProperty("city") String city, @JsonProperty("state") String state,
-      @JsonProperty("zip") Integer zip, @JsonProperty("longitude") Double longitude,
+      @JsonProperty("zip") Integer zip, @JsonProperty("zip_extension") Integer zipExtension, @JsonProperty("longitude") Double longitude,
       @JsonProperty("lattitude") Double lattitude, @JsonProperty("delivery") Boolean deliverable) {
     super();
     this.streetAddress = streetAddress;
     this.city = city;
     this.state = state;
     this.zip = zip;
+    this.zip = zipExtension;
     this.longitude = longitude;
     this.lattitude = lattitude;
     this.deliverable = deliverable;
@@ -111,6 +119,10 @@ public class ValidatedAddress implements Request, Response {
     return zip;
   }
 
+  /** @return zip extension code */
+  public Integer getZipExtension() {
+    return zipExtension;
+  }
 
   /**
    * @return the longitude
@@ -152,6 +164,7 @@ public class ValidatedAddress implements Request, Response {
     result = prime * result + ((state == null) ? 0 : state.hashCode());
     result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
     result = prime * result + ((zip == null) ? 0 : zip.hashCode());
+    result = prime * result + ((zipExtension == null) ? 0 : zipExtension.hashCode());
     return result;
   }
 
@@ -172,7 +185,7 @@ public class ValidatedAddress implements Request, Response {
     if (!(getClass().isInstance(obj))) {
       return false;
     }
-    ValidatedAddress other = (ValidatedAddress) obj;
+    ValidatedAddressDTO other = (ValidatedAddressDTO) obj;
     if (city == null) {
       if (other.city != null) {
         return false;
@@ -222,6 +235,9 @@ public class ValidatedAddress implements Request, Response {
     } else if (!zip.equals(other.zip)) {
       return false;
     }
+    if (zipExtension == null) {
+      if (other.zipExtension != null) return false;
+    } else if (!zipExtension.equals(other.zipExtension)) return false;
     return true;
   }
 

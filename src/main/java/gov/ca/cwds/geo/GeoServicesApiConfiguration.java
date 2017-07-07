@@ -6,18 +6,15 @@ import javax.annotation.Nullable;
 
 public class GeoServicesApiConfiguration extends BaseApiConfiguration {
 
-  @Nullable
-  private SmartyStreetsConfig smartyStreetsConfig;
+  @Nullable private SmartyStreetsConfig smartyStreetsConfig;
 
-  @JsonProperty(value = "smartystreets1")
+  @JsonProperty(value = "smartystreets")
   public SmartyStreetsConfig getSmartyStreetsConfig() {
     return smartyStreetsConfig;
   }
 
   @JsonProperty
-  public void setSmartystreetsConfig(
-      SmartyStreetsConfig smartyStreetsConfig) {
+  public void setSmartystreetsConfig(SmartyStreetsConfig smartyStreetsConfig) {
     this.smartyStreetsConfig = smartyStreetsConfig;
   }
-
 }

@@ -1,14 +1,14 @@
 package gov.ca.cwds.geo.persistence.dao;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.rest.SmartyStreetsConfiguration;
+import gov.ca.cwds.geo.SmartyStreetsConfig;
 
 /**
  * A DAO for SmartyStreets.
- * 
+ *
  * @author CWDS API Team
  */
-public class SmartyStreetsDao {
+public class SmartyStreetsDAO {
 
   private final String clientId;
   private final String token;
@@ -16,12 +16,12 @@ public class SmartyStreetsDao {
 
   /**
    * Constructor. Construct from required fields.
-   * 
+   *
    * @param clientId The Client login Id
    * @param token The Client login token
    * @param maxCandidates The maximum number of returned standardized Addresses
    */
-  public SmartyStreetsDao(String clientId, String token, Integer maxCandidates) {
+  public SmartyStreetsDAO(String clientId, String token, Integer maxCandidates) {
     super();
     this.clientId = clientId;
     this.token = token;
@@ -30,35 +30,28 @@ public class SmartyStreetsDao {
 
   /**
    * Constructor. Construct from YAML configuration.
-   * 
+   *
    * @param config The SmartyStreets configuration
    */
   @Inject
-  public SmartyStreetsDao(SmartyStreetsConfiguration config) {
+  public SmartyStreetsDAO(SmartyStreetsConfig config) {
     this.clientId = config.getClientId();
     this.token = config.getToken();
     this.maxCandidates = config.getMaxCandidates();
   }
 
-  /**
-   * @return the clientId
-   */
+  /** @return the clientId */
   public String getClientId() {
     return clientId;
   }
 
-  /**
-   * @return the token
-   */
+  /** @return the token */
   public String getToken() {
     return token;
   }
 
-  /**
-   * @return the maxCandidates
-   */
+  /** @return the maxCandidates */
   public Integer getMaxCandidates() {
     return maxCandidates;
   }
-
 }

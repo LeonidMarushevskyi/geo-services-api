@@ -2,9 +2,9 @@ package gov.ca.cwds.geo.service;
 
 import com.google.inject.Inject;
 import gov.ca.cwds.geo.SmartyStreet;
-import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDao;
+import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.persistence.model.Address;
-import gov.ca.cwds.geo.service.dto.ValidatedAddress;
+import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.services.CrudsService;
@@ -13,44 +13,44 @@ import java.io.Serializable;
 import org.apache.commons.lang3.NotImplementedException;
 
 /**
- * Business layer object to work on {@link ValidatedAddress}
- * 
+ * Business layer object to work on {@link ValidatedAddressDTO}
+ *
  * @author CWDS API Team
  */
 public class AddressValidationService implements CrudsService {
 
-  private SmartyStreetsDao smartyStreetsDao;
+  private SmartyStreetsDAO smartyStreetsDAO;
 
   @Inject
-  AddressValidationService(SmartyStreetsDao smartyStreetsDao) {
-    this.smartyStreetsDao = smartyStreetsDao;
+  AddressValidationService(SmartyStreetsDAO smartyStreetsDAO) {
+    this.smartyStreetsDAO = smartyStreetsDAO;
   }
 
   /**
-   * Returns all valid addresses, up to the default number set in {@link SmartyStreetsDao}
-   * 
+   * Returns all valid addresses, up to the default number set in {@link SmartyStreetsDAO}
+   *
    * @param address The address to validate
-   * @return array of {@link ValidatedAddress}
+   * @return array of {@link ValidatedAddressDTO}
    * @throws ServiceException due to SmartyStreets error, I/O error, etc.
    */
-  public ValidatedAddress[] fetchValidatedAddresses(Address address) {
-    ValidatedAddress[] addresses = null;
+  public ValidatedAddressDTO[] fetchValidatedAddresses(Address address) {
+    ValidatedAddressDTO[] addresses = null;
     try {
-      SmartyStreet smartyStreet = new SmartyStreet(smartyStreetsDao);
-      addresses = smartyStreet.usStreetSingleAddress(address.getStreetAddress(), address.getCity(),
-          address.getState(), address.getZip());
+      SmartyStreet smartyStreet = new SmartyStreet(smartyStreetsDAO);
+      addresses =
+          smartyStreet.usStreetSingleAddress(
+              address.getStreetAddress(), address.getCity(), address.getState(), address.getZip());
     } catch (Exception e) {
       throw new ServiceException("ERROR calling usStreetSingleAddress in SmartyStreet", e);
     }
     return addresses;
-
   }
 
   // Not Implemented
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
    */
   @Override
@@ -81,17 +81,14 @@ public class AddressValidationService implements CrudsService {
     throw new NotImplementedException("Delete is not implemented");
   }
 
-
   /**
    * {@inheritDoc}
    *
-   * @see gov.ca.cwds.rest.services.CrudsService#update(Serializable,
-   *      gov.ca.cwds.rest.api.Request)
+   * @see gov.ca.cwds.rest.services.CrudsService#update(Serializable, gov.ca.cwds.rest.api.Request)
    */
   @Override
   public Response update(Serializable primaryKey, Request request) {
     assert primaryKey instanceof Long;
     throw new NotImplementedException("Update is not implemented");
   }
-
 }
