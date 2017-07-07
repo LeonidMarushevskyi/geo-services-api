@@ -2,10 +2,9 @@ applicationName: CWDS GEO SERVICES API
 version: ${APP_VERSION:-local}
 
 server:
-  detailedJsonProcessingExceptionMapper: true
   applicationConnectors:
-  - type: http 
-    port: 8080
+  - type: http
+    port: 8090
   - type: https
     port: 8443
     keyStorePath: ${KEY_STORE_FILE:-./config/testKeyStore.jks}
@@ -14,18 +13,10 @@ server:
     supportedProtocols: [TLSv1, TLSv1.1, TLSv1.2]
   adminConnectors:
   - type: http
-    port: 9081
+    port: 9091
 
-  requestLog:
-    appenders:
-      - type: console
 shiro:
   iniConfigs: ["file:${SHIRO_CONFIG_PATH:-config/shiro.ini}"]
-
-smartystreets1:
-  clientId: ${SS_ID:-8721f357-6381-1001-4633-5157e84b68cb}
-  token: ${SS_TOKEN:-Q62NxpgzuBEUq3IalqVx}
-  maxCandidates: ${SS_MAX:-10}
 
 swagger:
   templateName: swagger.mustache
@@ -36,7 +27,3 @@ swagger:
   logo: images/CWDS-API-Logo-Horizontal.png
   loginUrl: ${LOGIN_URL:-http://localhost:8090/authn/login}
   showSwagger: ${SHOW_SWAGGER:-true}
-
-logging:
-  level: ${LOGLEVEL:-WARN}
-

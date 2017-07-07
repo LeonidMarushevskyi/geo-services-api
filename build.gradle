@@ -28,9 +28,8 @@ project.ext {
     projectVersion = '3.3-SNAPSHOT'
     dropwizardVersion = '1.1.0'
     coreApiVersion = '0.21.216'
-    calsModelVersion = '3.3-SNAPSHOT'
     mapstructVersion = '1.1.0.Final'
-    mainClass = 'gov.ca.cwds.GeoServicesApiApplication'
+    mainClass = 'gov.ca.cwds.geo.GeoServicesApiApplication'
 }
 
 group projectGroup
@@ -97,6 +96,7 @@ dependencies {
         exclude group: 'org.glassfish.jersey.core'
     }
 
+    compile group: "com.smartystreets.api", name: "smartystreets-java-sdk", version: "1.0.7"
     compile group: 'org.bouncycastle', name: 'bcprov-jdk16', version: '1.46'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.1'
     compile group: 'org.slf4j', name: 'slf4j-ext', version: '1.7.25'
@@ -167,7 +167,7 @@ task copyDist(type: Copy, dependsOn: shadowJar) {
 }
 
 
-task calsApiDocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
+task geoServicesApiDocker(type: Docker,  dependsOn: [copyConfig, copyDist] ) {
     dockerfile = "Dockerfile"
     project.group = projectDockerGroup
     applicationName = projectDockerAppName

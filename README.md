@@ -1,10 +1,10 @@
-# CWDS CALS API
+# CWDS GEO Services API
 
-The CWDS CALS API provides RESTful services for the CWDS CALS Digital Service.
+The CWDS GEO Services API provides RESTful services for the CWDS Digital Services.
 
 ## Wiki
 
-The development team is actively using the [Github Wiki](https://github.com/ca-cwds/cals-api/wiki).
+The development team is actively using the [Github Wiki](https://github.com/ca-cwds/geo-services-api/wiki).
 
 ## Documentation
 
