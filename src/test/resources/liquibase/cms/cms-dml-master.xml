@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog logicalFilePath="cwscms-dml.xml"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+
+    <property name="schema.name" value="CWSCMS" dbms="h2"/>
+
+    <changeSet author="System" id="0" runAlways="true" dbms="db2">
+        <sql>
+            set schema ${schema.name}
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet author="leonid.marushevskiy" id="0513201710136-53">
+        <sqlFile path="liquibase/cms/dml/SYS_CD_C.sql"/>
+    </changeSet>
+    <changeSet author="leonid.marushevskiy" id="0513201710136-39">
+        <sqlFile path="liquibase/cms/dml/PLC_HM_T.sql"/>
+    </changeSet>
+    <changeSet author="leonid.marushevskiy" id="0513201710136-32">
+        <sqlFile path="liquibase/cms/dml/O_HM_PLT.sql"/>
+    </changeSet>
+    <changeSet author="leonid.marushevskiy" id="0513201710136-38">
+        <sqlFile path="liquibase/cms/dml/PLC_EPST.sql"/>
+    </changeSet>
+    <changeSet author="leonid.marushevskiy" id="0513201710136-15">
+        <sqlFile path="liquibase/cms/dml/CLIENT_T.sql"/>
+    </changeSet>
+    <changeSet author="leonid.marushevskiy" id="0513201710136-49">
+        <sqlFile path="liquibase/cms/dml/STFPERST.sql"/>
+    </changeSet>
+    <changeSet author="oleg.korniichuk" id="1">
+        <sqlFile path="liquibase/cms/dml/LIC_VSTT.sql"/>
+    </changeSet>
+    <changeSet author="oleg.korniichuk" id="2">
+        <sqlFile path="liquibase/cms/dml/CNTY_CST.sql"/>
+    </changeSet>
+</databaseChangeLog>

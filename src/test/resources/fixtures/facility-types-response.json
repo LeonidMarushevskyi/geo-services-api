@@ -1,0 +1,144 @@
+{
+  "facility_types": [
+    {
+      "id": "400",
+      "value": "ADOPTION AGENCY"
+    },
+    {
+      "id": "775",
+      "value": "ADULT DAY CARE"
+    },
+    {
+      "id": "735",
+      "value": "ADULT RESIDENTIAL"
+    },
+    {
+      "id": "737",
+      "value": "ARF-ENHANCED BEHAVIORAL SUPPORTS HOME"
+    },
+    {
+      "id": "734",
+      "value": "ARFPSHN"
+    },
+    {
+      "id": "738",
+      "value": "COMMUNITY CRISIS HOME-ARF"
+    },
+    {
+      "id": "728",
+      "value": "COMMUNITY TREATMENT FACILITY"
+    },
+    {
+      "id": "720",
+      "value": "CRISIS NURSERY"
+    },
+    {
+      "id": "850",
+      "value": "DAY CARE CENTER"
+    },
+    {
+      "id": "845",
+      "value": "DC CENTER - ILL CHILD"
+    },
+    {
+      "id": "999",
+      "value": "DUMMY FACILITY"
+    },
+    {
+      "id": "810",
+      "value": "FAMILY DAY CARE"
+    },
+    {
+      "id": "433",
+      "value": "FFA CERTIFIED HOME"
+    },
+    {
+      "id": "431",
+      "value": "FOSTER FAMILY AG-SUB"
+    },
+    {
+      "id": "430",
+      "value": "FOSTER FAMILY AGENCY"
+    },
+    {
+      "id": "711",
+      "value": "FOSTER FAMILY HOME"
+    },
+    {
+      "id": "729",
+      "value": "GH-ENHANCED BEHAVIORAL SUPPORTS HOME"
+    },
+    {
+      "id": "730",
+      "value": "GROUP HOME"
+    },
+    {
+      "id": "300",
+      "value": "HOME CARE ORGANIZATION"
+    },
+    {
+      "id": "830",
+      "value": "INFANT CENTER"
+    },
+    {
+      "id": "731",
+      "value": "OUT OF STATE GH"
+    },
+    {
+      "id": "771",
+      "value": "REHAB FACILITY"
+    },
+    {
+      "id": "736",
+      "value": "RESID FAC CHRON ILL"
+    },
+    {
+      "id": "741",
+      "value": "RESIDENTIAL ELDERLY-CONTINUING CARE"
+    },
+    {
+      "id": "740",
+      "value": "RESIDENTIAL-ELDERLY"
+    },
+    {
+      "id": "403",
+      "value": "RESOURCE FAMILY HOME"
+    },
+    {
+      "id": "732",
+      "value": "RUNAWAY AND HOMELESS YOUTH SHELTER-GH"
+    },
+    {
+      "id": "840",
+      "value": "SCHOOL-AGE DC CENTER"
+    },
+    {
+      "id": "733",
+      "value": "SHORT TERM RESIDENTIAL THERAPEUTIC PROGRAM"
+    },
+    {
+      "id": "710",
+      "value": "SMALL FAMILY HOME"
+    },
+    {
+      "id": "772",
+      "value": "SOCIAL REHABILITATION FACILITY"
+    },
+    {
+      "id": "432",
+      "value": "SUB EMPLOYMENT REG"
+    },
+    {
+      "id": "721",
+      "value": "TEMPORARY SHELTER CARE FACILITY"
+    },
+    {
+      "id": "726",
+      "value": "TRANSITIONAL HOUSING PLACEMENT PROGRAM"
+    },
+    {
+      "id": "722",
+      "value": "TRANSITIONAL SHELTER CARE"
+    }
+  ]
+}

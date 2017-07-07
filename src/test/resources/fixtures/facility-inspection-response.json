@@ -1,0 +1,14 @@
+{
+  "id": "14-CR-MHRO-8WZSF8-20120809134525",
+  "href": "/facilities/011400218/inspections/14-CR-MHRO-8WZSF8-20120809134525",
+  "representative_signature_date": "2012-08-09 00:00:00",
+  "deficiencies": [
+    {
+      "deficiency_type": "Type A",
+      "poc_date": "2012-08-10 00:00:00",
+      "fac_section_violated": "84300.1(b)",
+      "deficiency": "84300.1(b) Emergency Intervention Prohibition.  Any emergency intervention technique not approved for use as part of the licensee's emergency intervention plan must not be used at any time.\r\nStaff have used the relaxation room that is not supposed to be used as a seclusion room as a seclusion room in New Yosemite.",
+      "correction_plan": "By 8-10-12 staff will be scheduled to be retrained on the use of the relaxation room in New Yosemite no later than 8-31-12. Also, the supervisors that sign off on the IR's will note if any follow up with staff needs to occur for the next six months on the IR. Proof to be sent to CCL."
+    }
+  ]
+}

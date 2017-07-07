@@ -1,0 +1,26 @@
+{
+  "id" : "24-CR-BJAS-72KVMM-20070424163336",
+  "complaint_date" : "2007-04-24",
+  "assigned_worker" : "Tamara Melikian",
+  "control_number" : "24-CR-20070424163336",
+  "priority_level" : "3",
+  "status" : "Approved",
+  "approval_date" : "2007-10-11 11:28:40",
+  "pre_investigation_comments" : "Discussed allegations. Client is manipulative, beliggerent and has anger management issues. She is probably playing it up in his opinion.",
+  "post_investigation_comments" : "Advised of outcome.",
+  "contact_summary" : "5/3/07: Complaint opened at Group Home. Case management visit conducted. Client interviewed.\n6/13/07: Client interviewed at school.\n6/21/07: Complaint closed at Group Home. \n",
+  "followup_comments" : "",
+  "allegations" : [ {
+    "complaint_code" : "10",
+    "allegation" : "Client alleged that she spent the week of 3-31-07 to 4-7-07 at a staff's home.",
+    "resolution_code_sub" : "",
+    "resolution_code_insub" : "I",
+    "resolution_code_unsub" : ""
+  }, {
+    "complaint_code" : "3",
+    "allegation" : "Staff threatened a client not to disclose the above allegation and said to client \"bitch, I'll put you on your back\".",
+    "resolution_code_sub" : "",
+    "resolution_code_insub" : "I",
+    "resolution_code_unsub" : ""
+  } ]
+}

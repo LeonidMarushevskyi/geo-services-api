@@ -1,0 +1,22 @@
+{
+  "applicant_signatures": [
+    {
+      "applicant_id": 1234567,
+      "signature_city": "Sacramento",
+      "signature_county": {
+        "id": 34,
+        "value": "Sacramento"
+      },
+      "signature_date": "2017-06-18"
+    },
+    {
+      "applicant_id": 1234568,
+      "signature_city": "Sacramento",
+      "signature_county": {
+        "id": 34,
+        "value": "Sacramento"
+      },
+      "signature_date": "2017-06-18"
+    }
+  ]
+}

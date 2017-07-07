@@ -1,0 +1,56 @@
+{
+  "first_name": "Peter",
+  "middle_name": "J.",
+  "last_name": "Smith",
+  "highest_education_level": {
+    "id": 2,
+    "value": "High School"
+  },
+  "date_of_birth": "1981-11-24",
+  "gender": {
+    "id": 1,
+    "value": "Male"
+  },
+  "race": {
+    "id": 6,
+    "value": "White"
+  },
+  "ethnicity": {
+    "id": 30,
+    "value": "White - European"
+  },
+  "driver_license_number": "MD123G34545232",
+  "driver_license_state": {
+    "id": 1,
+    "value": "CA - California"
+  },
+  "email": "peter.smith@gmail.com",
+  "employment": {
+    "employer_name": "HSH Inc.",
+    "occupation": "Sr. Software Developer",
+    "income": 93000,
+    "income_type": {
+      "id": 1,
+      "value": "yearly"
+    },
+    "physical_address": {
+      "street_address": "1702 Redoak Ct.",
+      "city": "Rocklin",
+      "state": {
+        "id": 1,
+        "value": "CA - California"
+      },
+      "zip": "98123"
+    }
+  },
+  "phones": [
+    {
+      "phone_type": {
+        "id": 1,
+        "value": "Cell"
+      },
+      "number": "(534) 758-3302",
+      "preferred": true
+    }
+  ]
+}

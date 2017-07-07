@@ -1,0 +1,15 @@
+{
+  "first_name": "Anna",
+  "middle_name": "L.",
+  "last_name": "Pollen",
+  "date_of_birth": "1995-07-14",
+  "relationship_to_applicants": [
+    {
+      "relationship_to_applicant": {
+        "id": 1,
+        "value": "Child"
+      },
+      "applicant_id": 1234567
+    }
+  ]
+}

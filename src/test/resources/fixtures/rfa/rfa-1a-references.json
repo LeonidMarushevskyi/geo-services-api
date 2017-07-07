@@ -1,0 +1,64 @@
+{
+  "references": [
+    {
+      "first_name": "Anna",
+      "middle_name": "N.",
+      "last_name": "Smith",
+      "mailing_address": {
+        "type": {
+          "id": 1,
+          "value": "Mailing"
+        },
+        "street_address": "1704 Redoak Ct.",
+        "zip": "98123",
+        "city": "Rocklin",
+        "state": {
+          "id": 1,
+          "value": "CA - California"
+        }
+      },
+      "phone_number": "(534) 758-9802",
+      "email": "anna.smith@gmail.com"
+    },
+    {
+      "first_name": "Anna",
+      "middle_name": "N.",
+      "last_name": "Smith",
+      "mailing_address": {
+        "type": {
+          "id": 1,
+          "value": "Mailing"
+        },
+        "street_address": "1704 Redoak Ct.",
+        "zip": "98123",
+        "city": "Rocklin",
+        "state": {
+          "id": 1,
+          "value": "CA - California"
+        }
+      },
+      "phone_number": "(534) 758-9802",
+      "email": "anna.smith@gmail.com"
+    },
+    {
+      "first_name": "Anna",
+      "middle_name": "N.",
+      "last_name": "Smith",
+      "mailing_address": {
+        "type": {
+          "id": 1,
+          "value": "Mailing"
+        },
+        "street_address": "1704 Redoak Ct.",
+        "zip": "98123",
+        "city": "Rocklin",
+        "state": {
+          "id": 1,
+          "value": "CA - California"
+        }
+      },
+      "phone_number": "(534) 758-9802",
+      "email": "anna.smith@gmail.com"
+    }
+  ]
+}

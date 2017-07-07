@@ -1,0 +1,52 @@
+{
+  "application_county": {
+    "id": 39,
+    "value": "Sacramento"
+  },
+  "child_identified": true,
+  "child_in_home": true,
+  "identified_children": [
+    {
+      "first_name": "Collin",
+      "middle_name": "P.",
+      "last_name": "Martin",
+      "date_of_birth": "2007-07-14",
+      "gender": {
+        "id": 1,
+        "value": "Male"
+      },
+      "county_of_jurisdiction": {
+        "id": 39,
+        "value": "Sacramento"
+      },
+      "date_of_placement": "2017-05-14",
+      "relationship_to_applicants": [
+        {
+          "relationship_to_applicant": {
+            "id": 1,
+            "value": "Child"
+          },
+          "applicant_id": 1234567
+        }
+      ],
+      "school_grade": {
+        "id": 1,
+        "value": "11"
+      },
+      "school_name": "White Oaks High",
+      "school_address": {
+        "street_address": "1702 Redoak Ct.",
+        "zip": "98123",
+        "city": "Rocklin",
+        "state": {
+          "id": 0,
+          "value": "string"
+        },
+        "type": {
+          "id": 1,
+          "value": "Mailing"
+        }
+      }
+    }
+  ]
+}

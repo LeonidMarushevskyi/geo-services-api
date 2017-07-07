@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "value": "yearly"
+    },
+    {
+      "id": 2,
+      "value": "monthly"
+    },
+    {
+      "id": 3,
+      "value": "hourly"
+    }
+  ]
+}

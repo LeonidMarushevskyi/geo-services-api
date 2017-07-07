@@ -1,0 +1,37 @@
+applicationName: CWDS GEO SERVICES API
+version: ${APP_VERSION:-local}
+
+server:
+  detailedJsonProcessingExceptionMapper: true
+  applicationConnectors:
+  - type: http 
+    port: 8080
+  - type: https
+    port: 8443
+    keyStorePath: ${KEY_STORE_FILE:-./config/testKeyStore.jks}
+    keyStorePassword: ${KEY_STORE_PASSWORD:-testPass}
+    keyStoreType: JKS
+    supportedProtocols: [TLSv1, TLSv1.1, TLSv1.2]
+  adminConnectors:
+  - type: http
+    port: 9081
+
+  requestLog:
+    appenders:
+      - type: console
+shiro:
+  iniConfigs: ["file:${SHIRO_CONFIG_PATH:-config/shiro.ini}"]
+
+swagger:
+  templateName: swagger.mustache
+  assetsPath: /static
+  resourcePackage: gov.ca.cwds.geo.web.rest
+  title: CWDS GEO SERVICES API
+  description: RESTful API definitions for the CWS New System.
+  logo: images/CWDS-API-Logo-Horizontal.png
+  loginUrl: ${LOGIN_URL:-http://localhost:8090/authn/login}
+  showSwagger: ${SHOW_SWAGGER:-true}
+
+logging:
+  level: ${LOGLEVEL:-DEBUG}
+

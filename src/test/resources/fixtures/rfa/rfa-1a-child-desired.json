@@ -1,0 +1,24 @@
+{
+  "child_identified": false,
+  "child_in_home": false,
+  "preferred_ages": [
+    {
+      "id": 1,
+      "value": "0 to 3 years"
+    },
+    {
+      "id": 2,
+      "value": "4 to 8 years"
+    }
+  ],
+  "preferred_sibling_groups": [
+    {
+      "id": 2,
+      "value": "2"
+    },
+    {
+      "id": 3,
+      "value": "3"
+    }
+  ]
+}

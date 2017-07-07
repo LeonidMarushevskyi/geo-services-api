@@ -1,0 +1,67 @@
+{
+  "first_name": "Anna",
+  "middle_name": "N.",
+  "last_name": "Smith",
+  "other_names": [
+    {
+      "first_name": "Anna",
+      "middle_name": "N.",
+      "last_name": "Peterson",
+      "name_type": {
+        "id": 2,
+        "value": "Maiden"
+      }
+    }
+  ],
+  "highest_education_level": {
+    "id": 2,
+    "value": "High School"
+  },
+  "date_of_birth": "1981-12-26",
+  "gender": {
+    "id": 1,
+    "value": "Female"
+  },
+  "race": {
+    "id": 1,
+    "value": "White"
+  },
+  "ethnicity": {
+    "id": 30,
+    "value": "White - European"
+  },
+  "driver_license_number": "MD123G3333232",
+  "driver_license_state": {
+    "id": 1,
+    "value": "CA - California"
+  },
+  "email": "anna.smith@gmail.com",
+  "employment": {
+    "employer_name": "HSH Inc.",
+    "occupation": "Sr. Analyst",
+    "income": 98000,
+    "income_type": {
+      "id": 1,
+      "value": "yearly"
+    },
+    "physical_address": {
+      "street_address": "1702 Redoak Ct.",
+      "city": "Rocklin",
+      "state": {
+        "id": 1,
+        "value": "CA - California"
+      },
+      "zip": "98123"
+    }
+  },
+  "phones": [
+    {
+      "phone_type": {
+        "id": 1,
+        "value": "Cell"
+      },
+      "number": "(534) 758-9802",
+      "preferred": true
+    }
+  ]
+}

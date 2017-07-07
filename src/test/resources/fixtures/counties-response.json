@@ -1,0 +1,240 @@
+{
+  "counties": [
+    {
+      "id": "01",
+      "value": "Alameda"
+    },
+    {
+      "id": "02",
+      "value": "Alpine"
+    },
+    {
+      "id": "03",
+      "value": "Amador"
+    },
+    {
+      "id": "04",
+      "value": "Butte"
+    },
+    {
+      "id": "05",
+      "value": "Calaveras"
+    },
+    {
+      "id": "06",
+      "value": "Colusa"
+    },
+    {
+      "id": "07",
+      "value": "Contra Costa"
+    },
+    {
+      "id": "08",
+      "value": "Del Norte"
+    },
+    {
+      "id": "09",
+      "value": "El Dorado"
+    },
+    {
+      "id": "10",
+      "value": "Fresno"
+    },
+    {
+      "id": "11",
+      "value": "Glenn"
+    },
+    {
+      "id": "12",
+      "value": "Humboldt"
+    },
+    {
+      "id": "13",
+      "value": "Imperial"
+    },
+    {
+      "id": "14",
+      "value": "Inyo"
+    },
+    {
+      "id": "15",
+      "value": "Kern"
+    },
+    {
+      "id": "16",
+      "value": "Kings"
+    },
+    {
+      "id": "17",
+      "value": "Lake"
+    },
+    {
+      "id": "18",
+      "value": "Lassen"
+    },
+    {
+      "id": "19",
+      "value": "Los Angeles"
+    },
+    {
+      "id": "20",
+      "value": "Madera"
+    },
+    {
+      "id": "21",
+      "value": "Marin"
+    },
+    {
+      "id": "22",
+      "value": "Mariposa"
+    },
+    {
+      "id": "23",
+      "value": "Mendocino"
+    },
+    {
+      "id": "24",
+      "value": "Merced"
+    },
+    {
+      "id": "25",
+      "value": "Modoc"
+    },
+    {
+      "id": "26",
+      "value": "Mono"
+    },
+    {
+      "id": "27",
+      "value": "Monterey"
+    },
+    {
+      "id": "28",
+      "value": "Napa"
+    },
+    {
+      "id": "29",
+      "value": "Nevada"
+    },
+    {
+      "id": "30",
+      "value": "Orange"
+    },
+    {
+      "id": "31",
+      "value": "Placer"
+    },
+    {
+      "id": "32",
+      "value": "Plumas"
+    },
+    {
+      "id": "33",
+      "value": "Riverside"
+    },
+    {
+      "id": "34",
+      "value": "Sacramento"
+    },
+    {
+      "id": "35",
+      "value": "San Benito"
+    },
+    {
+      "id": "36",
+      "value": "San Bernardino"
+    },
+    {
+      "id": "37",
+      "value": "San Diego"
+    },
+    {
+      "id": "38",
+      "value": "San Francisco"
+    },
+    {
+      "id": "39",
+      "value": "San Joaquin"
+    },
+    {
+      "id": "40",
+      "value": "San Luis Obispo"
+    },
+    {
+      "id": "41",
+      "value": "San Mateo"
+    },
+    {
+      "id": "42",
+      "value": "Santa Barbara"
+    },
+    {
+      "id": "43",
+      "value": "Santa Clara"
+    },
+    {
+      "id": "44",
+      "value": "Santa Cruz"
+    },
+    {
+      "id": "45",
+      "value": "Shasta"
+    },
+    {
+      "id": "46",
+      "value": "Sierra"
+    },
+    {
+      "id": "47",
+      "value": "Siskiyou"
+    },
+    {
+      "id": "48",
+      "value": "Solano"
+    },
+    {
+      "id": "49",
+      "value": "Sonoma"
+    },
+    {
+      "id": "50",
+      "value": "Stanislaus"
+    },
+    {
+      "id": "51",
+      "value": "Sutter"
+    },
+    {
+      "id": "52",
+      "value": "Tehama"
+    },
+    {
+      "id": "53",
+      "value": "Trinity"
+    },
+    {
+      "id": "54",
+      "value": "Tulare"
+    },
+    {
+      "id": "55",
+      "value": "Tuolumne"
+    },
+    {
+      "id": "56",
+      "value": "Ventura"
+    },
+    {
+      "id": "57",
+      "value": "Yolo"
+    },
+    {
+      "id": "58",
+      "value": "Yuba"
+    },
+    {
+      "id": "99",
+      "value": "State of California"
+    }
+  ]
+}

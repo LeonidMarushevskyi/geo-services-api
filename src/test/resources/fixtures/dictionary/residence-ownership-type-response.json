@@ -1,0 +1,16 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "value": "Own"
+    },
+    {
+      "id": 2,
+      "value": "Rent"
+    },
+    {
+      "id": 3,
+      "value": "Lease"
+    }
+  ]
+}

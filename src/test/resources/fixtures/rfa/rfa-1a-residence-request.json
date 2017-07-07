@@ -1,0 +1,53 @@
+{
+  "addresses": [
+    {
+      "street_address": "1702 Redoak Ct.",
+      "zip": "98123",
+      "city": "Rocklin",
+      "state": {
+        "id": 0,
+        "value": "string"
+      },
+      "type": {
+        "id": 1,
+        "value": "Physical"
+      }
+    },
+    {
+      "street_address": "1702 Redoak Ct.",
+      "zip": "98123",
+      "city": "Rocklin",
+      "state": {
+        "id": 0,
+        "value": "string"
+      },
+      "type": {
+        "id": 2,
+        "value": "Mailing"
+      }
+    }
+  ],
+  "physical_mailing_similar": false,
+  "residence_ownership": {
+    "id": 0,
+    "value": "string"
+  },
+  "weapon_in_home": false,
+  "body_of_water_exist": true,
+  "body_of_water_description": "Description here",
+  "others_using_residence_as_mailing": "true",
+  "other_people_using_residence_as_mailing": [
+    {
+      "first_name": "string",
+      "middle_name": "string",
+      "last_name": "string"
+    }
+  ],
+  "directions_to_home": "Directions here",
+  "home_languages": [
+    {
+      "id": 0,
+      "value": "string"
+    }
+  ]
+}

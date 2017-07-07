@@ -1,0 +1,20 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "value": "Married"
+    },
+    {
+      "id": 2,
+      "value": "Domestic Partnership"
+    },
+    {
+      "id": 3,
+      "value": "Related (Family Member)"
+    },
+    {
+      "id": 4,
+      "value": "Cohabitants"
+    }
+  ]
+}

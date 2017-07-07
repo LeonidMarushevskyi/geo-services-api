@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet author="leonid.marushevskiy (generated)" id="1493269173453-30">
+
+        <insert tableName="lpa_information">
+            <column name="access_level"/>
+            <column name="audit_history"/>
+            <column name="creator_name" value="Nicole Burgess"/>
+            <column name="do_email_address"/>
+            <column name="dbfilename"/>
+            <column name="dbpathname" value="Training"/>
+            <column name="dbservername" value="Domino06"/>
+            <column name="dbtitle"/>
+            <column name="delete_flag"/>
+            <column name="doc_unid"/>
+            <column name="dont_save_flag" value="1"/>
+            <column name="dt_created" valueDate="2010-06-14"/>
+            <column name="dt_edited" valueDate="2010-06-14"/>
+            <column name="edit_history" value="Nicole Burgess!06/14/2010 11:36:48 AM&#10;"/>
+            <column name="editor_name" value="Nicole Burgess&#10;"/>
+            <column name="editors" value="Admin,RTS,Karen Buckley"/>
+            <column name="full_lpa_name" value="Karen Buckley"/>
+            <column name="keydbname" value="Training\\FASSystemKeywords.nsf"/>
+            <column name="lpa_code" value="03B302"/>
+            <column name="lpa_code_d" value="03B302"/>
+            <column name="lpa_do_city" value="SACRAMENTO"/>
+            <column name="lpa_do_name" value="CCLD Regional Office"/>
+            <column name="lpa_do_phone" value="(916) 229-4530"/>
+            <column name="lpa_do_street" value="8745 FOLSOM BLVD., SUITE 200"/>
+            <column name="lpa_do_zip" value="95826"/>
+            <column name="lpa_email_address" value="Karen.Buckley@CDSS.DSS.CA.GOV"/>
+            <column name="lpa_loc_code" value="B"/>
+            <column name="lpa_loc_code_d" value="B"/>
+            <column name="lpa_name" value="Karen Buckley"/>
+            <column name="lpa_name_d" value="Karen Buckley"/>
+            <column name="lpa_rgnl_mgr" value="03"/>
+            <column name="lpa_rgnl_mgr_d" value="03"/>
+            <column name="lpa_sup" value="Sharon Ogbodo"/>
+            <column name="lpa_sup_d" value="Sharon Ogbodo"/>
+            <column name="lpa_sup_email_addr" value="Sharon.Ogbodo@CDSS.DSS.CA.GOV"/>
+            <column name="lpa_sup_telephone" value="(916) 229-4549"/>
+            <column name="lpa_telephone" value="(916) 229-4530"/>
+            <column name="loc_address_code" value="03"/>
+            <column name="noexport"/>
+            <column name="originalunidkey" value="-CC-NBUS-86EPU2-"/>
+            <column name="program_code" value="CC"/>
+            <column name="response_description"/>
+            <column name="lpacodesave" value="03B302"/>
+        </insert>
+
+    </changeSet>
+</databaseChangeLog>

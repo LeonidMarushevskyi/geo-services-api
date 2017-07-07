@@ -1,0 +1,32 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "value": "0-3 years"
+    },
+    {
+      "id": 2,
+      "value": "4-8 years"
+    },
+    {
+      "id": 3,
+      "value": "9-12 years"
+    },
+    {
+      "id": 4,
+      "value": "13-15 years"
+    },
+    {
+      "id": 5,
+      "value": "16-18 years"
+    },
+    {
+      "id": 6,
+      "value": "18-21 years"
+    },
+    {
+      "id": 7,
+      "value": "No preference"
+    }
+  ]
+}
