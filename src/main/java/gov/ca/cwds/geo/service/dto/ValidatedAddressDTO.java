@@ -24,7 +24,7 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
 
   @JsonProperty("zip")
   @ApiModelProperty(example = "95661")
-  private Integer zip;
+  private String zip;
 
   @JsonProperty("zip_extension")
   @ApiModelProperty(value = "Zip Extension", example = "123")
@@ -43,9 +43,14 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
 
 
   @JsonProperty("state")
-  @ApiModelProperty(example = "CA")
+  @ApiModelProperty(example = "California")
   @Size(max = 50)
   private String state;
+
+  @JsonProperty("state_abbreviation")
+  @ApiModelProperty(example = "CA")
+  @Size(max = 2)
+  private String stateAbbreviation;
 
   @JsonProperty("longitude")
   @ApiModelProperty(example = "-121.25118")
@@ -74,8 +79,8 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
    */
   @JsonCreator
   public ValidatedAddressDTO(@JsonProperty("street_address") String streetAddress,
-      @JsonProperty("city") String city, @JsonProperty("state") String state,
-      @JsonProperty("zip") Integer zip, @JsonProperty("zip_extension") Integer zipExtension, @JsonProperty("longitude") Double longitude,
+      @JsonProperty("city") String city, @JsonProperty("state") String state, @JsonProperty("state_abbreviation") String stateAbbreviation,
+      @JsonProperty("zip") String zip, @JsonProperty("zip_extension") String zipExtension, @JsonProperty("longitude") Double longitude,
       @JsonProperty("lattitude") Double lattitude, @JsonProperty("delivery") Boolean deliverable) {
     super();
     this.streetAddress = streetAddress;
@@ -86,6 +91,7 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
     this.longitude = longitude;
     this.lattitude = lattitude;
     this.deliverable = deliverable;
+    this.stateAbbreviation = stateAbbreviation;
   }
 
   /**
@@ -111,11 +117,17 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
     return state;
   }
 
+  /**
+   * @return the state
+   */
+  public String getStateAbbreviation() {
+    return stateAbbreviation;
+  }
 
   /**
    * @return the zip
    */
-  public Integer getZip() {
+  public String getZip() {
     return zip;
   }
 
@@ -148,97 +160,46 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
   }
 
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#hashCode()
-   */
   @Override
-  public final int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((city == null) ? 0 : city.hashCode());
-    result = prime * result + ((deliverable == null) ? 0 : deliverable.hashCode());
-    result = prime * result + ((lattitude == null) ? 0 : lattitude.hashCode());
-    result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
-    result = prime * result + ((state == null) ? 0 : state.hashCode());
-    result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
-    result = prime * result + ((zip == null) ? 0 : zip.hashCode());
-    result = prime * result + ((zipExtension == null) ? 0 : zipExtension.hashCode());
-    return result;
-  }
-
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    if (this == obj) {
+  public boolean equals(Object o) {
+    if (this == o) {
       return true;
     }
-    if (obj == null) {
+    if (!(o instanceof ValidatedAddressDTO)) {
       return false;
     }
-    if (!(getClass().isInstance(obj))) {
+
+    ValidatedAddressDTO that = (ValidatedAddressDTO) o;
+
+    if (getZip() != null ? !getZip().equals(that.getZip()) : that.getZip() != null) {
       return false;
     }
-    ValidatedAddressDTO other = (ValidatedAddressDTO) obj;
-    if (city == null) {
-      if (other.city != null) {
-        return false;
-      }
-    } else if (!city.equals(other.city)) {
+    if (getZipExtension() != null ? !getZipExtension().equals(that.getZipExtension())
+        : that.getZipExtension() != null) {
       return false;
     }
-    if (deliverable == null) {
-      if (other.deliverable != null) {
-        return false;
-      }
-    } else if (!deliverable.equals(other.deliverable)) {
+    if (getCity() != null ? !getCity().equals(that.getCity()) : that.getCity() != null) {
       return false;
     }
-    if (lattitude == null) {
-      if (other.lattitude != null) {
-        return false;
-      }
-    } else if (!lattitude.equals(other.lattitude)) {
+    if (getStreetAddress() != null ? !getStreetAddress().equals(that.getStreetAddress())
+        : that.getStreetAddress() != null) {
       return false;
     }
-    if (longitude == null) {
-      if (other.longitude != null) {
-        return false;
-      }
-    } else if (!longitude.equals(other.longitude)) {
-      return false;
-    }
-    if (state == null) {
-      if (other.state != null) {
-        return false;
-      }
-    } else if (!state.equals(other.state)) {
-      return false;
-    }
-    if (streetAddress == null) {
-      if (other.streetAddress != null) {
-        return false;
-      }
-    } else if (!streetAddress.equals(other.streetAddress)) {
-      return false;
-    }
-    if (zip == null) {
-      if (other.zip != null) {
-        return false;
-      }
-    } else if (!zip.equals(other.zip)) {
-      return false;
-    }
-    if (zipExtension == null) {
-      if (other.zipExtension != null) return false;
-    } else if (!zipExtension.equals(other.zipExtension)) return false;
-    return true;
+
+    return getState() != null ? !getState().equals(that.getState()) : that.getState() == null;
   }
 
+  @Override
+  public int hashCode() {
+    int result = getZip() != null ? getZip().hashCode() : 0;
+    result = 31 * result + (getZipExtension() != null ? getZipExtension().hashCode() : 0);
+    result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
+    result = 31 * result + (getStreetAddress() != null ? getStreetAddress().hashCode() : 0);
+    result = 31 * result + (getState() != null ? getState().hashCode() : 0);
+    result = 31 * result + (getStateAbbreviation() != null ? getStateAbbreviation().hashCode() : 0);
+    result = 31 * result + (getLongitude() != null ? getLongitude().hashCode() : 0);
+    result = 31 * result + (getLattitude() != null ? getLattitude().hashCode() : 0);
+    result = 31 * result + (getDeliverable() != null ? getDeliverable().hashCode() : 0);
+    return result;
+  }
 }

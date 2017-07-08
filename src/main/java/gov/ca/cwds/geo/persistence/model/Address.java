@@ -7,7 +7,6 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 
 /**
@@ -39,8 +38,8 @@ public class Address implements Request {
 
   @JsonProperty("zip")
   @ApiModelProperty(value = "Zip", example = "95661")
-  @Max(99999)
-  private Integer zip;
+  @Size(max = 5)
+  private String zip;
 
   /**
    * Constructor
@@ -56,7 +55,7 @@ public class Address implements Request {
       @JsonProperty("street_address") String streetAddress,
       @JsonProperty("city") String city,
       @JsonProperty("state") String state,
-      @JsonProperty("zip") Integer zip,
+      @JsonProperty("zip") String zip,
       @JsonProperty("type") String type) {
     super();
     this.streetAddress = streetAddress;
@@ -81,51 +80,40 @@ public class Address implements Request {
   }
 
   /** @return zip code */
-  public Integer getZip() {
+  public String getZip() {
     return zip;
   }
 
-  /*
-   * (non-Javadoc)
-   *
-   * @see java.lang.Object#hashCode()
-   */
   @Override
-  public final int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + ((city == null) ? 0 : city.hashCode());
-    result = prime * result + ((state == null) ? 0 : state.hashCode());
-    result = prime * result + ((streetAddress == null) ? 0 : streetAddress.hashCode());
-    result = prime * result + ((zip == null) ? 0 : zip.hashCode());
-    return result;
-  }
-
-  /*
-   * (non-Javadoc)
-   *
-   * @see java.lang.Object#equals(java.lang.Object)
-   */
-  @Override
-  public final boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (obj == null) return false;
-    if (!(obj instanceof Address)) {
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof Address)) {
       return false;
     }
-    Address other = (Address) obj;
-    if (city == null) {
-      if (other.city != null) return false;
-    } else if (!city.equals(other.city)) return false;
-    if (state == null) {
-      if (other.state != null) return false;
-    } else if (!state.equals(other.state)) return false;
-    if (streetAddress == null) {
-      if (other.streetAddress != null) return false;
-    } else if (!streetAddress.equals(other.streetAddress)) return false;
-    if (zip == null) {
-      if (other.zip != null) return false;
-    } else if (!zip.equals(other.zip)) return false;
-    return true;
+
+    Address address = (Address) o;
+
+    if (getStreetAddress() != null ? !getStreetAddress().equals(address.getStreetAddress())
+        : address.getStreetAddress() != null) {
+      return false;
+    }
+    if (getCity() != null ? !getCity().equals(address.getCity()) : address.getCity() != null) {
+      return false;
+    }
+    if (getState() != null ? !getState().equals(address.getState()) : address.getState() != null) {
+      return false;
+    }
+    return getZip() != null ? getZip().equals(address.getZip()) : address.getZip() == null;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = getStreetAddress() != null ? getStreetAddress().hashCode() : 0;
+    result = 31 * result + (getCity() != null ? getCity().hashCode() : 0);
+    result = 31 * result + (getState() != null ? getState().hashCode() : 0);
+    result = 31 * result + (getZip() != null ? getZip().hashCode() : 0);
+    return result;
   }
 }

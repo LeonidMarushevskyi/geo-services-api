@@ -7,6 +7,7 @@ import com.smartystreets.api.us_street.Candidate;
 import com.smartystreets.api.us_street.Client;
 import com.smartystreets.api.ClientBuilder;
 import com.smartystreets.api.us_street.Lookup;
+import com.smartystreets.api.us_zipcode.City;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.api.ApiException;
@@ -22,44 +23,37 @@ import org.slf4j.LoggerFactory;
  * @author CWDS API Team
  */
 public class SmartyStreet {
+
   private static final Logger LOGGER = LoggerFactory.getLogger(SmartyStreet.class);
+  public static final String ERROR_CALLING_SMARTY_STREET = "ERROR calling SmartyStreet - ";
   String streetAddress;
   String cityName;
   String stateName;
-  Integer zip;
-  Integer zipExtension;
+  String stateAbbreviation;
+  String zip;
+  String zipExtension;
   boolean delPoint;
   Double latitude;
   Double longitude;
   private SmartyStreetsDAO smartyStreetsDAO;
 
-  /** */
   @Inject
   public SmartyStreet() {
-    // default constructor
+    // Nothing to do
   }
 
-  /** @param smartyStreetsDAO to set the smartyStreetsDAO */
   @Inject
   public SmartyStreet(SmartyStreetsDAO smartyStreetsDAO) {
     this.smartyStreetsDAO = smartyStreetsDAO;
   }
 
-  /** @param smartyStreetsDAO the smartyStreetsDAO to set the smartyStreetsDAO */
   @Inject
   public void setSmartyStreetsDAO(SmartyStreetsDAO smartyStreetsDAO) {
     this.smartyStreetsDAO = smartyStreetsDAO;
   }
 
-  /**
-   * @param street incoming street address
-   * @param city incoming city name
-   * @param state incoming state
-   * @param zipCode incoming zip code
-   * @return returns a validated address back
-   */
-  public ValidatedAddressDTO[] usStreetSingleAddress(
-      String street, String city, String state, Integer zipCode) {
+  public ValidatedAddressDTO[] validateSingleUSAddress(
+      String street, String city, String state, String zipCode) {
 
     ArrayList<Candidate> results =
         (ArrayList<Candidate>) getSmartyStreetsCandidates(street, city, state, zipCode);
@@ -72,7 +66,7 @@ public class SmartyStreet {
       latitude = null;
       ValidatedAddressDTO address =
           new ValidatedAddressDTO(
-              streetAddress, cityName, stateName, zip, zipExtension, longitude, latitude, delPoint);
+              streetAddress, cityName, stateName, stateAbbreviation, zip, zipExtension, longitude, latitude, delPoint);
       returnValidatedAddressDTOS.add(address);
       return returnValidatedAddressDTOS.toArray(new ValidatedAddressDTO[0]);
     }
@@ -93,30 +87,60 @@ public class SmartyStreet {
       streetAddress = candidate.getDeliveryLine1();
       cityName = candidate.getComponents().getCityName();
       stateName = candidate.getComponents().getState();
-      zip = Integer.parseInt(candidate.getComponents().getZipCode());
-      zipExtension = Integer.parseInt(candidate.getComponents().getPlus4Code());
+      zip = candidate.getComponents().getZipCode();
+      zipExtension = candidate.getComponents().getPlus4Code();
 
       ValidatedAddressDTO address =
           new ValidatedAddressDTO(
-              streetAddress, cityName, stateName, zip, zipExtension, longitude, latitude, delPoint);
+              streetAddress, cityName, stateName, stateAbbreviation, zip, zipExtension, longitude, latitude, delPoint);
       returnValidatedAddressDTOS.add(address);
     }
-    return returnValidatedAddressDTOS.toArray(new ValidatedAddressDTO[returnValidatedAddressDTOS.size()]);
+    return returnValidatedAddressDTOS.toArray(
+        new ValidatedAddressDTO[returnValidatedAddressDTOS.size()]);
   }
 
-  /**
-   * @param street incoming street address
-   * @param city incoming city name
-   * @param state incoming state
-   * @param zipCode incoming zip code
-   * @return returns a address back
-   */
-  public List<Candidate> getSmartyStreetsCandidates(
-      String street, String city, String state, Integer zipCode) {
+  public ValidatedAddressDTO[] lookupSingleUSZip(String zipCode) {
+    StaticCredentials credentials =
+        new StaticCredentials(smartyStreetsDAO.getClientId(), smartyStreetsDAO.getToken());
+    com.smartystreets.api.us_zipcode.Client client =
+        new ClientBuilder(credentials).buildUsZipCodeApiClient();
+    com.smartystreets.api.us_zipcode.Lookup lookup = new com.smartystreets.api.us_zipcode.Lookup();
+    lookup.setZipCode(zipCode);
+    try {
+      client.send(lookup);
+    } catch (SmartyException e) {
+      LOGGER.error("SmartyStreet error, Unable to lookup zip code", e);
+      throw new ApiException(ERROR_CALLING_SMARTY_STREET, e);
+    } catch (IOException e) {
+      LOGGER.error("SmartyStreet IO error, Unable to validate the address", e);
+      throw new ApiException(ERROR_CALLING_SMARTY_STREET, e);
+    }
+    com.smartystreets.api.us_zipcode.Result result = lookup.getResult();
+    City[] cities = result.getCities();
+
+    ArrayList<ValidatedAddressDTO> validAddresses = new ArrayList<>();
+    for (City city : cities) {
+      ValidatedAddressDTO address =
+          new ValidatedAddressDTO(
+              null,
+              city.getCity(),
+              city.getState(),
+              city.getStateAbbreviation(),
+              zipCode,
+              null,
+              null,
+              null,
+              null);
+      validAddresses.add(address);
+    }
+    return validAddresses.toArray(new ValidatedAddressDTO[validAddresses.size()]);
+  }
+
+  private List<Candidate> getSmartyStreetsCandidates(
+      String street, String city, String state, String zipCode) {
 
     StaticCredentials credentials =
         new StaticCredentials(smartyStreetsDAO.getClientId(), smartyStreetsDAO.getToken());
-
     Client client = new ClientBuilder(credentials).buildUsStreetApiClient();
 
     Lookup lookup = createSmartyStreetsLookup(street, city, state, zipCode);
@@ -125,30 +149,23 @@ public class SmartyStreet {
       client.send(lookup);
     } catch (SmartyException e) {
       LOGGER.error("SmartyStreet error, Unable to validate the address", e);
-      throw new ApiException("ERROR calling SmartyStreet - ", e);
+      throw new ApiException(ERROR_CALLING_SMARTY_STREET, e);
     } catch (IOException e) {
       LOGGER.error("SmartyStreet IO error, Unable to validate the address", e);
-      throw new ApiException("ERROR calling SmartyStreet - ", e);
+      throw new ApiException(ERROR_CALLING_SMARTY_STREET, e);
     }
 
     return lookup.getResult();
   }
 
-  /**
-   * @param street incoming street address
-   * @param city incoming city name
-   * @param state incoming state
-   * @param zipCode incoming zip code
-   * @return returns lookup
-   */
-  public Lookup createSmartyStreetsLookup(
-      String street, String city, String state, Integer zipCode) {
+  private Lookup createSmartyStreetsLookup(
+      String street, String city, String state, String zipCode) {
     Lookup lookup = new Lookup();
     lookup.setStreet(street);
     lookup.setCity(city);
     lookup.setState(state);
-    if (zipCode > 0) {
-      lookup.setZipCode(Integer.toString(zipCode));
+    if (zipCode != null) {
+      lookup.setZipCode(zipCode);
     } else {
       lookup.setZipCode("");
     }

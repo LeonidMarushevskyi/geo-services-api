@@ -19,11 +19,11 @@ import org.apache.commons.lang3.NotImplementedException;
  */
 public class AddressValidationService implements CrudsService {
 
-  private SmartyStreetsDAO smartyStreetsDAO;
+  private SmartyStreet smartyStreet;
 
   @Inject
   AddressValidationService(SmartyStreetsDAO smartyStreetsDAO) {
-    this.smartyStreetsDAO = smartyStreetsDAO;
+    this.smartyStreet = new SmartyStreet(smartyStreetsDAO);
   }
 
   /**
@@ -36,56 +36,44 @@ public class AddressValidationService implements CrudsService {
   public ValidatedAddressDTO[] fetchValidatedAddresses(Address address) {
     ValidatedAddressDTO[] addresses = null;
     try {
-      SmartyStreet smartyStreet = new SmartyStreet(smartyStreetsDAO);
       addresses =
-          smartyStreet.usStreetSingleAddress(
+          smartyStreet.validateSingleUSAddress(
               address.getStreetAddress(), address.getCity(), address.getState(), address.getZip());
     } catch (Exception e) {
-      throw new ServiceException("ERROR calling usStreetSingleAddress in SmartyStreet", e);
+      throw new ServiceException("ERROR calling validateSingleUSAddress in SmartyStreet", e);
     }
     return addresses;
   }
 
-  // Not Implemented
+  public ValidatedAddressDTO[] lookupSingleUSZip(String zip) {
+    ValidatedAddressDTO[] addresses = null;
+    try {
+      addresses = smartyStreet.lookupSingleUSZip(zip);
+    } catch (Exception e) {
+      throw new ServiceException("ERROR calling lookupSingleUSZip in SmartyStreet", e);
+    }
+    return addresses;
+  }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see gov.ca.cwds.rest.services.CrudsService#create(gov.ca.cwds.rest.api.Request)
-   */
   @Override
   public Response create(Request request) {
     assert request instanceof Address;
     throw new NotImplementedException("Create is not implemented");
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see gov.ca.cwds.rest.services.CrudsService#find(Serializable)
-   */
+
   @Override
   public Response find(Serializable primaryKey) {
     assert primaryKey instanceof Long;
     throw new NotImplementedException("Delete is not implemented");
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see gov.ca.cwds.rest.services.CrudsService#delete(Serializable)
-   */
   @Override
   public Response delete(Serializable primaryKey) {
     assert primaryKey instanceof Long;
     throw new NotImplementedException("Delete is not implemented");
   }
 
-  /**
-   * {@inheritDoc}
-   *
-   * @see gov.ca.cwds.rest.services.CrudsService#update(Serializable, gov.ca.cwds.rest.api.Request)
-   */
   @Override
   public Response update(Serializable primaryKey, Request request) {
     assert primaryKey instanceof Long;
