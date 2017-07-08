@@ -136,7 +136,7 @@ public class SmartyStreet {
     return validAddresses.toArray(new ValidatedAddressDTO[validAddresses.size()]);
   }
 
-  private List<Candidate> getSmartyStreetsCandidates(
+  public List<Candidate> getSmartyStreetsCandidates(
       String street, String city, String state, String zipCode) {
 
     StaticCredentials credentials =

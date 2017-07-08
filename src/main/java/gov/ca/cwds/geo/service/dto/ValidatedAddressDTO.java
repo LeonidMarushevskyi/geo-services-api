@@ -29,7 +29,7 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
   @JsonProperty("zip_extension")
   @ApiModelProperty(value = "Zip Extension", example = "123")
   @Max(99999)
-  private Integer zipExtension;
+  private String zipExtension;
 
   @JsonProperty("city")
   @ApiModelProperty(example = "Roseville")
@@ -87,7 +87,7 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
     this.city = city;
     this.state = state;
     this.zip = zip;
-    this.zip = zipExtension;
+    this.zipExtension = zipExtension;
     this.longitude = longitude;
     this.lattitude = lattitude;
     this.deliverable = deliverable;
@@ -132,7 +132,7 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
   }
 
   /** @return zip extension code */
-  public Integer getZipExtension() {
+  public String getZipExtension() {
     return zipExtension;
   }
 
@@ -185,8 +185,11 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
         : that.getStreetAddress() != null) {
       return false;
     }
+    if (getState() != null ? !getState().equals(that.getState()) : that.getState() != null) {
+      return false;
+    }
 
-    return getState() != null ? !getState().equals(that.getState()) : that.getState() == null;
+    return true;
   }
 
   @Override

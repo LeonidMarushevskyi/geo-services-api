@@ -15,6 +15,11 @@ server:
   - type: http
     port: 9091
 
+smartystreets:
+  clientId: ${SS_ID:-auth_id_here}
+  token: ${SS_TOKEN:-auth_token_here}
+  maxCandidates: ${SS_MAX:-10}
+
 shiro:
   iniConfigs: ["file:${SHIRO_CONFIG_PATH:-config/shiro.ini}"]
 
