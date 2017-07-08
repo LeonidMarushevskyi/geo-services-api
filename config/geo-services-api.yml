@@ -23,8 +23,8 @@ shiro:
   iniConfigs: ["file:${SHIRO_CONFIG_PATH:-config/shiro.ini}"]
 
 smartystreets:
-  clientId: ${SS_ID:-90a1b85a-b4f4-70cd-9134-14c2b0b7f9a3}
-  token: ${SS_TOKEN:-pCsUCGZ4ufEMjuE0tg3w}
+  clientId: ${SS_ID:-auth_id_here}
+  token: ${SS_TOKEN:-auth_token_here}
   maxCandidates: ${SS_MAX:-10}
 
 swagger:
