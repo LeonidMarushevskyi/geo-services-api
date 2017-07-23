@@ -10,7 +10,8 @@ import com.smartystreets.api.us_street.Analysis;
 import com.smartystreets.api.us_street.Candidate;
 import com.smartystreets.api.us_street.Components;
 import com.smartystreets.api.us_street.Metadata;
-import gov.ca.cwds.geo.SmartyStreet;
+import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
+import gov.ca.cwds.geo.service.USStreetAddressService;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import java.util.ArrayList;
 import org.junit.Test;
@@ -18,19 +19,19 @@ import org.mockito.Mockito;
 
 /** @author CWDS API Team */
 @SuppressWarnings("javadoc")
-public class SmartyStreetTest {
+public class USStreetAddressServiceTest {
 
-  private static final SmartyStreet spySmartyStreet = spy(new SmartyStreet());
+  private static final USStreetAddressService SPY_US_STREET_ADDRESS_SERVICE = spy(new USStreetAddressService(new SmartyStreetsDAO("","",10)));
 
   @Test
   public void successfulWithEmptyCandidate() throws Exception {
-    ArrayList<Candidate> empty = new ArrayList<Candidate>();
+    ArrayList<Candidate> empty = new ArrayList<>();
     String a = "a";
     String b = "b";
     String c = "c";
     String z = "";
-    Mockito.doReturn(empty).when(spySmartyStreet).getSmartyStreetsCandidates(a, b, c, z);
-    ValidatedAddressDTO[] actual = spySmartyStreet.validateSingleUSAddress(a, b, c, z);
+    Mockito.doReturn(empty).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, z);
+    ValidatedAddressDTO[] actual = SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
     ValidatedAddressDTO[] expected = new ValidatedAddressDTO[1];
     expected[0] = new ValidatedAddressDTO(null, null, null, null, null, null, null, null, false);
     assertThat(actual[0], is(equalTo(expected[0])));
@@ -41,7 +42,7 @@ public class SmartyStreetTest {
    */
   @Test
   public void successfulWithDpvY() throws Exception {
-    ArrayList<Candidate> dpvY = new ArrayList<Candidate>();
+    ArrayList<Candidate> dpvY = new ArrayList<>();
     Candidate mockcandidate1 = mock(Candidate.class);
     Analysis mockanalysis1 = mock(Analysis.class);
     Components mockancomponents1 = mock(Components.class);
@@ -62,8 +63,8 @@ public class SmartyStreetTest {
     String b = "folsom";
     String c = "ca";
     String z = "95630";
-    Mockito.doReturn(dpvY).when(spySmartyStreet).getSmartyStreetsCandidates(a, b, c, z);
-    ValidatedAddressDTO[] actual = spySmartyStreet.validateSingleUSAddress(a, b, c, z);
+    Mockito.doReturn(dpvY).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, z);
+    ValidatedAddressDTO[] actual = SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
     ValidatedAddressDTO[] expected = new ValidatedAddressDTO[1];
     expected[0] =
         new ValidatedAddressDTO(
@@ -73,7 +74,7 @@ public class SmartyStreetTest {
 
   @Test
   public void successfulWithMultipleCandidates() throws Exception {
-    ArrayList<Candidate> multiCandidates = new ArrayList<Candidate>();
+    ArrayList<Candidate> multiCandidates = new ArrayList<>();
     Candidate mockcandidate1 = mock(Candidate.class);
     Analysis mockanalysis1 = mock(Analysis.class);
     Components mockancomponents1 = mock(Components.class);
@@ -111,9 +112,8 @@ public class SmartyStreetTest {
     String a = "106 Big Valley";
     String b = "folsom";
     String c = "ca";
-    String z = null;
-    Mockito.doReturn(multiCandidates).when(spySmartyStreet).getSmartyStreetsCandidates(a, b, c, z);
-    ValidatedAddressDTO[] actual = spySmartyStreet.validateSingleUSAddress(a, b, c, z);
+    Mockito.doReturn(multiCandidates).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, null);
+    ValidatedAddressDTO[] actual = SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, null);
     ValidatedAddressDTO[] expected = new ValidatedAddressDTO[2];
     expected[0] =
         new ValidatedAddressDTO(

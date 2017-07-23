@@ -2,6 +2,8 @@ package gov.ca.cwds.geo.web.rest;
 
 import static gov.ca.cwds.geo.Constants.ADDRESS;
 import static gov.ca.cwds.geo.Constants.LOOKUP_ZIP_CODE;
+import static gov.ca.cwds.geo.Constants.PREFIX;
+import static gov.ca.cwds.geo.Constants.SUGGEST;
 import static gov.ca.cwds.geo.Constants.VALIDATE_SINGLE;
 import static gov.ca.cwds.geo.Constants.ZIP_CODE;
 
@@ -9,7 +11,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 import gov.ca.cwds.geo.inject.AddressValidationServiceBackedResource;
 import gov.ca.cwds.geo.persistence.model.Address;
-import gov.ca.cwds.geo.service.AddressValidationService;
+import gov.ca.cwds.geo.service.AddressService;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
@@ -28,16 +30,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.apache.http.HttpStatus;
 
 /**
- * A resource providing a RESTful interface for {@link ValidatedAddressDTO}. It delegates functions
- * to {@link ResourceDelegate}. It decorates the {@link ResourceDelegate} not in functionality but
- * with @see <a href= "https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X">Swagger
- * Annotations</a> and <a
- * href="https://jersey.java.net/documentation/latest/user-guide.html#jaxrs-resources">Jersey
- * Annotations</a>
- *
  * @author CWDS API Team
  */
 @Api(value = ADDRESS, tags = ADDRESS)
@@ -69,28 +63,29 @@ public class AddressResource {
   @Timed
   @ApiResponses(
     value = {
-      @ApiResponse(code = 400, message = "Unable to process JSON"),
-      @ApiResponse(code = 401, message = "Not Authorized"),
-      @ApiResponse(code = 406, message = "Accept Header not supported"),
-      @ApiResponse(code = 422, message = "Unable to validate Address")
+        @ApiResponse(code = 400, message = "Bad Request (Malformed Payload): The request was malformed in some way and could not be parsed."),
+        @ApiResponse(code = 401, message = "Unauthorized: The credentials were provided incorrectly or did not match any existing, active credentials."),
+        @ApiResponse(code = 402, message = "Payment Required: There is no active subscription for the account associated with the credentials submitted with the request."),
+        @ApiResponse(code = 422, message = "Unprocessable Entity (Unsuitable Payload): The value of the prefix input parameter was too long and could not be processed."),
+        @ApiResponse(code = 429, message = "Too Many Requests: When using public \"website key\" authentication, we restrict the number of requests coming from a given source over too short of a time. If you use \"website key\" authentication, you can avoid this error by adding your IP address as an authorized host for the website key in question."),
+        @ApiResponse(code = 200, message = "OK (success!)")
     }
   )
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(
     value = "Validate Single Address",
-    code = HttpStatus.SC_OK,
     response = ValidatedAddressDTO[].class
   )
   public Response validateSingleAddress(
-      @Valid @ApiParam(hidden = false, required = true) Address address) {
-    ValidatedAddressDTO[] addresses = null;
+      @Valid @ApiParam(required = true) Address address) {
+    ValidatedAddressDTO[] addresses;
     try {
       addresses =
-          ((AddressValidationService)
+          ((AddressService)
                   ((ServiceBackedResourceDelegate) resourceDelegate).getService())
               .fetchValidatedAddresses(address);
     } catch (Exception e) {
-      throw new ApiException("ERROR calling SmartyStreet to fetch Validated Addresses", e);
+      throw new ApiException("ERROR calling USStreetAddressService to fetch Validated Addresses", e);
     }
     if (addresses != null) {
       return Response.ok(addresses).build();
@@ -104,28 +99,65 @@ public class AddressResource {
   @Path("/" + LOOKUP_ZIP_CODE + "/{" + ZIP_CODE + "}" )
   @ApiResponses(
       value = {
-          @ApiResponse(code = 400, message = "Unable to process JSON"),
-          @ApiResponse(code = 401, message = "Not Authorized"),
-          @ApiResponse(code = 406, message = "Accept Header not supported"),
-          @ApiResponse(code = 422, message = "Unable to validate Address")
+          @ApiResponse(code = 400, message = "Bad Request (Malformed Payload): The request was malformed in some way and could not be parsed."),
+          @ApiResponse(code = 401, message = "Unauthorized: The credentials were provided incorrectly or did not match any existing, active credentials."),
+          @ApiResponse(code = 402, message = "Payment Required: There is no active subscription for the account associated with the credentials submitted with the request."),
+          @ApiResponse(code = 422, message = "Unprocessable Entity (Unsuitable Payload): The value of the prefix input parameter was too long and could not be processed."),
+          @ApiResponse(code = 429, message = "Too Many Requests: When using public \"website key\" authentication, we restrict the number of requests coming from a given source over too short of a time. If you use \"website key\" authentication, you can avoid this error by adding your IP address as an authorized host for the website key in question."),
+          @ApiResponse(code = 200, message = "OK (success!)")
       }
   )
   @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(
       value = "Lookup City and State by Zip Code",
-      code = HttpStatus.SC_OK,
       response = ValidatedAddressDTO[].class
   )
-  public Response citiesByZipCode(
-      @PathParam(ZIP_CODE) @ApiParam(hidden = false, required = true, name = ZIP_CODE, value = "Zip Code") String zipCode) {
-    ValidatedAddressDTO[] addresses = null;
+  public Response getCityStateByZipCode(
+      @PathParam(ZIP_CODE) @ApiParam(required = true, name = ZIP_CODE, value = "Zip Code") String zipCode) {
+    ValidatedAddressDTO[] addresses;
     try {
       addresses =
-          ((AddressValidationService)
+          ((AddressService)
               ((ServiceBackedResourceDelegate) resourceDelegate).getService())
               .lookupSingleUSZip(zipCode);
     } catch (Exception e) {
-      throw new ApiException("ERROR calling SmartyStreet to lookup City and State by Zip Code", e);
+      throw new ApiException("ERROR calling USStreetAddressService to lookup City and State by Zip Code", e);
+    }
+    if (addresses != null) {
+      return Response.ok(addresses).build();
+    } else {
+      return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+    }
+  }
+
+  @GET
+  @Timed
+  @Path("/" + SUGGEST + "/{" + PREFIX + "}" )
+  @ApiResponses(
+      value = {
+          @ApiResponse(code = 400, message = "Bad Request (Malformed Payload): The request was malformed in some way and could not be parsed."),
+          @ApiResponse(code = 401, message = "Unauthorized: The credentials were provided incorrectly or did not match any existing, active credentials."),
+          @ApiResponse(code = 402, message = "Payment Required: There is no active subscription for the account associated with the credentials submitted with the request."),
+          @ApiResponse(code = 422, message = "Unprocessable Entity (Unsuitable Payload): The value of the prefix input parameter was too long and could not be processed."),
+          @ApiResponse(code = 429, message = "Too Many Requests: When using public \"website key\" authentication, we restrict the number of requests coming from a given source over too short of a time. If you use \"website key\" authentication, you can avoid this error by adding your IP address as an authorized host for the website key in question."),
+          @ApiResponse(code = 200, message = "OK (success!)")
+      }
+  )
+  @Consumes(value = MediaType.APPLICATION_JSON)
+  @ApiOperation(
+      value = "Autocomplete Address by prefix",
+      response = Address[].class
+  )
+  public Response suggestAddress(
+      @PathParam(PREFIX) @ApiParam(required = true, name = PREFIX, value = "Required. The part of the address that has already been typed. Maximum length is 128 bytes.") String prefix) {
+    Address[] addresses;
+    try {
+      addresses =
+          ((AddressService)
+              ((ServiceBackedResourceDelegate) resourceDelegate).getService())
+              .suggestAddress(prefix);
+    } catch (Exception e) {
+      throw new ApiException("ERROR calling USStreetAddressService to autocomplete Address", e);
     }
     if (addresses != null) {
       return Response.ok(addresses).build();

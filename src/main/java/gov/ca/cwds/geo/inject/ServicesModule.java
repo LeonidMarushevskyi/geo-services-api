@@ -1,7 +1,7 @@
 package gov.ca.cwds.geo.inject;
 
 import com.google.inject.AbstractModule;
-import gov.ca.cwds.geo.service.AddressValidationService;
+import gov.ca.cwds.geo.service.AddressService;
 
 /**
  * Identifies all GEO Services API business layer (services) classes available for dependency
@@ -12,12 +12,12 @@ import gov.ca.cwds.geo.service.AddressValidationService;
 public class ServicesModule extends AbstractModule {
 
   /** Default constructor */
-  public ServicesModule() {
+  ServicesModule() {
     // Do nothing - Default constructor
   }
 
   @Override
   protected void configure() {
-    bind(AddressValidationService.class);
+    bind(AddressService.class);
   }
 }

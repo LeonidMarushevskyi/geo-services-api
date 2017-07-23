@@ -1,7 +1,6 @@
 package gov.ca.cwds.geo.service;
 
 import com.google.inject.Inject;
-import gov.ca.cwds.geo.SmartyStreet;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.persistence.model.Address;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
@@ -17,13 +16,19 @@ import org.apache.commons.lang3.NotImplementedException;
  *
  * @author CWDS API Team
  */
-public class AddressValidationService implements CrudsService {
+public class AddressService implements CrudsService {
 
-  private SmartyStreet smartyStreet;
+  private USStreetAddressService usStreetAddressService;
+  private USZipCodeService usZipCodeService;
+  private USAutocompleteService usAutocompleteService;
+  private SmartyStreetsDAO smartyStreetsDAO;
 
   @Inject
-  AddressValidationService(SmartyStreetsDAO smartyStreetsDAO) {
-    this.smartyStreet = new SmartyStreet(smartyStreetsDAO);
+  AddressService(SmartyStreetsDAO smartyStreetsDAO) {
+    this.smartyStreetsDAO = smartyStreetsDAO;
+    this.usStreetAddressService = new USStreetAddressService(smartyStreetsDAO);
+    this.usZipCodeService = new USZipCodeService(smartyStreetsDAO);
+    this.usAutocompleteService = new USAutocompleteService(smartyStreetsDAO);
   }
 
   /**
@@ -34,26 +39,37 @@ public class AddressValidationService implements CrudsService {
    * @throws ServiceException due to SmartyStreets error, I/O error, etc.
    */
   public ValidatedAddressDTO[] fetchValidatedAddresses(Address address) {
-    ValidatedAddressDTO[] addresses = null;
+    ValidatedAddressDTO[] addresses;
     try {
       addresses =
-          smartyStreet.validateSingleUSAddress(
+          usStreetAddressService.validateSingleUSAddress(
               address.getStreetAddress(), address.getCity(), address.getState(), address.getZip());
     } catch (Exception e) {
-      throw new ServiceException("ERROR calling validateSingleUSAddress in SmartyStreet", e);
+      throw new ServiceException("ERROR calling validateSingleUSAddress in usStreetAddressService", e);
     }
     return addresses;
   }
 
   public ValidatedAddressDTO[] lookupSingleUSZip(String zip) {
-    ValidatedAddressDTO[] addresses = null;
+    ValidatedAddressDTO[] addresses;
     try {
-      addresses = smartyStreet.lookupSingleUSZip(zip);
+      addresses = usZipCodeService.lookupSingleUSZip(zip);
     } catch (Exception e) {
-      throw new ServiceException("ERROR calling lookupSingleUSZip in SmartyStreet", e);
+      throw new ServiceException("ERROR calling lookupSingleUSZip in usStreetAddressService", e);
     }
     return addresses;
   }
+
+  public Address[] suggestAddress(String prefix) {
+    Address[] addresses;
+    try {
+      addresses = usAutocompleteService.suggestAddress(prefix, "CA", smartyStreetsDAO.getMaxCandidates());
+    } catch (Exception e) {
+      throw new ServiceException("ERROR calling suggestAddress in usStreetAddressService", e);
+    }
+    return addresses;
+  }
+
 
   @Override
   public Response create(Request request) {
