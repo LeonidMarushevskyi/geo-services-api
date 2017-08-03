@@ -46,10 +46,10 @@ node ('tpt2-slave'){
 		cleanWs()
 	}
 	stage('Deploy Application'){
-	   checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', url: 'git@github.com:ca-cwds/de-ansible.git']]]
-	   sh 'ansible-playbook -vv -e VERSION_NUMBER=v21 -i $inventory deploy-db2-docker.yml  --vault-password-file ~/.ssh/vault.txt'
-	   sh 'ansible-playbook -vv -e VERSION_NUMBER=latest -i $inventory deploy-postgres-docker.yml  --vault-password-file ~/.ssh/vault.txt'
-	   sh 'ansible-playbook -e GEO_SERVICES_API_VERSION=$APP_VERSION -i $inventory deploy-geo-services-api.yml --vault-password-file ~/.ssh/vault.txt -vv'
+#	   checkout changelog: false, poll: false, scm: [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', url: 'git@github.com:ca-cwds/de-ansible.git']]]
+#           sh 'ansible-playbook -vv -e VERSION_NUMBER=v21 -i $inventory deploy-db2-docker.yml  --vault-password-file ~/.ssh/vault.txt'
+#	   sh 'ansible-playbook -vv -e VERSION_NUMBER=latest -i $inventory deploy-postgres-docker.yml  --vault-password-file ~/.ssh/vault.txt'
+#	   sh 'ansible-playbook -e GEO_SERVICES_API_VERSION=$APP_VERSION -i $inventory deploy-geo-services-api.yml --vault-password-file ~/.ssh/vault.txt -vv'
 	   cleanWs()
 	   sleep (20)
   }
