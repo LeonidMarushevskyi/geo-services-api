@@ -107,7 +107,6 @@ public class AddressResource {
           @ApiResponse(code = 200, message = "OK (success!)")
       }
   )
-  @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(
       value = "Lookup City and State by Zip Code",
       response = ValidatedAddressDTO[].class
@@ -143,7 +142,6 @@ public class AddressResource {
           @ApiResponse(code = 200, message = "OK (success!)")
       }
   )
-  @Consumes(value = MediaType.APPLICATION_JSON)
   @ApiOperation(
       value = "Autocomplete Address by prefix",
       response = Address[].class

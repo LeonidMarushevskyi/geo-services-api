@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  */
 public class USZipCodeService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(USStreetAddressService.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(USZipCodeService.class);
   private static final String ERROR_CALLING_SMARTY_STREET = "ERROR calling USStreetAddressService - ";
   private SmartyStreetsDAO smartyStreetsDAO;
 

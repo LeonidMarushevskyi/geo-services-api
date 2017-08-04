@@ -56,7 +56,7 @@ public class USStreetAddressService {
     if (results.isEmpty()) {
       ValidatedAddressDTO address =
           new ValidatedAddressDTO(
-              streetAddress, cityName, stateName, stateAbbreviation, zip, zipExtension, null, null, false);
+              streetAddress, cityName, stateName, stateAbbreviation, zip, zipExtension, null, null, Boolean.FALSE);
       returnValidatedAddressDTOS.add(address);
       return returnValidatedAddressDTOS.toArray(new ValidatedAddressDTO[0]);
     }
