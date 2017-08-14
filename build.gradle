@@ -28,7 +28,7 @@ project.ext {
     projectDockerAppName = 'geo-services-api'
     projectVersion = '3.5-SNAPSHOT'
     dropwizardVersion = '1.1.0'
-    coreApiVersion = '0.21.216'
+    coreApiVersion = '3.6.400'
     mapstructVersion = '1.1.0.Final'
     mainClass = 'gov.ca.cwds.geo.GeoServicesApiApplication'
 }
@@ -93,7 +93,7 @@ dependencies {
 // Dropwizard-guice 1.0.0.2 conflicts with jersey-client 2.25.
 // Exclude transitive dependencies.
 
-    compile (group: 'gov.ca.cwds.api', name: 'api-core', version: coreApiVersion , changing: true) {
+    compile (group: 'gov.ca.cwds.api', name: 'api-core-rest', version: coreApiVersion , changing: true) {
         exclude group: 'org.glassfish.jersey.core'
     }
 

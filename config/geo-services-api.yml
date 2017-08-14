@@ -36,6 +36,8 @@ swagger:
   logo: images/CWDS-API-Logo-Horizontal.png
   loginUrl: ${LOGIN_URL:-http://localhost:8090/authn/login}
   showSwagger: ${SHOW_SWAGGER:-true}
+  jsonUrl: ${SWAGGER_JSON_URL:-http://localhost:8080/swagger.json}
+  callbackUrl: ${SWAGGER_CALLBACK_URL:-http://localhost:8080/swagger}
 
 logging:
   level: ${LOGLEVEL:-INFO}
