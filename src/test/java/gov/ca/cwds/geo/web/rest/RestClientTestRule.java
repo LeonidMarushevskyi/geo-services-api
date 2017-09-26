@@ -43,7 +43,7 @@ public class RestClientTestRule implements TestRule {
   public WebTarget target(String pathInfo) {
     String restUrl = getUriString() + pathInfo;
     WebTarget webTarget = client.target(restUrl);
-//    webTarget.register(new LoggingFilter());
+    webTarget.register(new LoggingFilter());
     return webTarget;
   }
 

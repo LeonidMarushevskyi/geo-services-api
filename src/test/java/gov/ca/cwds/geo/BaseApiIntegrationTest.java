@@ -38,6 +38,10 @@ public abstract class BaseApiIntegrationTest {
     return clientTestRule.getMapper().writeValueAsString(dto);
   }
 
+  public String transformListDTOtoJSON(BaseDTO[] dtoList) throws Exception {
+    return clientTestRule.getMapper().writeValueAsString(dtoList);
+  }
+
   @After
   public void tearDown() throws Exception {}
 

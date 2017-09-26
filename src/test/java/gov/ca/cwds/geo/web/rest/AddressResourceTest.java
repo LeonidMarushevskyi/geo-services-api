@@ -1,59 +1,40 @@
 package gov.ca.cwds.geo.web.rest;
 
+import static gov.ca.cwds.geo.Constants.ADDRESS;
 import static gov.ca.cwds.geo.Constants.API.SYSTEM_INFORMATION;
+import static gov.ca.cwds.geo.Constants.LOOKUP_ZIP_CODE;
+import static gov.ca.cwds.geo.Constants.VALIDATE_SINGLE;
+import static gov.ca.cwds.geo.Constants.ZIP_CODE;
+import static gov.ca.cwds.geo.web.rest.AssertFixtureUtils.assertResponseByFixturePath;
+import static gov.ca.cwds.geo.web.rest.AssertResponseHelper.assertEqualsResponse;
+import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
+import gov.ca.cwds.geo.BaseApiIntegrationTest;
+import gov.ca.cwds.geo.Constants;
 import gov.ca.cwds.geo.JerseyGuiceRule;
+import gov.ca.cwds.geo.persistence.model.Address;
+import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-public class AddressResourceTest {
-
-    private static final String APP_NAME = "my app";
-    private static final String VERSION = "1.0.0";
-    private static final String BUILD_NUMBER = "1";
-
-    @ClassRule
-    public static JerseyGuiceRule rule = new JerseyGuiceRule();
-
-    @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new SystemInformationResource(APP_NAME))
-            .build();
+public class AddressResourceTest extends BaseApiIntegrationTest {
 
     @Test
-    public void applicationGetReturns200() {
-        assertThat(resources.client().target("/"+SYSTEM_INFORMATION).request().get().getStatus(), is(equalTo(200)));
-    }
-
-    @Test
-    public void applicationGetReturnsCorrectName() {
-        assertThat(resources.client().target("/"+SYSTEM_INFORMATION).request().get().readEntity(String.class),
-                containsString(APP_NAME));
-    }
-
-    @Test
-    public void applicationGetReturnsCorrectVersion() {
-        assertThat(resources.client().target("/"+SYSTEM_INFORMATION).request().get().readEntity(String.class),
-                containsString(VERSION));
-    }
-
-    @Test
-    public void applicationGetReturnsCorrectBuildNumber() {
-        assertThat(resources.client().target("/"+SYSTEM_INFORMATION).request().get().readEntity(String.class),
-                containsString(BUILD_NUMBER));
-    }
-
-    @Test
-    public void applicationGetReturnsV1JsonContentType() {
-        assertThat(
-                resources.client().target("/"+SYSTEM_INFORMATION).request().get().getMediaType()
-                        .toString(), is(equalTo(MediaType.APPLICATION_JSON)));
+    public void testPostAddressValidate() throws Exception {
+        WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
+        Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+        Response postResponse = invocation.post(Entity.entity(fixture("fixtures/addressValidateRequest.json"), MediaType.APPLICATION_JSON_TYPE), Response.class);
+        assertResponseByFixturePath(postResponse, "fixtures/addressValidateResponse.json");
     }
 
 }
