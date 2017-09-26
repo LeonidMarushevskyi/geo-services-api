@@ -28,7 +28,7 @@ project.ext {
     projectDockerAppName = 'geo-services-api'
     projectVersion = '0.4.3-SNAPSHOT'
     dropwizardVersion = '1.1.0'
-    coreApiVersion = '3.6.400'
+    coreApiVersion = '3.6.425'
     mapstructVersion = '1.1.0.Final'
     mainClass = 'gov.ca.cwds.geo.GeoServicesApiApplication'
 }

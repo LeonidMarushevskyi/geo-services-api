@@ -1,5 +1,6 @@
 package gov.ca.cwds.geo.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
@@ -20,10 +21,10 @@ import javax.ws.rs.core.MediaType;
 /**
  * @author CWDS TPT2 Team
  */
-@Api(value = API.RESOURCE_APPLICATION)
-@Path(API.RESOURCE_APPLICATION)
+@Api(value = API.SYSTEM_INFORMATION)
+@Path(API.SYSTEM_INFORMATION)
 @Produces(MediaType.APPLICATION_JSON)
-public class ApplicationResource {
+public class SystemInformationResource {
 
   private static final String VERSION_PROPERTIES_FILE = "version.properties";
   private static final String BUILD_VERSION = "build.version";
@@ -41,7 +42,7 @@ public class ApplicationResource {
    * @param applicationName The name of the application
    */
   @Inject
-  public ApplicationResource(@Named("app.name") String applicationName) {
+  public SystemInformationResource(@Named("app.name") String applicationName) {
     this.applicationName = applicationName;
     Properties versionProperties = getVersionProperties();
     this.version = versionProperties.getProperty(BUILD_VERSION);
@@ -65,6 +66,7 @@ public class ApplicationResource {
    * @return the application data
    */
   @GET
+  @Timed
   @ApiOperation(value = "Returns Application information")
   public String get() {
     ImmutableMap<String, String> map =

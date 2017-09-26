@@ -7,7 +7,7 @@ import com.google.inject.name.Named;
 import gov.ca.cwds.geo.GeoServicesApiConfiguration;
 import gov.ca.cwds.geo.service.AddressService;
 import gov.ca.cwds.geo.web.rest.AddressResource;
-import gov.ca.cwds.geo.web.rest.ApplicationResource;
+import gov.ca.cwds.geo.web.rest.SystemInformationResource;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
 import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 
@@ -26,7 +26,7 @@ public class ResourcesModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    bind(ApplicationResource.class);
+    bind(SystemInformationResource.class);
     bind(AddressResource.class);
   }
 

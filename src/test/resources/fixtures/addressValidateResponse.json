@@ -1,0 +1,12 @@
+[
+  {
+    "street_address": "202 Spurlock Ct",
+    "city": "Roseville",
+    "state": "CA",
+    "zip": "95661",
+    "zip_extension": "3714",
+    "longitude": -121.25118,
+    "lattitude": 38.74037,
+    "deliverable": true
+  }
+]

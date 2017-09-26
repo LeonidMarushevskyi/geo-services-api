@@ -15,7 +15,7 @@ public final class Constants {
 
   public static class API {
 
-    public static final String RESOURCE_APPLICATION = "application";
+    public static final String SYSTEM_INFORMATION = "system-information";
 
     private API() {}
   }

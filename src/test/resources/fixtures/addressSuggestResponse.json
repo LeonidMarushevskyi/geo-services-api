@@ -1,0 +1,42 @@
+[
+  {
+    "street_address": "1489 Black Bear St",
+    "city": "Roseville",
+    "state": "CA"
+  },
+  {
+    "street_address": "1489 Black Bear St",
+    "city": "Granite Bay",
+    "state": "CA"
+  },
+  {
+    "street_address": "1489 Black Bear St",
+    "city": "Delta",
+    "state": "CO"
+  },
+  {
+    "street_address": "1489 Black Bear Run",
+    "city": "Stowe",
+    "state": "VT"
+  },
+  {
+    "street_address": "1489 Black Bear St",
+    "city": "Conroe",
+    "state": "TX"
+  },
+  {
+    "street_address": "1489 Black Bear Ln",
+    "city": "Stanley",
+    "state": "VA"
+  },
+  {
+    "street_address": "1489 Black Bear St",
+    "city": "Fryeburg",
+    "state": "ME"
+  },
+  {
+    "street_address": "1489 Black Bear Ln",
+    "city": "Stroudsburg",
+    "state": "PA"
+  }
+]
