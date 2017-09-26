@@ -37,4 +37,13 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
         assertResponseByFixturePath(postResponse, "fixtures/addressValidateResponse.json");
     }
 
+    @Test
+    public void testAddressLookup() throws Exception {
+        String zipCode = "95747";
+        WebTarget target = clientTestRule.target(ADDRESS + "/" + LOOKUP_ZIP_CODE + "/" + zipCode);
+        Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+        Response response = invocation.get(Response.class);
+        assertResponseByFixturePath(response, "fixtures/addressLookupResponse.json");
+    }
+
 }
