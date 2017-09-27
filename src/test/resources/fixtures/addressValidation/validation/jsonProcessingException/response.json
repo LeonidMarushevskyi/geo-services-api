@@ -1,0 +1,9 @@
+{
+  "issue_details": [
+    {
+      "type": "json_processing_exception",
+      "user_message": "There was an error processing your request. It has been logged with unique incident id",
+      "technical_message": "Unable to process JSON. Can not deserialize instance of gov.ca.cwds.geo.persistence.model.Address out of START_ARRAY token"
+    }
+  ]
+}

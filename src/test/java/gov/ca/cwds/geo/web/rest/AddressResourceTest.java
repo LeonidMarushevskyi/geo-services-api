@@ -19,62 +19,96 @@ import org.junit.Test;
 
 public class AddressResourceTest extends BaseApiIntegrationTest {
 
-    @Test
-    public void testPostAddressValidate() throws Exception {
-        WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
-        Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
-        Response postResponse = invocation.post(Entity.entity(fixture("fixtures/addressValidateRequest.json"), MediaType.APPLICATION_JSON_TYPE), Response.class);
-        assertResponseByFixturePath(postResponse, "fixtures/addressValidateResponse.json");
-    }
+  @Test
+  public void testPostAddressValidate() throws Exception {
+    WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
+    Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+    Response postResponse =
+        invocation.post(
+            Entity.entity(
+                fixture("fixtures/addressValidateRequest.json"), MediaType.APPLICATION_JSON_TYPE),
+            Response.class);
+    assertResponseByFixturePath(postResponse, "fixtures/addressValidateResponse.json");
+  }
+
+  @Test
+  public void testPostAddressValidateJsonProcessingException() throws Exception {
+    WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
+    Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+    Response postResponse =
+        invocation.post(
+            Entity.entity(
+                fixture("fixtures/addressValidation/validation/jsonProcessingException/request.json"),
+                MediaType.APPLICATION_JSON_TYPE),
+            Response.class);
+    assertResponseByFixturePath(
+        postResponse, "fixtures/addressValidation/validation/jsonProcessingException/response.json");
+  }
 
   @Test
   public void testPostAddressValidateStreetTooLong() throws Exception {
     WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
     Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
-    Response postResponse = invocation.post(Entity.entity(fixture(
-        "fixtures/addressValidation/validation/streetTooLong/request.json"), MediaType.APPLICATION_JSON_TYPE), Response.class);
-    assertResponseByFixturePath(postResponse,
-        "fixtures/addressValidation/validation/streetTooLong/response.json");
+    Response postResponse =
+        invocation.post(
+            Entity.entity(
+                fixture("fixtures/addressValidation/validation/streetTooLong/request.json"),
+                MediaType.APPLICATION_JSON_TYPE),
+            Response.class);
+    assertResponseByFixturePath(
+        postResponse, "fixtures/addressValidation/validation/streetTooLong/response.json");
   }
 
   @Test
   public void testPostAddressValidateCityTooLong() throws Exception {
     WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
     Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
-    Response postResponse = invocation.post(Entity.entity(fixture(
-        "fixtures/addressValidation/validation/cityTooLong/request.json"), MediaType.APPLICATION_JSON_TYPE), Response.class);
-    assertResponseByFixturePath(postResponse,
-        "fixtures/addressValidation/validation/cityTooLong/response.json");
+    Response postResponse =
+        invocation.post(
+            Entity.entity(
+                fixture("fixtures/addressValidation/validation/cityTooLong/request.json"),
+                MediaType.APPLICATION_JSON_TYPE),
+            Response.class);
+    assertResponseByFixturePath(
+        postResponse, "fixtures/addressValidation/validation/cityTooLong/response.json");
   }
 
   @Test
   public void testPostAddressValidateZipTooLong() throws Exception {
     WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
     Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
-    Response postResponse = invocation.post(Entity.entity(fixture(
-        "fixtures/addressValidation/validation/zipTooLong/request.json"), MediaType.APPLICATION_JSON_TYPE), Response.class);
-    assertResponseByFixturePath(postResponse,
-        "fixtures/addressValidation/validation/zipTooLong/response.json");
+    Response postResponse =
+        invocation.post(
+            Entity.entity(
+                fixture("fixtures/addressValidation/validation/zipTooLong/request.json"),
+                MediaType.APPLICATION_JSON_TYPE),
+            Response.class);
+    assertResponseByFixturePath(
+        postResponse, "fixtures/addressValidation/validation/zipTooLong/response.json");
   }
 
   @Test
   public void testPostAddressValidateStateTooLong() throws Exception {
     WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
     Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
-    Response postResponse = invocation.post(Entity.entity(fixture(
-        "fixtures/addressValidation/validation/stateTooLong/request.json"), MediaType.APPLICATION_JSON_TYPE), Response.class);
-    assertResponseByFixturePath(postResponse,
-        "fixtures/addressValidation/validation/stateTooLong/response.json");
+    Response postResponse =
+        invocation.post(
+            Entity.entity(
+                fixture("fixtures/addressValidation/validation/stateTooLong/request.json"),
+                MediaType.APPLICATION_JSON_TYPE),
+            Response.class);
+    assertResponseByFixturePath(
+        postResponse, "fixtures/addressValidation/validation/stateTooLong/response.json");
   }
 
-    @Test
-    public void testAddressLookup() throws Exception {
-        String zipCode = "95747";
-        WebTarget target = clientTestRule.target(ADDRESS + "/" + LOOKUP_ZIP_CODE + "/" + zipCode);
-        Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
-        Response response = invocation.get(Response.class);
-        assertResponseByFixturePath(response, "fixtures/addressLookupResponse.json");
-    }
+  @Test
+  public void testAddressLookup() throws Exception {
+    String zipCode = "95747";
+    WebTarget target = clientTestRule.target(ADDRESS + "/" + LOOKUP_ZIP_CODE + "/" + zipCode);
+    Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+    Response response = invocation.get(Response.class);
+    assertResponseByFixturePath(response, "fixtures/addressLookupResponse.json");
+  }
 
   @Test
   public void testAddressSuggestion() throws Exception {
@@ -84,5 +118,4 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
     Response response = invocation.get(Response.class);
     assertResponseByFixturePath(response, "fixtures/addressSuggestResponse.json");
   }
-
 }
