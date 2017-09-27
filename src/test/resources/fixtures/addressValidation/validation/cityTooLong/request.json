@@ -1,0 +1,6 @@
+{
+  "street_address": "1467 Black Bear St.",
+  "city": "Some invalid long city name more then 50 characters",
+  "state": "CA",
+  "zip": "95747"
+}

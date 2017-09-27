@@ -7,6 +7,7 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -23,7 +24,8 @@ public class Address implements Request {
 
   @JsonProperty("street_address")
   @ApiModelProperty(example = "202 Spurlock Ct")
-  @Size(max = 50)
+  @NotNull
+  @Size(max = 100)
   private String streetAddress;
 
   @JsonProperty("city")
@@ -33,12 +35,12 @@ public class Address implements Request {
 
   @JsonProperty("state")
   @ApiModelProperty(value = "State Code", example = "CA")
-  @Size(max = 50)
+  @Size(min = 2, max = 2)
   private String state;
 
   @JsonProperty("zip")
   @ApiModelProperty(value = "Zip", example = "95661")
-  @Size(max = 5)
+  @Size(min = 5, max = 5)
   private String zip;
 
   /**

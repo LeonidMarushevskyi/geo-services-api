@@ -1,0 +1,8 @@
+{
+  "issue_details": [
+    {
+      "type": "constraint_validation",
+      "user_message": "city size must be between 0 and 50"
+    }
+  ]
+}
