@@ -26,8 +26,11 @@ project.ext {
     projectGroup = 'gov.ca.cwds.geo'
     projectDockerGroup = 'cwds'
     projectDockerAppName = 'geo-services-api'
+    releaseDocker = System.getProperty("ReleaseDocker")
+    buildNumber = System.getProperty('BuildNumber')
     projectMajorVersion = '0.4.3'
-    projectVersion = projectMajorVersion + '-SNAPSHOT'
+    dockerTag = (releaseDocker == 'true' && buildNumber != null  ? projectMajorVersion + '_' + buildNumber + '-RC' : (projectMajorVersion + '-SNAPSHOT') )
+    projectVersion = dockerTag
     dropwizardVersion = '1.1.0'
     coreApiVersion = '3.6.425'
     mapstructVersion = '1.1.0.Final'
@@ -150,10 +153,6 @@ jar {
         attributes 'Main-Class': mainClassName
     }
 }
-
-def releaseDocker = System.getProperty("ReleaseDocker")
-def buildNumber = System.getProperty('BuildNumber')
-def dockerTag = (releaseDocker == 'true' && buildNumber != null  ? projectMajorVersion + '_' + buildNumber + '-RC' : projectVersion )
 
 task readArguments() {
     doLast{
