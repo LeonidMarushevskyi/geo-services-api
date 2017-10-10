@@ -31,8 +31,8 @@ node ('tpt2-slave'){
 
 	stage ('Push to artifactory'){
 
-	    // rtGradle.deployer repo:'libs-snapshot', server: serverArti
- 	    rtGradle.deployer repo:'libs-release', server: serverArti
+	    rtGradle.deployer repo:'libs-snapshot', server: serverArti
+ 	    // rtGradle.deployer repo:'libs-release', server: serverArti
 	    rtGradle.deployer.deployArtifacts = true
 		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'artifactoryPublish'
 		rtGradle.deployer.deployArtifacts = false
