@@ -28,9 +28,9 @@ project.ext {
     projectDockerAppName = 'geo-services-api'
     releaseDocker = System.getProperty("ReleaseDocker")
     buildNumber = System.getProperty('BuildNumber')
-    projectMajorVersion = '0.4.3'
-    //dockerTag = (releaseDocker == 'true' && buildNumber != null  ? projectMajorVersion + '_' + buildNumber + '-RC' : (projectMajorVersion + '-SNAPSHOT') )
-    dockerTag = projectMajorVersion
+    projectMajorVersion = '0.4.4'
+    dockerTag = (releaseDocker == 'true' && buildNumber != null  ? projectMajorVersion + '_' + buildNumber + '-RC' : (projectMajorVersion + '-SNAPSHOT') )
+    //dockerTag = projectMajorVersion
     projectVersion = dockerTag
     dropwizardVersion = '1.1.0'
     coreApiVersion = '3.6.425'
