@@ -1,8 +1,8 @@
 {
-  "issue_details": [
-    {
-      "type": "constraint_validation",
-      "user_message": "streetAddress size must be between 0 and 100"
-    }
-  ]
+  "issue_details" : [ {
+    "type" : "constraint_validation",
+    "user_message" : "streetAddress size must be between 0 and 100",
+    "property" : "streetAddress",
+    "invalid_value" : "Some infinitely long street name more then 100 characters long 0000000000000000000000000000000000000000000000"
+  } ]
 }
