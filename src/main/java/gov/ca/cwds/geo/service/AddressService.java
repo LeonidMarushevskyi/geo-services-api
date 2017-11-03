@@ -23,12 +23,12 @@ public class AddressService implements CrudsService {
   private USZipCodeService usZipCodeService;
   private USAutocompleteService usAutocompleteService;
   private SmartyStreetsDAO smartyStreetsDAO;
-  private final GoogleMapsDistanceService googleMapsDistanceService;
+  private final DistanceService distanceService;
 
   @Inject
-  AddressService(SmartyStreetsDAO smartyStreetsDAO, GoogleMapsDistanceService googleMapsDistanceService) {
+  AddressService(SmartyStreetsDAO smartyStreetsDAO, DistanceService distanceService) {
     this.smartyStreetsDAO = smartyStreetsDAO;
-    this.googleMapsDistanceService = googleMapsDistanceService;
+    this.distanceService = distanceService;
     this.usStreetAddressService = new USStreetAddressService(smartyStreetsDAO);
     this.usZipCodeService = new USZipCodeService(smartyStreetsDAO);
     this.usAutocompleteService = new USAutocompleteService(smartyStreetsDAO);
@@ -73,11 +73,17 @@ public class AddressService implements CrudsService {
     return addresses;
   }
 
-  public DistanceDTO calculateDistance(Address firstAddress, Address secondAddress) {
+  public DistanceDTO calculateDistance(final Address firstAddress, final Address secondAddress) {
     try {
-      return googleMapsDistanceService.calculateDistance(firstAddress, secondAddress);
+      final ValidatedAddressDTO[] validatedFirstAddress = fetchValidatedAddresses(firstAddress);
+      final ValidatedAddressDTO[] validatedSecondAddress = fetchValidatedAddresses(secondAddress);
+      final Double distance = distanceService.calculateDistance(
+          validatedFirstAddress[0],
+          validatedSecondAddress[0]
+      );
+      return new DistanceDTO(distance);
     } catch (Exception e) {
-      throw new ServiceException("ERROR while calculating distance", e);
+      throw new ServiceException("ERROR calling calculateDistance service", e);
     }
   }
 

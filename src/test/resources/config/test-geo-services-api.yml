@@ -14,8 +14,6 @@ smartystreets:
   token: ${SS_TOKEN:-8pWIIdqtfEZlyBLP6Gfl}
   maxCandidates: ${SS_MAX:-10}
 
-googleMapsApiKey: ${GM_API_KEY:-AIzaSyBKS_5dhNIDRlbWKFXJa66Gcz6-eYJcaiA}
-
 shiro:
   iniConfigs: ["file:${SHIRO_CONFIG_PATH:-config/shiro.ini}"]
 

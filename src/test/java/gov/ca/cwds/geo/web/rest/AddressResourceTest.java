@@ -7,14 +7,8 @@ import static gov.ca.cwds.geo.Constants.SUGGEST;
 import static gov.ca.cwds.geo.Constants.VALIDATE_SINGLE;
 import static gov.ca.cwds.geo.web.rest.AssertFixtureUtils.assertResponseByFixturePath;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.endsWith;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
 
 import gov.ca.cwds.geo.BaseApiIntegrationTest;
-import gov.ca.cwds.geo.service.dto.DistanceDTO;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -118,12 +112,12 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
     final Response postResponse = clientTestRule.target(ADDRESS + "/" + DISTANCE)
         .request(MediaType.APPLICATION_JSON)
         .post(input, Response.class);
-    final DistanceDTO actualResult = postResponse.readEntity(DistanceDTO.class);
 
     // then
-    assertThat(actualResult.getHumanReadableInMiles(), endsWith("mi"));
-    assertThat(actualResult.getMeters(), is(greaterThan(10000L)));
-    assertThat(actualResult.getMeters(), is(lessThan(20000L)));
+    assertResponseByFixturePath(
+        postResponse,
+        "fixtures/calculateDistance/calculateDistanceSuccessResponse.json"
+    );
   }
 
   @Test

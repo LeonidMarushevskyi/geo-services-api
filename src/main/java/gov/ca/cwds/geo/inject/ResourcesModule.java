@@ -43,12 +43,6 @@ public class ResourcesModule extends AbstractModule {
   }
 
   @Provides
-  @Named("google.maps.api.key")
-  public String googleMapApiKey(GeoServicesApiConfiguration geoServicesApiConfiguration) {
-    return geoServicesApiConfiguration.getGoogleMapsApiKey();
-  }
-
-  @Provides
   @AddressValidationServiceBackedResource
   public ResourceDelegate addressValidationServiceBackedResource(Injector injector) {
     return new ServiceBackedResourceDelegate(injector.getInstance(AddressService.class));
