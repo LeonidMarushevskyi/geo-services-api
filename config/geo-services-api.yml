@@ -21,6 +21,8 @@ smartystreets:
   token: ${SS_TOKEN}
   maxCandidates: ${SS_MAX:-10}
 
+googleMapsApiKey: ${GM_API_KEY}
+
 swagger:
   templateName: swagger.mustache
   assetsPath: /static

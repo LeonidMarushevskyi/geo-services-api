@@ -21,6 +21,9 @@ NOTE : At this time there is not a publicy available link to the documentation, 
 - **SS_ID** -- Smarty Streets Client Id (required)
 - **SS_TOKEN** -- Smarty Streets token (required)
 
+### Google Maps Services integration
+- **GM_API_KEY** -- Google Maps API Key (required)
+
 ### SSL Configuration Parameters
 - KEY_STORE_FILE -- Path to keystore file
 - KEY_STORE_PASSWORD -- Keystore password

@@ -1,16 +1,12 @@
 package gov.ca.cwds.geo.service;
 
-import static org.junit.Assert.*;
-
-import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
-import gov.ca.cwds.rest.api.Request;
 import java.io.Serializable;
 import org.apache.commons.lang3.NotImplementedException;
 import org.junit.Test;
 
 public class AddressServiceTest {
 
-  private AddressService addressService = new AddressService(null);
+  private AddressService addressService = new AddressService(null, null);
 
   @Test(expected = NotImplementedException.class)
   public void find() throws Exception {

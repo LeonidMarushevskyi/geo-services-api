@@ -7,8 +7,11 @@ import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * {@link DomainObject} representing an address
@@ -117,5 +120,12 @@ public class Address implements Request {
     result = 31 * result + (getState() != null ? getState().hashCode() : 0);
     result = 31 * result + (getZip() != null ? getZip().hashCode() : 0);
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return Stream.of(streetAddress, city, state, zip)
+        .filter(StringUtils::isNotEmpty)
+        .collect(Collectors.joining(", "));
   }
 }

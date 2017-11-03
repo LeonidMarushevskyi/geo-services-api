@@ -1,0 +1,7 @@
+{
+  "issue_details" : [ {
+    "type" : "constraint_validation",
+    "user_message" : "secondAddress may not be null",
+    "property" : "secondAddress"
+  } ]
+}

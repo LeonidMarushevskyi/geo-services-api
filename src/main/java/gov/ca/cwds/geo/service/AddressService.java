@@ -3,6 +3,7 @@ package gov.ca.cwds.geo.service;
 import com.google.inject.Inject;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.persistence.model.Address;
+import gov.ca.cwds.geo.service.dto.DistanceDTO;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
@@ -22,10 +23,12 @@ public class AddressService implements CrudsService {
   private USZipCodeService usZipCodeService;
   private USAutocompleteService usAutocompleteService;
   private SmartyStreetsDAO smartyStreetsDAO;
+  private final GoogleMapsDistanceService googleMapsDistanceService;
 
   @Inject
-  AddressService(SmartyStreetsDAO smartyStreetsDAO) {
+  AddressService(SmartyStreetsDAO smartyStreetsDAO, GoogleMapsDistanceService googleMapsDistanceService) {
     this.smartyStreetsDAO = smartyStreetsDAO;
+    this.googleMapsDistanceService = googleMapsDistanceService;
     this.usStreetAddressService = new USStreetAddressService(smartyStreetsDAO);
     this.usZipCodeService = new USZipCodeService(smartyStreetsDAO);
     this.usAutocompleteService = new USAutocompleteService(smartyStreetsDAO);
@@ -70,6 +73,13 @@ public class AddressService implements CrudsService {
     return addresses;
   }
 
+  public DistanceDTO calculateDistance(Address firstAddress, Address secondAddress) {
+    try {
+      return googleMapsDistanceService.calculateDistance(firstAddress, secondAddress);
+    } catch (Exception e) {
+      throw new ServiceException("ERROR while calculating distance", e);
+    }
+  }
 
   @Override
   public Response create(Request request) {

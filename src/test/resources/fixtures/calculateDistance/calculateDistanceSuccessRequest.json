@@ -1,0 +1,14 @@
+{
+  "first_address": {
+    "street_address": "1 Infinite Loop",
+    "city": "Cupertino",
+    "state": "CA",
+    "zip": "95014"
+  },
+  "second_address": {
+    "street_address": "1600 Amphitheatre Pkwy",
+    "city": "Mountain View",
+    "state": "CA",
+    "zip": "94043"
+  }
+}
