@@ -1,11 +1,9 @@
 {
   "issue_details" : [ {
     "type" : "constraint_validation",
-    "user_message" : "secondAddress may not be null",
-    "property" : "secondAddress"
+    "user_message" : "firstAddress.streetAddress may not be null"
   }, {
     "type" : "constraint_validation",
-    "user_message" : "firstAddress.streetAddress may not be null",
-    "property" : "firstAddress.streetAddress"
+    "user_message" : "secondAddress may not be null"
   } ]
 }

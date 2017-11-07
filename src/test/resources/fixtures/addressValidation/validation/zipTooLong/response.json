@@ -1,8 +1,8 @@
 {
-  "issue_details" : [ {
-    "type" : "constraint_validation",
-    "user_message" : "zip size must be between 5 and 5",
-    "property" : "zip",
-    "invalid_value" : "9999999"
-  } ]
+  "issue_details": [
+    {
+      "type": "constraint_validation",
+      "user_message": "zip size must be between 5 and 5"
+    }
+  ]
 }
