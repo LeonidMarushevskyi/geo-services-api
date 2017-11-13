@@ -6,7 +6,8 @@ import javax.annotation.Nullable;
 
 public class GeoServicesApiConfiguration extends MinimalApiConfiguration {
 
-  @Nullable private SmartyStreetsConfig smartyStreetsConfig;
+  @Nullable
+  private SmartyStreetsConfig smartyStreetsConfig;
 
   @JsonProperty(value = "smartystreets")
   public SmartyStreetsConfig getSmartyStreetsConfig() {

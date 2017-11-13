@@ -1,6 +1,7 @@
 package gov.ca.cwds.geo.web.rest;
 
 import static gov.ca.cwds.geo.Constants.ADDRESS;
+import static gov.ca.cwds.geo.Constants.DISTANCE;
 import static gov.ca.cwds.geo.Constants.LOOKUP_ZIP_CODE;
 import static gov.ca.cwds.geo.Constants.PREFIX;
 import static gov.ca.cwds.geo.Constants.SUGGEST;
@@ -12,6 +13,8 @@ import com.google.inject.Inject;
 import gov.ca.cwds.geo.inject.AddressValidationServiceBackedResource;
 import gov.ca.cwds.geo.persistence.model.Address;
 import gov.ca.cwds.geo.service.AddressService;
+import gov.ca.cwds.geo.service.dto.CalculateDistanceDTO;
+import gov.ca.cwds.geo.service.dto.DistanceDTO;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.api.ApiException;
 import gov.ca.cwds.rest.resources.ResourceDelegate;
@@ -80,10 +83,7 @@ public class AddressResource {
       @Valid @ApiParam(required = true) Address address) {
     ValidatedAddressDTO[] addresses;
     try {
-      addresses =
-          ((AddressService)
-                  ((ServiceBackedResourceDelegate) resourceDelegate).getService())
-              .fetchValidatedAddresses(address);
+      addresses = getService().fetchValidatedAddresses(address);
     } catch (Exception e) {
       throw new ApiException("ERROR calling USStreetAddressService to fetch Validated Addresses", e);
     }
@@ -91,6 +91,43 @@ public class AddressResource {
       return Response.ok(addresses).build();
     } else {
       return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+    }
+  }
+
+  /**
+   * Returns a distance between two addresses
+   *
+   * @param calculateDistance The {@link CalculateDistanceDTO}
+   * @return The {@link DistanceDTO}
+   */
+  @POST
+  @Path("/" + DISTANCE)
+  @Timed
+  @ApiResponses(
+    value = {
+        @ApiResponse(code = 400, message = "Bad Request (Malformed Payload): The request was malformed in some way and could not be parsed."),
+        @ApiResponse(code = 401, message = "Unauthorized: The credentials were provided incorrectly or did not match any existing, active credentials."),
+        @ApiResponse(code = 402, message = "Payment Required: There is no active subscription for the account associated with the credentials submitted with the request."),
+        @ApiResponse(code = 422, message = "Unprocessable Entity (Unsuitable Payload): The value of the prefix input parameter was too long and could not be processed."),
+        @ApiResponse(code = 429, message = "Too Many Requests: When using public \"website key\" authentication, we restrict the number of requests coming from a given source over too short of a time. If you use \"website key\" authentication, you can avoid this error by adding your IP address as an authorized host for the website key in question."),
+        @ApiResponse(code = 200, message = "OK")
+    }
+  )
+  @Consumes(value = MediaType.APPLICATION_JSON)
+  @ApiOperation(
+    value = "Calculate distance",
+    response = DistanceDTO.class
+  )
+  public Response calculateDistance(
+      @Valid @ApiParam(required = true) final CalculateDistanceDTO calculateDistance) {
+    try {
+      final DistanceDTO result = getService().calculateDistance(
+          calculateDistance.getFirstAddress(),
+          calculateDistance.getSecondAddress()
+      );
+      return Response.ok(result).build();
+    } catch (Exception e) {
+      throw new ApiException(e.getMessage(), e);
     }
   }
 
@@ -115,10 +152,7 @@ public class AddressResource {
       @PathParam(ZIP_CODE) @ApiParam(required = true, name = ZIP_CODE, value = "Zip Code") String zipCode) {
     ValidatedAddressDTO[] addresses;
     try {
-      addresses =
-          ((AddressService)
-              ((ServiceBackedResourceDelegate) resourceDelegate).getService())
-              .lookupSingleUSZip(zipCode);
+      addresses = getService().lookupSingleUSZip(zipCode);
     } catch (Exception e) {
       throw new ApiException("ERROR calling USStreetAddressService to lookup City and State by Zip Code", e);
     }
@@ -150,10 +184,7 @@ public class AddressResource {
       @PathParam(PREFIX) @ApiParam(required = true, name = PREFIX, value = "Required. The part of the address that has already been typed. Maximum length is 128 bytes.") String prefix) {
     Address[] addresses;
     try {
-      addresses =
-          ((AddressService)
-              ((ServiceBackedResourceDelegate) resourceDelegate).getService())
-              .suggestAddress(prefix);
+      addresses = getService().suggestAddress(prefix);
     } catch (Exception e) {
       throw new ApiException("ERROR calling USStreetAddressService to autocomplete Address", e);
     }
@@ -162,5 +193,9 @@ public class AddressResource {
     } else {
       return Response.status(Response.Status.NOT_FOUND).entity(null).build();
     }
+  }
+
+  private AddressService getService() {
+    return (AddressService) ((ServiceBackedResourceDelegate) resourceDelegate).getService();
   }
 }

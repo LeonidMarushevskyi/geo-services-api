@@ -1,13 +1,12 @@
 package gov.ca.cwds.geo.web.rest;
 
 import static gov.ca.cwds.geo.Constants.ADDRESS;
+import static gov.ca.cwds.geo.Constants.DISTANCE;
 import static gov.ca.cwds.geo.Constants.LOOKUP_ZIP_CODE;
 import static gov.ca.cwds.geo.Constants.SUGGEST;
 import static gov.ca.cwds.geo.Constants.VALIDATE_SINGLE;
 import static gov.ca.cwds.geo.web.rest.AssertFixtureUtils.assertResponseByFixturePath;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 import gov.ca.cwds.geo.BaseApiIntegrationTest;
 import javax.ws.rs.client.Entity;
@@ -99,6 +98,46 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
             Response.class);
     assertResponseByFixturePath(
         postResponse, "fixtures/addressValidation/validation/stateTooLong/response.json");
+  }
+
+  @Test
+  public void calculateDistance_success_whenValidInput() throws Exception {
+    // given
+    final Entity<String> input = Entity.entity(
+        fixture("fixtures/calculateDistance/calculateDistanceSuccessRequest.json"),
+        MediaType.APPLICATION_JSON_TYPE
+    );
+
+    // when
+    final Response postResponse = clientTestRule.target(ADDRESS + "/" + DISTANCE)
+        .request(MediaType.APPLICATION_JSON)
+        .post(input, Response.class);
+
+    // then
+    assertResponseByFixturePath(
+        postResponse,
+        "fixtures/calculateDistance/calculateDistanceSuccessResponse.json"
+    );
+  }
+
+  @Test
+  public void calculateDistance_exception_whenInvalidInput() throws Exception {
+    // given
+    final Entity<String> input = Entity.entity(
+        fixture("fixtures/calculateDistance/calculateDistanceInvalidRequest.json"),
+        MediaType.APPLICATION_JSON_TYPE
+    );
+
+    // when
+    final Response postResponse = clientTestRule.target(ADDRESS + "/" + DISTANCE)
+        .request(MediaType.APPLICATION_JSON)
+        .post(input, Response.class);
+
+    // then
+    assertResponseByFixturePath(
+        postResponse,
+        "fixtures/calculateDistance/calculateDistanceInvalidResponse.json"
+    );
   }
 
   @Test
