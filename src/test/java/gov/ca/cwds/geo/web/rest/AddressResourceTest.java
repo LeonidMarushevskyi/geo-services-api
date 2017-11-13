@@ -9,11 +9,13 @@ import static gov.ca.cwds.geo.web.rest.AssertFixtureUtils.assertResponseByFixtur
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 
 import gov.ca.cwds.geo.BaseApiIntegrationTest;
+import java.io.IOException;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.json.JSONException;
 import org.junit.Test;
 
 public class AddressResourceTest extends BaseApiIntegrationTest {
@@ -102,29 +104,33 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
 
   @Test
   public void calculateDistance_success_whenValidInput() throws Exception {
-    // given
-    final Entity<String> input = Entity.entity(
-        fixture("fixtures/calculateDistance/calculateDistanceSuccessRequest.json"),
-        MediaType.APPLICATION_JSON_TYPE
-    );
-
-    // when
-    final Response postResponse = clientTestRule.target(ADDRESS + "/" + DISTANCE)
-        .request(MediaType.APPLICATION_JSON)
-        .post(input, Response.class);
-
-    // then
-    assertResponseByFixturePath(
-        postResponse,
-        "fixtures/calculateDistance/calculateDistanceSuccessResponse.json"
+    calculateDistanceAndAssert(
+        "fixtures/calculateDistance/calculateDistance_success_request.json",
+        "fixtures/calculateDistance/calculateDistance_success_response.json"
     );
   }
 
   @Test
-  public void calculateDistance_exception_whenInvalidInput() throws Exception {
+  public void calculateDistance_errorMessage_whenNoSecondAddress() throws Exception {
+    calculateDistanceAndAssert(
+        "fixtures/calculateDistance/calculateDistance_noSecondAddress_request.json",
+        "fixtures/calculateDistance/calculateDistance_noSecondAddress_response.json"
+    );
+  }
+
+  @Test
+  public void calculateDistance_errorMessage_whenNotValidFirstAddress() throws Exception {
+    calculateDistanceAndAssert(
+        "fixtures/calculateDistance/calculateDistance_notValidFirstAddress_request.json",
+        "fixtures/calculateDistance/calculateDistance_notValidFirstAddress_response.json"
+    );
+  }
+
+  private void calculateDistanceAndAssert(String inputFixture, String expectedResultFixture)
+      throws IOException, JSONException {
     // given
     final Entity<String> input = Entity.entity(
-        fixture("fixtures/calculateDistance/calculateDistanceInvalidRequest.json"),
+        fixture(inputFixture),
         MediaType.APPLICATION_JSON_TYPE
     );
 
@@ -134,10 +140,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
         .post(input, Response.class);
 
     // then
-    assertResponseByFixturePath(
-        postResponse,
-        "fixtures/calculateDistance/calculateDistanceInvalidResponse.json"
-    );
+    assertResponseByFixturePath(postResponse, expectedResultFixture);
   }
 
   @Test

@@ -1,0 +1,6 @@
+{
+  "issue_details" : [ {
+    "type" : "constraint_validation",
+    "user_message" : "firstAddress.streetAddress may not be null"
+  } ]
+}
