@@ -6,11 +6,10 @@ import gov.ca.cwds.geo.inject.ApplicationModule;
 import gov.ca.cwds.rest.BaseApiApplication;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import java.util.Map;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /** @author CWDS TPT2 Team */
 public class GeoServicesApiApplication extends BaseApiApplication<GeoServicesApiConfiguration> {

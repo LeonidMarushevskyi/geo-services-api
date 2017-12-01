@@ -13,6 +13,7 @@ import com.smartystreets.api.us_street.Metadata;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.service.USStreetAddressService;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
+import gov.ca.cwds.rest.exception.BusinessValidationException;
 import java.util.ArrayList;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -23,7 +24,7 @@ public class USStreetAddressServiceTest {
 
   private static final USStreetAddressService SPY_US_STREET_ADDRESS_SERVICE = spy(new USStreetAddressService(new SmartyStreetsDAO("","",10)));
 
-  @Test
+  @Test(expected = BusinessValidationException.class)
   public void successfulWithEmptyCandidate() throws Exception {
     ArrayList<Candidate> empty = new ArrayList<>();
     String a = "a";
@@ -31,8 +32,7 @@ public class USStreetAddressServiceTest {
     String c = "c";
     String z = "";
     Mockito.doReturn(empty).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, z);
-    ValidatedAddressDTO[] actual = SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
-    assertThat(actual, is(equalTo(new ValidatedAddressDTO[0])));
+    SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
   }
 
   /*

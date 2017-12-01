@@ -72,17 +72,8 @@ public class AddressResource {
   )
   public Response validateSingleAddress(
       @Valid @ApiParam(required = true) Address address) {
-    ValidatedAddressDTO[] addresses;
-    try {
-      addresses = addressService.fetchValidatedAddresses(address);
-    } catch (Exception e) {
-      throw new ApiException("ERROR calling USStreetAddressService to fetch Validated Addresses", e);
-    }
-    if (addresses == null || addresses.length == 0) {
-      return Response.status(ResponseStatus.UNPROCESSABLE_ENTITY).build();
-    } else {
-      return Response.ok(addresses).build();
-    }
+    final ValidatedAddressDTO[] addresses = addressService.fetchValidatedAddresses(address);
+    return Response.ok(addresses).build();
   }
 
   /**

@@ -37,12 +37,8 @@ public class AddressService {
    * @throws ServiceException due to SmartyStreets error, I/O error, etc.
    */
   public ValidatedAddressDTO[] fetchValidatedAddresses(Address address) {
-    try {
       return usStreetAddressService.validateSingleUSAddress(
           address.getStreetAddress(), address.getCity(), address.getState(), address.getZip());
-    } catch (Exception e) {
-      throw new ServiceException("ERROR calling validateSingleUSAddress in usStreetAddressService", e);
-    }
   }
 
   public ValidatedAddressDTO[] lookupSingleUSZip(String zip) {
