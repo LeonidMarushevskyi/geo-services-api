@@ -7,6 +7,9 @@ import static gov.ca.cwds.geo.Constants.SUGGEST;
 import static gov.ca.cwds.geo.Constants.VALIDATE_SINGLE;
 import static gov.ca.cwds.geo.web.rest.AssertFixtureUtils.assertResponseByFixturePath;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 import gov.ca.cwds.geo.BaseApiIntegrationTest;
 import java.io.IOException;
@@ -30,6 +33,24 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
                 fixture("fixtures/addressValidateRequest.json"), MediaType.APPLICATION_JSON_TYPE),
             Response.class);
     assertResponseByFixturePath(postResponse, "fixtures/addressValidateResponse.json");
+  }
+
+  @Test
+  public void postAddressValidate_unprocessableEntityResponse_whenValidationFailed() throws Exception {
+    // given
+    final Entity input = Entity.entity(
+        fixture("fixtures/addressValidateFailRequest.json"),
+        MediaType.APPLICATION_JSON_TYPE
+    );
+
+    // when
+    final Response response = clientTestRule
+        .target(ADDRESS + "/" + VALIDATE_SINGLE)
+        .request(MediaType.APPLICATION_JSON)
+        .post(input, Response.class);
+
+    // then
+    assertThat(response.getStatus(), is(equalTo(422)));
   }
 
   @Test

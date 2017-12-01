@@ -1,18 +1,20 @@
 package gov.ca.cwds.geo.service;
 
 import com.google.inject.Inject;
+import com.smartystreets.api.ClientBuilder;
 import com.smartystreets.api.StaticCredentials;
 import com.smartystreets.api.exceptions.SmartyException;
 import com.smartystreets.api.us_street.Candidate;
 import com.smartystreets.api.us_street.Client;
-import com.smartystreets.api.ClientBuilder;
+import com.smartystreets.api.us_street.Components;
 import com.smartystreets.api.us_street.Lookup;
+import com.smartystreets.api.us_street.Metadata;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.api.ApiException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,78 +26,49 @@ import org.slf4j.LoggerFactory;
 public class USStreetAddressService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(USStreetAddressService.class);
+
   private static final String ERROR_CALLING_SMARTY_STREET = "ERROR calling USStreetAddressService - ";
-  private String streetAddress;
-  private String cityName;
-  private String stateName;
-  private String stateAbbreviation;
-  private String zip;
-  private String zipExtension;
-  private SmartyStreetsDAO smartyStreetsDAO;
+  private final SmartyStreetsDAO smartyStreetsDAO;
 
   @Inject
   public USStreetAddressService(SmartyStreetsDAO smartyStreetsDAO) {
     this.smartyStreetsDAO = smartyStreetsDAO;
   }
 
-  @Inject
-  public void setSmartyStreetsDAO(SmartyStreetsDAO smartyStreetsDAO) {
-    this.smartyStreetsDAO = smartyStreetsDAO;
+  public ValidatedAddressDTO[] validateSingleUSAddress(String street, String city, String state, String zipCode) {
+    final List<Candidate> candidates = getSmartyStreetsCandidates(street, city, state, zipCode);
+    return candidates.stream()
+        .map(this::toValidatedAddressDTO)
+        .toArray(ValidatedAddressDTO[]::new);
   }
 
-  public ValidatedAddressDTO[] validateSingleUSAddress(
-      String street, String city, String state, String zipCode) {
+  private ValidatedAddressDTO toValidatedAddressDTO(Candidate candidate) {
+    final Components components = candidate.getComponents();
+    final Metadata metadata = candidate.getMetadata();
+    final String dpvMatchCode = candidate.getAnalysis().getDpvMatchCode();
+    return new ValidatedAddressDTO(
+        candidate.getDeliveryLine1(),
+        components.getCityName(),
+        components.getState(),
+        null,
+        components.getZipCode(),
+        components.getPlus4Code(),
+        metadata.getLongitude(),
+        metadata.getLatitude(),
+        isDeliverableMatchCode(dpvMatchCode)
+    );
+  }
 
-    boolean delPoint;
-
-    ArrayList<Candidate> results =
-        (ArrayList<Candidate>) getSmartyStreetsCandidates(street, city, state, zipCode);
-
-    ArrayList<ValidatedAddressDTO> returnValidatedAddressDTOS = new ArrayList<>();
-
-    if (results.isEmpty()) {
-      ValidatedAddressDTO address =
-          new ValidatedAddressDTO(
-              streetAddress, cityName, stateName, stateAbbreviation, zip, zipExtension, null, null, Boolean.FALSE);
-      returnValidatedAddressDTOS.add(address);
-      return returnValidatedAddressDTOS.toArray(new ValidatedAddressDTO[0]);
-    }
-
-    for (Candidate candidate : results) {
-
-      if (("Y").equals(candidate.getAnalysis().getDpvMatchCode())
-          || ("S").equals(candidate.getAnalysis().getDpvMatchCode())
-          || ("D").equals(candidate.getAnalysis().getDpvMatchCode())) {
-        delPoint = true;
-      } else {
-        delPoint = false;
-      }
-      Double longitude = candidate.getMetadata().getLongitude();
-      Double latitude = candidate.getMetadata().getLatitude();
-      streetAddress = candidate.getDeliveryLine1();
-      cityName = candidate.getComponents().getCityName();
-      stateName = candidate.getComponents().getState();
-      zip = candidate.getComponents().getZipCode();
-      zipExtension = candidate.getComponents().getPlus4Code();
-
-      ValidatedAddressDTO address =
-          new ValidatedAddressDTO(
-              streetAddress, cityName, stateName, stateAbbreviation, zip, zipExtension, longitude, latitude, delPoint);
-      returnValidatedAddressDTOS.add(address);
-    }
-    return returnValidatedAddressDTOS.toArray(
-        new ValidatedAddressDTO[returnValidatedAddressDTOS.size()]);
+  private boolean isDeliverableMatchCode(String dpvMatchCode) {
+    return "Y".equals(dpvMatchCode)
+        || "S".equals(dpvMatchCode)
+        || "D".equals(dpvMatchCode);
   }
 
 
-
-  public List<Candidate> getSmartyStreetsCandidates(
-      String street, String city, String state, String zipCode) {
-
-    StaticCredentials credentials =
-        new StaticCredentials(smartyStreetsDAO.getClientId(), smartyStreetsDAO.getToken());
+  public List<Candidate> getSmartyStreetsCandidates(String street, String city, String state, String zipCode) {
+    StaticCredentials credentials = new StaticCredentials(smartyStreetsDAO.getClientId(), smartyStreetsDAO.getToken());
     Client client = new ClientBuilder(credentials).buildUsStreetApiClient();
-
     Lookup lookup = createSmartyStreetsLookup(street, city, state, zipCode);
 
     try {
@@ -117,11 +90,7 @@ public class USStreetAddressService {
     lookup.setStreet(street);
     lookup.setCity(city);
     lookup.setState(state);
-    if (zipCode != null) {
-      lookup.setZipCode(zipCode);
-    } else {
-      lookup.setZipCode("");
-    }
+    lookup.setZipCode(zipCode == null ? StringUtils.EMPTY : zipCode);
     lookup.setMaxCandidates(smartyStreetsDAO.getMaxCandidates());
     return lookup;
   }

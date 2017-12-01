@@ -32,9 +32,7 @@ public class USStreetAddressServiceTest {
     String z = "";
     Mockito.doReturn(empty).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, z);
     ValidatedAddressDTO[] actual = SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
-    ValidatedAddressDTO[] expected = new ValidatedAddressDTO[1];
-    expected[0] = new ValidatedAddressDTO(null, null, null, null, null, null, null, null, false);
-    assertThat(actual[0], is(equalTo(expected[0])));
+    assertThat(actual, is(equalTo(new ValidatedAddressDTO[0])));
   }
 
   /*

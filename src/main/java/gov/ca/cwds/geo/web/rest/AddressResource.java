@@ -10,15 +10,12 @@ import static gov.ca.cwds.geo.Constants.ZIP_CODE;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
-import gov.ca.cwds.geo.inject.AddressValidationServiceBackedResource;
 import gov.ca.cwds.geo.persistence.model.Address;
 import gov.ca.cwds.geo.service.AddressService;
 import gov.ca.cwds.geo.service.dto.CalculateDistanceDTO;
 import gov.ca.cwds.geo.service.dto.DistanceDTO;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.resources.ResourceDelegate;
-import gov.ca.cwds.rest.resources.ServiceBackedResourceDelegate;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -42,17 +39,11 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AddressResource {
-  private ResourceDelegate resourceDelegate;
+  private final AddressService addressService;
 
-  /**
-   * Constructor
-   *
-   * @param resourceDelegate The resourceDelegate to delegate to.
-   */
   @Inject
-  public AddressResource(
-      @AddressValidationServiceBackedResource ResourceDelegate resourceDelegate) {
-    this.resourceDelegate = resourceDelegate;
+  public AddressResource(AddressService addressService) {
+    this.addressService = addressService;
   }
 
   /**
@@ -69,7 +60,7 @@ public class AddressResource {
         @ApiResponse(code = 400, message = "Bad Request (Malformed Payload): The request was malformed in some way and could not be parsed."),
         @ApiResponse(code = 401, message = "Unauthorized: The credentials were provided incorrectly or did not match any existing, active credentials."),
         @ApiResponse(code = 402, message = "Payment Required: There is no active subscription for the account associated with the credentials submitted with the request."),
-        @ApiResponse(code = 422, message = "Unprocessable Entity (Unsuitable Payload): The value of the prefix input parameter was too long and could not be processed."),
+        @ApiResponse(code = 422, message = "Unprocessable Entity (Unsuitable Payload): Validation failed."),
         @ApiResponse(code = 429, message = "Too Many Requests: When using public \"website key\" authentication, we restrict the number of requests coming from a given source over too short of a time. If you use \"website key\" authentication, you can avoid this error by adding your IP address as an authorized host for the website key in question."),
         @ApiResponse(code = 200, message = "OK (success!)")
     }
@@ -83,14 +74,14 @@ public class AddressResource {
       @Valid @ApiParam(required = true) Address address) {
     ValidatedAddressDTO[] addresses;
     try {
-      addresses = getService().fetchValidatedAddresses(address);
+      addresses = addressService.fetchValidatedAddresses(address);
     } catch (Exception e) {
       throw new ApiException("ERROR calling USStreetAddressService to fetch Validated Addresses", e);
     }
-    if (addresses != null) {
-      return Response.ok(addresses).build();
+    if (addresses == null || addresses.length == 0) {
+      return Response.status(ResponseStatus.UNPROCESSABLE_ENTITY).build();
     } else {
-      return Response.status(Response.Status.NOT_FOUND).entity(null).build();
+      return Response.ok(addresses).build();
     }
   }
 
@@ -121,7 +112,7 @@ public class AddressResource {
   public Response calculateDistance(
       @Valid @ApiParam(required = true) final CalculateDistanceDTO calculateDistance) {
     try {
-      final DistanceDTO result = getService().calculateDistance(
+      final DistanceDTO result = addressService.calculateDistance(
           calculateDistance.getFirstAddress(),
           calculateDistance.getSecondAddress()
       );
@@ -152,7 +143,7 @@ public class AddressResource {
       @PathParam(ZIP_CODE) @ApiParam(required = true, name = ZIP_CODE, value = "Zip Code") String zipCode) {
     ValidatedAddressDTO[] addresses;
     try {
-      addresses = getService().lookupSingleUSZip(zipCode);
+      addresses = addressService.lookupSingleUSZip(zipCode);
     } catch (Exception e) {
       throw new ApiException("ERROR calling USStreetAddressService to lookup City and State by Zip Code", e);
     }
@@ -184,7 +175,7 @@ public class AddressResource {
       @PathParam(PREFIX) @ApiParam(required = true, name = PREFIX, value = "Required. The part of the address that has already been typed. Maximum length is 128 bytes.") String prefix) {
     Address[] addresses;
     try {
-      addresses = getService().suggestAddress(prefix);
+      addresses = addressService.suggestAddress(prefix);
     } catch (Exception e) {
       throw new ApiException("ERROR calling USStreetAddressService to autocomplete Address", e);
     }
@@ -193,9 +184,5 @@ public class AddressResource {
     } else {
       return Response.status(Response.Status.NOT_FOUND).entity(null).build();
     }
-  }
-
-  private AddressService getService() {
-    return (AddressService) ((ServiceBackedResourceDelegate) resourceDelegate).getService();
   }
 }
