@@ -1,4 +1,4 @@
-FROM cwds/javajdk
+FROM cwds/javajdk:8u152
 RUN mkdir /opt/geo-services-api
 RUN mkdir /opt/geo-services-api/logs
 ADD config/geo-services-api.yml /opt/geo-services-api/geo-services-api.yml
