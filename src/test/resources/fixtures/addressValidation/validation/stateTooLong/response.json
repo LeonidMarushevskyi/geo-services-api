@@ -2,7 +2,9 @@
   "issue_details": [
     {
       "type": "constraint_validation",
-      "user_message": "state size must be between 2 and 2"
+      "user_message": "size must be between 2 and 2",
+      "property" : "state",
+      "invalid_value" : "CAL"
     }
   ]
 }
