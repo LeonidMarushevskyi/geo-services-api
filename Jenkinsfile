@@ -17,7 +17,7 @@ node ('tpt2-slave'){
 		  rtGradle.useWrapper = true
    }
    stage('Build'){
-		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar'
+		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -DReleaseDocker=$RELEASE_DOCKER -DBuildNumber=$BUILD_NUMBER'
    }
    stage('Unit Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
@@ -35,8 +35,8 @@ node ('tpt2-slave'){
 	    rtGradle.deployer repo:'libs-snapshot', server: serverArti
  	    //rtGradle.deployer repo:'libs-release', server: serverArti
 	    rtGradle.deployer.deployArtifacts = true
-		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'artifactoryPublish'
-		rtGradle.deployer.deployArtifacts = false
+	    buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -DReleaseDocker=$RELEASE_DOCKER -DBuildNumber=$BUILD_NUMBER'
+  		rtGradle.deployer.deployArtifacts = false
 	}
 	stage ('Build Docker'){
 	   buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'createDockerImage'

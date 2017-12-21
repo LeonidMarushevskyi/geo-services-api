@@ -28,14 +28,20 @@ project.ext {
     projectDockerAppName = 'geo-services-api'
     releaseDocker = System.getProperty("ReleaseDocker")
     buildNumber = System.getProperty('BuildNumber')
-    projectMajorVersion = '0.5.2'
-    dockerTag = (releaseDocker == 'true' && buildNumber != null  ? projectMajorVersion + '_' + buildNumber + '-RC' : (projectMajorVersion + '-SNAPSHOT') )
+    projectMajorVersion = '0.5.3'
+    projectVersion = (releaseDocker == 'true' && buildNumber != null  ? projectMajorVersion + '_' + buildNumber + '-RC' : (projectMajorVersion + '-SNAPSHOT') )
     //dockerTag = projectMajorVersion
-    projectVersion = dockerTag
+    dockerTag = projectVersion
     dropwizardVersion = '1.1.0'
     coreApiVersion = '0.5.3_TPT2-658_3'
     mapstructVersion = '1.1.0.Final'
     mainClass = 'gov.ca.cwds.geo.GeoServicesApiApplication'
+
+    // Publishing configuration
+    snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
+    releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
+    artifactoryRepo = ((releaseDocker == 'true') ? releaseMavenRepo : snapshotMavenRepo)
+    
 }
 
 group projectGroup
@@ -237,7 +243,7 @@ publishing {
     repositories {
         //mavenLocal()
         maven {
-            url "http://sonar.dev.cwds.io:8081/artifactory/repo"
+            url artifactoryRepo
         }
     }
 }
