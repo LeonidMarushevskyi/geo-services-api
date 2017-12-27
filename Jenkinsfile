@@ -6,7 +6,7 @@ node ('tpt2-slave'){
       string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
       string(defaultValue: 'development', description: '', name: 'branch'),
       booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE'),
-            string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
+      string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
       booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
       string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
@@ -18,7 +18,7 @@ node ('tpt2-slave'){
 		  rtGradle.useWrapper = true
    }
    stage('Build'){
-		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'jar -DRelease=$RELEASE -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'readArguments jar -DRelease=$RELEASE -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
    }
    stage('Unit Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
