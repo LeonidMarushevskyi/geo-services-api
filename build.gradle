@@ -45,7 +45,7 @@ project.ext {
     // Publishing configuration
     snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
     releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
-    artifactoryRepo = ((releaseDocker == 'true') ? releaseMavenRepo : snapshotMavenRepo)
+    artifactoryRepo = ((isRelease == 'true') ? releaseMavenRepo : snapshotMavenRepo)
     
 }
 
@@ -169,7 +169,7 @@ jar {
 
 task readArguments() {
     doLast{
-        println "ReleaseDocker: " + releaseDocker
+        println "Release: " + isRelease
         println "Build: " + buildNumber
         println "Docker Tag: " + dockerTag
     }
