@@ -26,12 +26,17 @@ project.ext {
     projectGroup = 'gov.ca.cwds.geo'
     projectDockerGroup = 'cwds'
     projectDockerAppName = 'geo-services-api'
-    releaseDocker = System.getProperty("ReleaseDocker")
-    buildNumber = System.getProperty('BuildNumber')
     projectMajorVersion = '0.5.3'
-    projectVersion = (releaseDocker == 'true' && buildNumber != null  ? projectMajorVersion + '_' + buildNumber + '-RC' : (projectMajorVersion + '-SNAPSHOT') )
-    //dockerTag = projectMajorVersion
+
+    isRelease = System.getProperty("Release")
+    buildNumber = System.getProperty('BuildNumber')
+    customVersion = System.getProperty('CustomVersion')
+
+    projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
+    projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
+    projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
     dockerTag = projectVersion
+
     dropwizardVersion = '1.1.0'
     coreApiVersion = '3.6.425'
     mapstructVersion = '1.1.0.Final'
@@ -236,11 +241,9 @@ publishing {
             from components.java
             groupId projectGroup
             artifactId rootProject.name
-            version dockerTag
         }
     }
     repositories {
-        //mavenLocal()
         maven {
             url artifactoryRepo
         }
