@@ -37,13 +37,13 @@ node ('tpt2-slave'){
   		rtGradle.deployer.deployArtifacts = false
 	}
 	stage ('Build Docker'){
-	   buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'createDockerImage'
+	   buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'createDockerImage -DRelease=$RELEASE -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
 	   withDockerRegistry([credentialsId: '6ba8d05c-ca13-4818-8329-15d41a089ec0']) {
            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publishDocker -DRelease=$RELEASE -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
        }
 	}
 	stage('Clean Workspace') {
-		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'dropDockerImage'
+		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'dropDockerImage -DRelease=$RELEASE -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
 		archiveArtifacts artifacts: '**/geo-services-api-*.jar,readme.txt', fingerprint: true
 		cleanWs()
 	}
