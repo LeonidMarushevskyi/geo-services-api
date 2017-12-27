@@ -34,7 +34,7 @@ project.ext {
 
     projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
     projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
-    projectVersion = (isRelease = "true" ? projectReleaseVersion : projectSnapshotVersion )
+    projectVersion = (isRelease == "true" ? projectReleaseVersion : projectSnapshotVersion )
     dockerTag = projectVersion
 
     dropwizardVersion = '1.1.0'
@@ -45,7 +45,7 @@ project.ext {
     // Publishing configuration
     snapshotMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/repo"
     releaseMavenRepo = "http://sonar.dev.cwds.io:8081/artifactory/libs-release"
-    artifactoryRepo = ( isRelease = "true" ? releaseMavenRepo : snapshotMavenRepo)
+    artifactoryRepo = ( isRelease == "true" ? releaseMavenRepo : snapshotMavenRepo)
     
 }
 
