@@ -1,33 +1,12 @@
-[ {
-  "street_address" : "1489 Black Bear St",
-  "city" : "Roseville",
-  "state" : "CA"
-}, {
-  "street_address" : "1489 Black Bear St",
-  "city" : "Granite Bay",
-  "state" : "CA"
-}, {
-  "street_address" : "1489 Black Bear St",
-  "city" : "Delta",
-  "state" : "CO"
-}, {
-  "street_address" : "1489 Black Bear Run",
-  "city" : "Stowe",
-  "state" : "VT"
-}, {
-  "street_address" : "1489 Black Bear St",
-  "city" : "Conroe",
-  "state" : "TX"
-}, {
-  "street_address" : "1489 Black Bear Ln",
-  "city" : "Stanley",
-  "state" : "VA"
-}, {
-  "street_address" : "1489 Black Bear Pass",
-  "city" : "Starrucca",
-  "state" : "PA"
-}, {
-  "street_address" : "1489 Black Bear Ln",
-  "city" : "Stroudsburg",
-  "state" : "PA"
-} ]
+[
+  {
+    "street_address": "1489 Black Bear St",
+    "city": "Roseville",
+    "state": "CA",
+    "zip": "95747",
+    "zip_extension": "4618",
+    "longitude": -121.3223,
+    "lattitude": 38.79895,
+    "deliverable": true
+  }
+]
