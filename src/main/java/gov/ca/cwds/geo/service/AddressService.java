@@ -1,11 +1,17 @@
 package gov.ca.cwds.geo.service;
 
 import com.google.inject.Inject;
+import com.jcabi.aspects.Cacheable;
+import com.jcabi.aspects.Loggable;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.persistence.model.Address;
 import gov.ca.cwds.geo.service.dto.DistanceDTO;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.services.ServiceException;
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Business layer object to work on {@link ValidatedAddressDTO}
@@ -36,11 +42,13 @@ public class AddressService {
    * @return array of {@link ValidatedAddressDTO}
    * @throws ServiceException due to SmartyStreets error, I/O error, etc.
    */
+  @Loggable(Loggable.DEBUG)
   public ValidatedAddressDTO[] fetchValidatedAddresses(Address address) {
-      return usStreetAddressService.validateSingleUSAddress(
-          address.getStreetAddress(), address.getCity(), address.getState(), address.getZip());
+    return usStreetAddressService.validateSingleUSAddress(
+        address.getStreetAddress(), address.getCity(), address.getState(), address.getZip());
   }
 
+  @Loggable(Loggable.DEBUG)
   public ValidatedAddressDTO[] lookupSingleUSZip(String zip) {
     try {
       return usZipCodeService.lookupSingleUSZip(zip);
@@ -49,14 +57,19 @@ public class AddressService {
     }
   }
 
-  public Address[] suggestAddress(String prefix) {
+  @Loggable(Loggable.DEBUG)
+  public ValidatedAddressDTO[] suggestAddress(String prefix) {
     try {
-      return usAutocompleteService.suggestAddress(prefix, "CA", smartyStreetsDAO.getMaxCandidates());
+      Address[] suggestions = usAutocompleteService
+          .suggestAddress(prefix, "CA", smartyStreetsDAO.getMaxCandidates());
+      ValidatedAddressDTO[] addresses = usStreetAddressService.validateBatchAddress(suggestions);
+      return addresses;
     } catch (Exception e) {
       throw new ServiceException("ERROR calling suggestAddress in usStreetAddressService", e);
     }
   }
 
+  @Loggable(Loggable.DEBUG)
   public DistanceDTO calculateDistance(final Address firstAddress, final Address secondAddress) {
     try {
       final ValidatedAddressDTO[] validatedFirstAddress = fetchValidatedAddresses(firstAddress);

@@ -10,6 +10,7 @@ import static gov.ca.cwds.geo.Constants.ZIP_CODE;
 
 import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
+import com.jcabi.aspects.Loggable;
 import gov.ca.cwds.geo.persistence.model.Address;
 import gov.ca.cwds.geo.service.AddressService;
 import gov.ca.cwds.geo.service.dto.CalculateDistanceDTO;
@@ -70,6 +71,7 @@ public class AddressResource {
     value = "Validate Single Address",
     response = ValidatedAddressDTO[].class
   )
+  @Loggable
   public Response validateSingleAddress(
       @Valid @ApiParam(required = true) Address address) {
     final ValidatedAddressDTO[] addresses = addressService.fetchValidatedAddresses(address);
@@ -100,6 +102,7 @@ public class AddressResource {
     value = "Calculate distance",
     response = DistanceDTO.class
   )
+  @Loggable
   public Response calculateDistance(
       @Valid @ApiParam(required = true) final CalculateDistanceDTO calculateDistance) {
     try {
@@ -130,6 +133,7 @@ public class AddressResource {
       value = "Lookup City and State by Zip Code",
       response = ValidatedAddressDTO[].class
   )
+  @Loggable
   public Response getCityStateByZipCode(
       @PathParam(ZIP_CODE) @ApiParam(required = true, name = ZIP_CODE, value = "Zip Code") String zipCode) {
     ValidatedAddressDTO[] addresses;
@@ -160,11 +164,12 @@ public class AddressResource {
   )
   @ApiOperation(
       value = "Autocomplete Address by prefix",
-      response = Address[].class
+      response = ValidatedAddressDTO[].class
   )
+  @Loggable
   public Response suggestAddress(
       @PathParam(PREFIX) @ApiParam(required = true, name = PREFIX, value = "Required. The part of the address that has already been typed. Maximum length is 128 bytes.") String prefix) {
-    Address[] addresses;
+    ValidatedAddressDTO[] addresses;
     try {
       addresses = addressService.suggestAddress(prefix);
     } catch (Exception e) {

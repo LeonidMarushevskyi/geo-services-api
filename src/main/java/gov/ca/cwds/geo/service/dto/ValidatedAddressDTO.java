@@ -9,6 +9,7 @@ import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  * {@link DomainObject} representing an address that is validated or standardized via SmartyStreets
@@ -204,5 +205,10 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
     result = 31 * result + (getLattitude() != null ? getLattitude().hashCode() : 0);
     result = 31 * result + (getDeliverable() != null ? getDeliverable().hashCode() : 0);
     return result;
+  }
+
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this);
   }
 }
