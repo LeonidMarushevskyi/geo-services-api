@@ -3,6 +3,8 @@ package gov.ca.cwds.geo.service;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
+import com.jcabi.aspects.Cacheable;
+import com.jcabi.aspects.Loggable;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import org.apache.commons.lang3.Validate;
 
@@ -16,6 +18,7 @@ public class DistanceService {
   private static final String MSG_ERR_LONGITUDE_CANNOT_BE_NULL = "Longitude cannot be null";
   private static final String MSG_ERR_LATITUDE_CANNOT_BE_NULL = "Latitude cannot be null";
 
+  @Loggable(Loggable.DEBUG)
   public double calculateDistance(final ValidatedAddressDTO firstAddress,
                                   final ValidatedAddressDTO secondAddress) {
     Validate.notNull(firstAddress.getLongitude(), MSG_ERR_LONGITUDE_CANNOT_BE_NULL);

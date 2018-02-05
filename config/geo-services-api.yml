@@ -50,17 +50,13 @@ webSecurity:
 logging:
   level: ${LOGLEVEL:-INFO}
   loggers:
-    "org.hibernate.SQL":
-      level: INFO
-    "org.hibernate.type.descriptor.sql":
-      level: INFO
     "AUDIT":
       level: ALL
     "gov.ca.cwds":
       level: DEBUG
   appenders:
     - type: console
-      threshold: INFO
+      threshold: DEBUG
       timeZone: UTC
       target: stdout
       logFormat: '[%X{remoteAddress}] [%date{ISO8601}] [%level] [%thread] [%X{uniqueId}] [%logger:] [%message]%n'

@@ -175,7 +175,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
 
   @Test
   public void testAddressSuggestion() throws Exception {
-    String suggestion = "1489 Black Bear St";
+    String suggestion = "1489 Black Be";
     WebTarget target = clientTestRule.target(ADDRESS + "/" + SUGGEST + "/" + suggestion);
     Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
     Response response = invocation.get(Response.class);

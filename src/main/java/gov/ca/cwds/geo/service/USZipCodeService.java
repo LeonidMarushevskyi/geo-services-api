@@ -1,6 +1,8 @@
 package gov.ca.cwds.geo.service;
 
 import com.google.inject.Inject;
+import com.jcabi.aspects.Cacheable;
+import com.jcabi.aspects.Loggable;
 import com.smartystreets.api.ClientBuilder;
 import com.smartystreets.api.StaticCredentials;
 import com.smartystreets.api.exceptions.SmartyException;
@@ -25,17 +27,20 @@ public class USZipCodeService {
   private static final Logger LOGGER = LoggerFactory.getLogger(USZipCodeService.class);
   private static final String ERROR_CALLING_SMARTY_STREET = "ERROR calling USStreetAddressService - ";
   private SmartyStreetsDAO smartyStreetsDAO;
+  private Client client;
 
   @Inject
   public USZipCodeService(SmartyStreetsDAO smartyStreetsDAO) {
     this.smartyStreetsDAO = smartyStreetsDAO;
-  }
-
-  ValidatedAddressDTO[] lookupSingleUSZip(String zipCode) {
     StaticCredentials credentials =
         new StaticCredentials(smartyStreetsDAO.getClientId(), smartyStreetsDAO.getToken());
-    Client client =
+    client =
         new ClientBuilder(credentials).buildUsZipCodeApiClient();
+
+  }
+
+  @Loggable(Loggable.DEBUG)
+  ValidatedAddressDTO[] lookupSingleUSZip(String zipCode) {
     com.smartystreets.api.us_zipcode.Lookup lookup = new Lookup();
     lookup.setZipCode(zipCode);
     try {
