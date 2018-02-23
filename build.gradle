@@ -27,7 +27,7 @@ project.ext {
     projectGroup = 'gov.ca.cwds.geo'
     projectDockerGroup = 'cwds'
     projectDockerAppName = 'geo-services-api'
-    projectMajorVersion = '0.5.6'
+    projectMajorVersion = '0.5.8'
 
     isRelease = System.getProperty("Release") == "true"
     buildNumber = System.getProperty('BuildNumber')
@@ -39,7 +39,7 @@ project.ext {
     dockerTag = projectVersion
 
     dropwizardVersion = '1.1.0'
-    coreApiVersion = '0.5.3_TPT2-658_3'
+    coreApiVersion = '1.5.7_333-RC'
     mapstructVersion = '1.1.0.Final'
     mainClass = 'gov.ca.cwds.geo.GeoServicesApiApplication'
 
