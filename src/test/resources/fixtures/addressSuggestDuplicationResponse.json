@@ -1,0 +1,12 @@
+[
+  {
+    "street_address": "6458 Altamar Cir",
+    "city": "Livermore",
+    "state": "CA",
+    "zip": "94551",
+    "zip_extension": "8759",
+    "longitude": -121.72249,
+    "lattitude": 37.72214,
+    "deliverable": true
+  }
+]
