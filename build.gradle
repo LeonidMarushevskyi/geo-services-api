@@ -27,7 +27,7 @@ project.ext {
     projectGroup = 'gov.ca.cwds.geo'
     projectDockerGroup = 'cwds'
     projectDockerAppName = 'geo-services-api'
-    projectMajorVersion = '0.5.8'
+    projectMajorVersion = '0.7.1'
 
     isRelease = System.getProperty("Release") == "true"
     buildNumber = System.getProperty('BuildNumber')

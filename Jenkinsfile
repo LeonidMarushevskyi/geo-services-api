@@ -54,7 +54,7 @@ node ('tpt2-slave'){
 	   sleep (20)
   }
   stage('Integration Tests') {
-      git branch: 'development', url: 'https://github.com/ca-cwds/geo-services-api.git'
+      git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'integrationTest --stacktrace'
       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
      cleanWs()
