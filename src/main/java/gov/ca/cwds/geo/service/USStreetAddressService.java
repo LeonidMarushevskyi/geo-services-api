@@ -1,7 +1,6 @@
 package gov.ca.cwds.geo.service;
 
 import com.google.inject.Inject;
-import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Loggable;
 import com.smartystreets.api.ClientBuilder;
 import com.smartystreets.api.StaticCredentials;
@@ -25,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,25 +62,18 @@ public class USStreetAddressService {
         .toArray(ValidatedAddressDTO[]::new);
   }
 
-  @Loggable
-  public ValidatedAddressDTO[] validateAddress(String street, String city, String state, String zipCode) {
-    final List<Candidate> candidates = getSmartyStreetsCandidates(street, city, state, zipCode);
-    return candidates.stream()
-        .map(this::toValidatedAddressDTO)
-        .toArray(ValidatedAddressDTO[]::new);
-  }
-
   @Loggable(Loggable.DEBUG)
-  public ValidatedAddressDTO[] validateBatchAddress(Address[] addresses) {
+  ValidatedAddressDTO[] validateBatchAddress(Address[] addresses) {
     List<Candidate> candidates = new ArrayList<>();
     if (addresses.length > 0) {
       candidates = validateBatch(addresses);
     }
-    return candidates.stream()
+    return candidates
+        .stream()
         .map(this::toValidatedAddressDTO)
-        .toArray(ValidatedAddressDTO[]::new);
+        .collect(Collectors.toSet())
+        .toArray(new ValidatedAddressDTO[0]);
   }
-
 
   private Set<IssueDetails> generateIssueDetails() {
     final Set<IssueDetails> issueDetails = new HashSet<>();
@@ -131,7 +124,7 @@ public class USStreetAddressService {
     return lookup.getResult();
   }
 
-  public List<Candidate> validateBatch(Address[] addresses) {
+  private List<Candidate> validateBatch(Address[] addresses) {
     List<Candidate> candidates = new ArrayList<>();
     try {
       Batch batch = createSmartyStreetsBatch(addresses);

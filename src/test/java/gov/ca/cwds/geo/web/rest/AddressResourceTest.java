@@ -36,7 +36,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
   }
 
   @Test
-  public void postAddressValidate_unprocessableEntityResponse_whenValidationFailed() throws Exception {
+  public void postAddressValidate_unprocessableEntityResponse_whenValidationFailed() {
     // given
     final Entity input = Entity.entity(
         fixture("fixtures/addressValidateFailRequest.json"),
@@ -180,5 +180,14 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
     Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
     Response response = invocation.get(Response.class);
     assertResponseByFixturePath(response, "fixtures/addressSuggestResponse.json");
+  }
+
+  @Test
+  public void testAddressDuplicationBug() throws Exception {
+    String suggestion = "6458 Altama";
+    WebTarget target = clientTestRule.target(ADDRESS + "/" + SUGGEST + "/" + suggestion);
+    Invocation.Builder invocation = target.request(MediaType.APPLICATION_JSON);
+    Response response = invocation.get(Response.class);
+    assertResponseByFixturePath(response, "fixtures/addressSuggestDuplicationResponse.json");
   }
 }
