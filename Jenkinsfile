@@ -152,11 +152,11 @@ def getNewTag(List tags, VersionIncrement increment) {
 }
 
 // Updates any build files that contain a version tag
-def updateFiles(String newTag) {
+def updateFiles(newTag) {
     debug("updateFiles( newTag: ${newTag} )")
-
-    // TODO - Implement for updating a file
-    debug("updateFiles: TODO Implement")
+	def source = readFile file: 'build.gradle'
+	source = source.replace('projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )', 'projectVersion = \''+newTag+'\'')
+	writeFile file:'build.gradle', text: "$source"
 }
 
 // Tags the repo
@@ -205,15 +205,15 @@ node ('tpt2-slave'){
 
    def serverArti = Artifactory.server 'CWDS_DEV'
    def rtGradle = Artifactory.newGradleBuild()
-   properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-   /* parameters([
+/* properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
+   parameters([
       string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
       string(defaultValue: 'master', description: '', name: 'branch'),
       booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE_PROJECT'),
       string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
       booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
       string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
-      ]), pipelineTriggers([pollSCM('H/5 * * * *')])])*/
+      ]), pipelineTriggers([pollSCM('H/5 * * * *')])]) */
   try {
    stage('Preparation') {
 		  git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
