@@ -213,8 +213,7 @@ node ('tpt2-slave'){
       string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
       booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
       string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
-      ]), 
-	       pipelineTriggers([pollSCM('H/5 * * * *')])])*/
+      ]), pipelineTriggers([pollSCM('H/5 * * * *')])])*/
   try {
    stage('Preparation') {
 		  git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
