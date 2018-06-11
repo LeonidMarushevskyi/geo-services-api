@@ -1,4 +1,4 @@
-/**
+/** 
 This script, in conjunction with Jenkins config, automatically commits a new SemVer-style
 tag to a GitHub repo when a pull request is closed.
 Dev Notes:
