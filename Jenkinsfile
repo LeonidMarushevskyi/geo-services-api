@@ -216,7 +216,7 @@ node ('tpt2-slave'){
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])]) */
   try {
    stage('Preparation') {
-		  git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
+		  git branch: '$branch', url: 'git@github.com:ca-cwds/geo-services-api.git'
 		  rtGradle.tool = "Gradle_35"
 		  rtGradle.resolver repo:'repo', server: serverArti
 		  rtGradle.useWrapper = true
