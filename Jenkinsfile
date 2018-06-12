@@ -283,4 +283,3 @@ node ('tpt2-slave'){
        cleanWs()
 	   }
 }
-
