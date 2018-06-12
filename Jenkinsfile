@@ -162,22 +162,50 @@ def updateFiles(newTag) {
 // Tags the repo
 def tagRepo(String newTag) {
     debug("tagRepo( newTag: ${newTag} )")
+    sshagent (credentials: ['433ac100-b3c2-4519-b4d6-207c029a103b']) {
     
     def tagStatus = sh(script: "git tag ${newTag}", returnStatus: true)
     if( tagStatus != 0) {
         throw new Exception("Unable to tag the repository with tag '${newTag}'")
     }
+	    
+    def configStatus = sh(script: "${GIT_SSH_COMMAND} git config --global user.email cwdsdoeteam@osi.ca.gov; git config --global user.name Jenkins",
+            returnStatus: true)
+        if( configStatus != 0) {
+            throw new Exception("Unable to push the tag '${newTag}'")
+        }
 
-    def pushStatus = sh(
-        script: "${GIT_SSH_COMMAND} git push origin ${newTag}", 
+    def pushStatus = sh(script: "${GIT_SSH_COMMAND} git push origin ${newTag}", 
         returnStatus: true)
     if( pushStatus != 0) {
         throw new Exception("Unable to push the tag '${newTag}'")
+        }
     }
 }
+
 node ('tpt2-slave'){
-   
-       stage("Increment Tag") {
+   def serverArti = Artifactory.server 'CWDS_DEV'
+   def rtGradle = Artifactory.newGradleBuild()
+/* properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
+   parameters([
+      string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
+      string(defaultValue: 'master', description: '', name: 'branch'),
+      booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE_PROJECT'),
+      string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
+      booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
+      string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
+      ]), pipelineTriggers([pollSCM('H/5 * * * *')])]) */
+    newTag = '';
+  try {
+   stage('Preparation') {
+		  git branch: '$branch', url: 'git@github.com:ca-cwds/geo-services-api.git'
+		  rtGradle.tool = "Gradle_35"
+		  rtGradle.resolver repo:'repo', server: serverArti
+		  rtGradle.useWrapper = true
+	          OVERRIDE_VERSION = $newTag
+   }
+	  
+   stage("Increment Tag") {
         try {
             def prEvent = getPullRequestEvent()
             debug("Increment Tag: prEvent: ${prEvent}")
@@ -202,26 +230,7 @@ node ('tpt2-slave'){
             error "[ERROR] ${ex}"
         }
     }
-
-   def serverArti = Artifactory.server 'CWDS_DEV'
-   def rtGradle = Artifactory.newGradleBuild()
-/* properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-   parameters([
-      string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
-      string(defaultValue: 'master', description: '', name: 'branch'),
-      booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE_PROJECT'),
-      string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
-      booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
-      string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
-      ]), pipelineTriggers([pollSCM('H/5 * * * *')])]) */
-  try {
-   stage('Preparation') {
-		  git branch: '$branch', url: 'git@github.com:ca-cwds/geo-services-api.git'
-		  rtGradle.tool = "Gradle_35"
-		  rtGradle.resolver repo:'repo', server: serverArti
-		  rtGradle.useWrapper = true
-	          OVERRIDE_VERSION = $newTag
-   }
+	  
    stage('Build'){
 		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'readArguments jar -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
    }
