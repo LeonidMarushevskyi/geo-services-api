@@ -42,12 +42,6 @@ node ('tpt2-slave'){
            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publishDocker -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
        }
 	}
-    stage('Tag GitHub') {
-	   buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'tagGitHub -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
-    }
-
-    // Tagging comes before here
-
 	stage('Clean Workspace') {
 		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'dropDockerImage -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
 		archiveArtifacts artifacts: '**/geo-services-api-*.jar,readme.txt', fingerprint: true
