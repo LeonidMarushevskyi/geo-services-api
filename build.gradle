@@ -229,6 +229,11 @@ task dropDockerImage(type:Exec) {
 
 }
 
+task tagGitHub(type:Exec) {
+    commandLine 'git', 'tag', "$dockerTag"
+    commandLine 'GIT_SSH_COMMAND="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"', 'git', 'push', 'origin', "$dockerTag"
+}
+
 task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
     doLast {
         println 'Published'
