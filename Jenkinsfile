@@ -12,7 +12,7 @@ node ('tpt2-slave'){
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
   try {
    stage('Preparation') {
-		  git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
+		  git branch: '$branch', credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', url: 'git@github.com:ca-cwds/geo-services-api.git'
 		  rtGradle.tool = "Gradle_35"
 		  rtGradle.resolver repo:'repo', server: serverArti
 		  rtGradle.useWrapper = true
@@ -30,18 +30,23 @@ node ('tpt2-slave'){
 			buildInfo = rtGradle.run buildFile: 'build.gradle', switches: '--info', tasks: 'sonarqube'
         }
     }
-
-	stage ('Push to artifactory'){
+	stage ('Build Docker'){
+	   buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'createDockerImage -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+	}
+    stage('Tag Git') {
+        // tagRepo('test-tags')
+	   def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+    }
+    stage ('Push to artifactory'){
 	    rtGradle.deployer.deployArtifacts = true
 	    buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
   		rtGradle.deployer.deployArtifacts = false
 	}
-	stage ('Build Docker'){
-	   buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'createDockerImage -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+    stage('Push to Docker Image') {
 	   withDockerRegistry([credentialsId: '6ba8d05c-ca13-4818-8329-15d41a089ec0']) {
            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publishDocker -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
        }
-	}
+    }
 	stage('Clean Workspace') {
 		buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'dropDockerImage -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
 		archiveArtifacts artifacts: '**/geo-services-api-*.jar,readme.txt', fingerprint: true
