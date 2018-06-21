@@ -34,7 +34,9 @@ node ('tpt2-slave'){
 	}
     stage('Tag Git') {
         // tagRepo('test-tags')
-	   def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+	   sshagent(credentials: ['433ac100-b3c2-4519-b4d6-207c029a103b']) {
+           def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+       }
     }
     stage ('Push to artifactory'){
 	    rtGradle.deployer.deployArtifacts = true
