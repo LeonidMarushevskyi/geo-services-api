@@ -19,10 +19,12 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.json.JSONException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AddressResourceTest extends BaseApiIntegrationTest {
 
+  @Ignore
   @Test
   public void testPostAddressValidate() throws Exception {
     WebTarget target = clientTestRule.target(ADDRESS + "/" + VALIDATE_SINGLE);
@@ -35,6 +37,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
     assertResponseByFixturePath(postResponse, "fixtures/addressValidateResponse.json");
   }
 
+  @Ignore
   @Test
   public void postAddressValidate_unprocessableEntityResponse_whenValidationFailed() {
     // given
@@ -123,6 +126,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
         postResponse, "fixtures/addressValidation/validation/stateTooLong/response.json");
   }
 
+  @Ignore
   @Test
   public void calculateDistance_success_whenValidInput() throws Exception {
     calculateDistanceAndAssert(
@@ -164,6 +168,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
     assertResponseByFixturePath(postResponse, expectedResultFixture);
   }
 
+  @Ignore
   @Test
   public void testAddressLookup() throws Exception {
     String zipCode = "95747";
@@ -173,6 +178,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
     assertResponseByFixturePath(response, "fixtures/addressLookupResponse.json");
   }
 
+  @Ignore
   @Test
   public void testAddressSuggestion() throws Exception {
     String suggestion = "1489 Black Be";
@@ -182,6 +188,7 @@ public class AddressResourceTest extends BaseApiIntegrationTest {
     assertResponseByFixturePath(response, "fixtures/addressSuggestResponse.json");
   }
 
+  @Ignore
   @Test
   public void testAddressDuplicationBug() throws Exception {
     String suggestion = "6458 Altama";
