@@ -37,3 +37,7 @@ NOTE : At this time there is not a publicy available link to the documentation, 
 The Docker env-file option provides a convenient method to supply these variables. These instructions assume an env file called .env located in the current directory. The repository contains a sample env file called env.sample.
 
 Further configuration options are available in the file config/geo-services-api.yml.
+
+# Questions
+
+If you have any questions regarding the contents of this repository, please email the Office of Systems Integration at FOSS@osi.ca.gov.
