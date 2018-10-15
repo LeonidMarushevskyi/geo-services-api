@@ -39,7 +39,7 @@ project.ext {
     dockerTag = projectVersion
 
     dropwizardVersion = '1.1.0'
-    coreApiVersion = '1.5.7_333-RC'
+    coreApiVersion = '1.9.4_867-RC'
     mapstructVersion = '1.1.0.Final'
     mainClass = 'gov.ca.cwds.geo.GeoServicesApiApplication'
 

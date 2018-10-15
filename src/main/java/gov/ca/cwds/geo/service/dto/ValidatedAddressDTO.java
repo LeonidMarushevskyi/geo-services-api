@@ -1,15 +1,18 @@
 package gov.ca.cwds.geo.service.dto;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Size;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import gov.ca.cwds.rest.api.Request;
 import gov.ca.cwds.rest.api.Response;
 import gov.ca.cwds.rest.api.domain.DomainObject;
 import io.dropwizard.jackson.JsonSnakeCase;
 import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  * {@link DomainObject} representing an address that is validated or standardized via SmartyStreets
@@ -72,6 +75,7 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
    * @param streetAddress The validated street address
    * @param city The validated city
    * @param state The validated state
+   * @param stateAbbreviation state Abbreviation
    * @param zip The validated zip
    * @param zipExtension The validated zip
    * @param longitude The longitude
@@ -80,9 +84,11 @@ public class ValidatedAddressDTO extends BaseDTO implements Request, Response {
    */
   @JsonCreator
   public ValidatedAddressDTO(@JsonProperty("street_address") String streetAddress,
-      @JsonProperty("city") String city, @JsonProperty("state") String state, @JsonProperty("state_abbreviation") String stateAbbreviation,
-      @JsonProperty("zip") String zip, @JsonProperty("zip_extension") String zipExtension, @JsonProperty("longitude") Double longitude,
-      @JsonProperty("lattitude") Double lattitude, @JsonProperty("delivery") Boolean deliverable) {
+      @JsonProperty("city") String city, @JsonProperty("state") String state,
+      @JsonProperty("state_abbreviation") String stateAbbreviation, @JsonProperty("zip") String zip,
+      @JsonProperty("zip_extension") String zipExtension,
+      @JsonProperty("longitude") Double longitude, @JsonProperty("lattitude") Double lattitude,
+      @JsonProperty("delivery") Boolean deliverable) {
     super();
     this.streetAddress = streetAddress;
     this.city = city;
