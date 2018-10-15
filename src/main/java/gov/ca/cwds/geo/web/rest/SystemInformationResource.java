@@ -1,22 +1,28 @@
 package gov.ca.cwds.geo.web.rest;
 
-import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
-import com.google.inject.Inject;
-import com.google.inject.name.Named;
-import gov.ca.cwds.geo.Constants.API;
-import gov.ca.cwds.rest.api.ApiException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.apache.http.HttpStatus;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
+
+import gov.ca.cwds.geo.Constants.API;
+import gov.ca.cwds.geo.GeoServicesApiConfiguration;
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.resources.system.AbstractSystemInformationResource;
+import io.dropwizard.setup.Environment;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 /**
  * @author CWDS TPT2 Team
@@ -24,29 +30,28 @@ import javax.ws.rs.core.MediaType;
 @Api(value = API.SYSTEM_INFORMATION)
 @Path(API.SYSTEM_INFORMATION)
 @Produces(MediaType.APPLICATION_JSON)
-public class SystemInformationResource {
+public class SystemInformationResource extends AbstractSystemInformationResource {
 
   private static final String VERSION_PROPERTIES_FILE = "version.properties";
   private static final String BUILD_VERSION = "build.version";
   private static final String BUILD_NUMBER = "build.number";
 
-  private String applicationName;
-  private String version;
-  private String buildNumber;
-
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
   /**
    * Constructor
-   *
-   * @param applicationName The name of the application
+   * 
+   * @param geoServicesApiConfiguration - geoServicesApiConfiguration
+   * @param environment - environment
    */
   @Inject
-  public SystemInformationResource(@Named("app.name") String applicationName) {
-    this.applicationName = applicationName;
+  public SystemInformationResource(final GeoServicesApiConfiguration geoServicesApiConfiguration,
+      final Environment environment) {
+    super(environment.healthChecks());
+    super.applicationName = geoServicesApiConfiguration.getApplicationName();
     Properties versionProperties = getVersionProperties();
-    this.version = versionProperties.getProperty(BUILD_VERSION);
-    this.buildNumber = versionProperties.getProperty(BUILD_NUMBER);
+    super.version = versionProperties.getProperty(BUILD_VERSION);
+    super.buildNumber = versionProperties.getProperty(BUILD_NUMBER);
   }
 
   private Properties getVersionProperties() {
@@ -66,19 +71,11 @@ public class SystemInformationResource {
    * @return the application data
    */
   @GET
-  @Timed
-  @ApiOperation(value = "Returns Application information")
-  public String get() {
-    ImmutableMap<String, String> map =
-        ImmutableMap.<String, String>builder()
-            .put("Application", applicationName)
-            .put("Version", version)
-            .put("BuildNumber", buildNumber)
-            .build();
-    try {
-      return MAPPER.writeValueAsString(map);
-    } catch (JsonProcessingException e) {
-      throw new ApiException("Unable to parse application data", e);
-    }
+  @ApiResponses(
+      value = {@ApiResponse(code = HttpStatus.SC_UNAUTHORIZED, message = "Not Authorized"),
+          @ApiResponse(code = HttpStatus.SC_NOT_FOUND, message = "Not found"),
+          @ApiResponse(code = 465, message = "CWS-CARES Geo Services API is UnHealthy")})
+  public Response get() {
+    return super.buildResponse();
   }
 }
