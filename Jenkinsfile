@@ -26,6 +26,11 @@ node ('tpt2-slave'){
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
 	   publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
    }
+
+   stage('Verify SemVer Label') {
+      checkForLabel("geo-services-api")
+   }
+
    stage('SonarQube analysis'){
 	 	lint(rtGradle)
    }
