@@ -4,7 +4,8 @@ node ('tpt2-slave'){
    def serverArti = Artifactory.server 'CWDS_DEV'
    def rtGradle = Artifactory.newGradleBuild()
    if (env.BUILD_JOB_TYPE && env.BUILD_JOB_TYPE=="master" ) {
-     properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
+     triggerProperties = pullRequestMergedTriggerProperties('geo-services-api')
+     properties([pipelineTriggers([triggerProperties]), buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
      parameters([
         string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
         string(defaultValue: 'master', description: '', name: 'branch'),
