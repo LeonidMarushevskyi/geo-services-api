@@ -165,7 +165,6 @@ run {
 }
 
 test {
-    exclude '**/AddressResourceTest.*'
     systemProperty 'java.net.preferIPv4Stack', 'true'
 }
 
