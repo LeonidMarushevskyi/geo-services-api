@@ -8,7 +8,6 @@ node ('tpt2-slave'){
       string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
       string(defaultValue: 'master', description: '', name: 'branch'),
       booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE_PROJECT'),
-      string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
       booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
       string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
       ])])
@@ -17,13 +16,13 @@ node ('tpt2-slave'){
       echo "hello world"
      }
 
-  //stage('Checkout') {
-        // deleteDir
-        // checkout scm
-        // rtGradle.tool = "Gradle_35"
-   		  // rtGradle.resolver repo:'repo', server: serverArti
-   		  // rtGradle.useWrapper = true
-  //  }
+  stage('Checkout') {
+         deleteDir
+         checkout scm
+         rtGradle.tool = "Gradle_35"
+   		   rtGradle.resolver repo:'repo', server: serverArti
+   		   rtGradle.useWrapper = true
+    }
 
   if (env.BUILD_JOB_TYPE && env.BUILD_JOB_TYPE=="master" ) {
    stage('Preparation') {
