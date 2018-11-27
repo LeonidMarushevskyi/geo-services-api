@@ -3,7 +3,6 @@
 node ('tpt2-slave'){
    def serverArti = Artifactory.server 'CWDS_DEV'
    def rtGradle = Artifactory.newGradleBuild()
-   if (env.BUILD_JOB_TYPE && env.BUILD_JOB_TYPE=="master" ) {
    properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
    parameters([
       string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
@@ -12,8 +11,7 @@ node ('tpt2-slave'){
       string(description: 'Fill this field if need to specify custom version ', name: 'OVERRIDE_VERSION'),
       booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
       string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
-      ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
-      }
+      ])])
   try {
    stage('Preparation') {
 		  git branch: '$branch', credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', url: 'git@github.com:ca-cwds/geo-services-api.git'
