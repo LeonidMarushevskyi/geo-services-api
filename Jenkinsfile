@@ -12,11 +12,7 @@ node ('tpt2-slave'){
       string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
       ])])
   try {
-  stage('Hello'){
-      echo "hello world"
-     }
-
-   stage('Preparation') {
+     stage('Preparation') {
 		  git branch: '$branch', credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', url: 'git@github.com:ca-cwds/geo-services-api.git'
 		  rtGradle.tool = "Gradle_35"
 		  rtGradle.resolver repo:'repo', server: serverArti
