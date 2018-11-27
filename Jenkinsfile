@@ -17,13 +17,13 @@ node ('tpt2-slave'){
       echo "hello world"
      }
 
-  stage('Checkout') {
-         deleteDir
+  //stage('Checkout') {
+        // deleteDir
         // checkout scm
         // rtGradle.tool = "Gradle_35"
    		  // rtGradle.resolver repo:'repo', server: serverArti
    		  // rtGradle.useWrapper = true
-    }
+  //  }
 
   if (env.BUILD_JOB_TYPE && env.BUILD_JOB_TYPE=="master" ) {
    stage('Preparation') {
