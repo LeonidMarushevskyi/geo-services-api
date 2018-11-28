@@ -17,7 +17,7 @@ node ('tpt2-slave'){
   } else {
     properties([disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
     parameters([
-       string(defaultValue: 'master', description: '', name: 'branch'),
+       string(defaultValue: 'prtest', description: '', name: 'branch'),
        string(defaultValue: 'inventories/tpt2dev/hosts.yml', description: '', name: 'inventory')
        ])])
   }
@@ -31,13 +31,13 @@ node ('tpt2-slave'){
    stage('Build'){
 		def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'readArguments jar -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
    }
-//   stage('Unit Tests') {
-//       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
-//	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
-//   }
-//   stage('SonarQube analysis'){
-//	 	lint(rtGradle)
-//   }
+   stage('Unit Tests') {
+       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
+	     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
+   }
+   stage('SonarQube analysis'){
+	 	lint(rtGradle)
+   }
 	stage ('Build Docker'){
 	   buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'createDockerImage -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
 	}
