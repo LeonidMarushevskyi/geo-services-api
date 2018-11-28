@@ -26,8 +26,12 @@ node ('tpt2-slave'){
      stage('Preparation') {
       echo "preparation"
       def scmInfo = checkout scm
+      echo "scm test"
+      echo "$scmInfo"
+      sh(returnStdout: true, script: 'git status')
       def gitbranch = scmInfo.GIT_BRANCH ?: env.GIT_BRANCH
       gitbranch = gitbranch.substring(gitbranch.lastIndexOf("/") + 1, gitbranch.length())
+      echo "git branch"
       echo "${gitbranch}"
       git branch: "${gitbranch}", credentialsId: '433ac100-b3c2-4519-b4d6-207c029a103b', url: 'git@github.com:ca-cwds/geo-services-api.git'
       rtGradle.tool = "Gradle_35"
