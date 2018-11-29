@@ -1,4 +1,4 @@
-FROM cwds/javajdk
+FROM cwds/alpinejre
 RUN mkdir /opt/geo-services-api
 RUN mkdir /opt/geo-services-api/logs
 ADD config/geo-services-api.yml /opt/geo-services-api/geo-services-api.yml
