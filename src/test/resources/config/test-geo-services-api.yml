@@ -10,8 +10,8 @@ server:
     port: 9091
 
 smartystreets:
-  clientId: ${SS_ID:-88f5b260-4ee4-73cb-1812-a674b5302232}
-  token: ${SS_TOKEN:-LDMsynX52ilHnFPsBSM0}
+  clientId: ${SS_ID:-ee79b2e1-a531-accc-9aa0-d4a9c2776890}
+  token: ${SS_TOKEN:-8pWIIdqtfEZlyBLP6Gfl}
   maxCandidates: ${SS_MAX:-10}
 
 shiro:
