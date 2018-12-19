@@ -1,7 +1,16 @@
 package gov.ca.cwds.geo.service;
 
+import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
+import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
+import gov.ca.cwds.rest.api.ApiException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
-import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Loggable;
 import com.smartystreets.api.ClientBuilder;
 import com.smartystreets.api.StaticCredentials;
@@ -9,13 +18,6 @@ import com.smartystreets.api.exceptions.SmartyException;
 import com.smartystreets.api.us_zipcode.City;
 import com.smartystreets.api.us_zipcode.Client;
 import com.smartystreets.api.us_zipcode.Lookup;
-import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
-import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
-import gov.ca.cwds.rest.api.ApiException;
-import java.io.IOException;
-import java.util.ArrayList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * US ZIP Code features by calling the SmartyStreets API
@@ -25,7 +27,8 @@ import org.slf4j.LoggerFactory;
 public class USZipCodeService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(USZipCodeService.class);
-  private static final String ERROR_CALLING_SMARTY_STREET = "ERROR calling USStreetAddressService - ";
+  private static final String ERROR_CALLING_SMARTY_STREET =
+      "ERROR calling USStreetAddressService - ";
   private SmartyStreetsDAO smartyStreetsDAO;
   private Client client;
 
@@ -34,8 +37,7 @@ public class USZipCodeService {
     this.smartyStreetsDAO = smartyStreetsDAO;
     StaticCredentials credentials =
         new StaticCredentials(smartyStreetsDAO.getClientId(), smartyStreetsDAO.getToken());
-    client =
-        new ClientBuilder(credentials).buildUsZipCodeApiClient();
+    client = new ClientBuilder(credentials).buildUsZipCodeApiClient();
 
   }
 
@@ -58,16 +60,8 @@ public class USZipCodeService {
     ArrayList<ValidatedAddressDTO> validAddresses = new ArrayList<>();
     for (City city : cities) {
       ValidatedAddressDTO address =
-          new ValidatedAddressDTO(
-              null,
-              city.getCity(),
-              city.getState(),
-              city.getStateAbbreviation(),
-              zipCode,
-              null,
-              null,
-              null,
-              null);
+          new ValidatedAddressDTO(null, city.getCity(), city.getState(),
+              city.getStateAbbreviation(), zipCode, null, null, null, null);
       validAddresses.add(address);
     }
     return validAddresses.toArray(new ValidatedAddressDTO[validAddresses.size()]);

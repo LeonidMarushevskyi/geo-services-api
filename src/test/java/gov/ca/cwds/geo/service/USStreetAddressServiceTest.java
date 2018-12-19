@@ -1,28 +1,110 @@
-package gov.ca.cwds.geo.web.rest;
+package gov.ca.cwds.geo.service;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
-
-import com.smartystreets.api.us_street.Analysis;
-import com.smartystreets.api.us_street.Candidate;
-import com.smartystreets.api.us_street.Components;
-import com.smartystreets.api.us_street.Metadata;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
-import gov.ca.cwds.geo.service.USStreetAddressService;
+import gov.ca.cwds.geo.persistence.model.Address;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.exception.BusinessValidationException;
+
 import java.util.ArrayList;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-/** @author CWDS API Team */
-@SuppressWarnings("javadoc")
+import com.smartystreets.api.us_street.Analysis;
+import com.smartystreets.api.us_street.Batch;
+import com.smartystreets.api.us_street.Candidate;
+import com.smartystreets.api.us_street.Client;
+import com.smartystreets.api.us_street.Components;
+import com.smartystreets.api.us_street.Lookup;
+import com.smartystreets.api.us_street.Metadata;
+
+/**
+ * 
+ * @author CWDS API Team
+ */
 public class USStreetAddressServiceTest {
 
-  private static final USStreetAddressService SPY_US_STREET_ADDRESS_SERVICE = spy(new USStreetAddressService(new SmartyStreetsDAO("","",10)));
+  private static final USStreetAddressService SPY_US_STREET_ADDRESS_SERVICE =
+      spy(new USStreetAddressService(new SmartyStreetsDAO("", "", 10)));
+
+  private SmartyStreetsDAO smartyStreetsDao;
+  private Client autocompleteClient;
+  private USStreetAddressService target;
+
+  @Before
+  public void setup() throws Exception {
+
+    smartyStreetsDao = new SmartyStreetsDAO("client", "token", 10);
+    autocompleteClient = mock(Client.class);
+    target = new USStreetAddressService(smartyStreetsDao, autocompleteClient);
+
+  }
+
+  @Test
+  public void createSmartyStreetsLookup() throws Exception {
+
+    Lookup expected = new Lookup();
+    expected.setStreet("1489 Black Bear St.");
+    expected.setCity("Folsom");
+    expected.setState("CA");
+    expected.setZipCode("95630");
+    expected.setMaxCandidates(10);
+
+    Lookup actual =
+        target.createSmartyStreetsLookup("1489 Black Bear St.", "Folsom", "CA", "95630");
+
+    assertThat(actual.getStreet(), is(equalTo(expected.getStreet())));
+    assertThat(actual.getCity(), is(equalTo(expected.getCity())));
+    assertThat(actual.getState(), is(equalTo(expected.getState())));
+    assertThat(actual.getZipCode(), is(equalTo(expected.getZipCode())));
+    assertThat(actual.getMaxCandidates(), is(equalTo(expected.getMaxCandidates())));
+  }
+
+  @Test
+  public void createSmartyStreetsLookupZipCodeNull() throws Exception {
+
+    Lookup expected = new Lookup();
+    expected.setStreet("1489 Black Bear St.");
+    expected.setCity("Folsom");
+    expected.setState("CA");
+    expected.setZipCode("");
+    expected.setMaxCandidates(10);
+
+    Lookup actual = target.createSmartyStreetsLookup("1489 Black Bear St.", "Folsom", "CA", null);
+
+    assertThat(actual.getStreet(), is(equalTo(expected.getStreet())));
+    assertThat(actual.getCity(), is(equalTo(expected.getCity())));
+    assertThat(actual.getState(), is(equalTo(expected.getState())));
+    assertThat(actual.getZipCode(), is(equalTo(expected.getZipCode())));
+    assertThat(actual.getMaxCandidates(), is(equalTo(expected.getMaxCandidates())));
+  }
+
+
+  @Test
+  public void createSmartyStreetsBatch() throws Exception {
+
+    Lookup expected = new Lookup();
+    expected.setStreet("1489 Black Bear St.");
+    expected.setCity("Folsom");
+    expected.setState("CA");
+    expected.setZipCode("95630");
+
+    Address[] address = new Address[1];
+    address[0] = new Address("1489 Black Bear St.", "Folsom", "CA", "95630", null);
+
+    Batch actual = target.createSmartyStreetsBatch(address);
+
+    assertThat(actual.get(0).getStreet(), is(equalTo(expected.getStreet())));
+    assertThat(actual.get(0).getCity(), is(equalTo(expected.getCity())));
+    assertThat(actual.get(0).getState(), is(equalTo(expected.getState())));
+    assertThat(actual.get(0).getZipCode(), is(equalTo(expected.getZipCode())));
+  }
 
   @Test(expected = BusinessValidationException.class)
   public void successfulWithEmptyCandidate() throws Exception {
@@ -31,13 +113,11 @@ public class USStreetAddressServiceTest {
     String b = "b";
     String c = "c";
     String z = "";
-    Mockito.doReturn(empty).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, z);
+    Mockito.doReturn(empty).when(SPY_US_STREET_ADDRESS_SERVICE)
+        .getSmartyStreetsCandidates(a, b, c, z);
     SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
   }
 
-  /*
-   * Successful Tests
-   */
   @Test
   public void successfulWithDpvY() throws Exception {
     ArrayList<Candidate> dpvY = new ArrayList<>();
@@ -61,12 +141,14 @@ public class USStreetAddressServiceTest {
     String b = "folsom";
     String c = "ca";
     String z = "95630";
-    Mockito.doReturn(dpvY).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, z);
-    ValidatedAddressDTO[] actual = SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
+    Mockito.doReturn(dpvY).when(SPY_US_STREET_ADDRESS_SERVICE)
+        .getSmartyStreetsCandidates(a, b, c, z);
+    ValidatedAddressDTO[] actual =
+        SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, z);
     ValidatedAddressDTO[] expected = new ValidatedAddressDTO[1];
     expected[0] =
-        new ValidatedAddressDTO(
-            "106 Big Valley Rd", "Folsom", "California", null, "95630", "2145", -121.13233, 38.64028, true);
+        new ValidatedAddressDTO("106 Big Valley Rd", "Folsom", "California", null, "95630", "2145",
+            -121.13233, 38.64028, true);
     assertThat(actual[0], is(equalTo(expected[0])));
   }
 
@@ -110,16 +192,19 @@ public class USStreetAddressServiceTest {
     String a = "106 Big Valley";
     String b = "folsom";
     String c = "ca";
-    Mockito.doReturn(multiCandidates).when(SPY_US_STREET_ADDRESS_SERVICE).getSmartyStreetsCandidates(a, b, c, null);
-    ValidatedAddressDTO[] actual = SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, null);
+    Mockito.doReturn(multiCandidates).when(SPY_US_STREET_ADDRESS_SERVICE)
+        .getSmartyStreetsCandidates(a, b, c, null);
+    ValidatedAddressDTO[] actual =
+        SPY_US_STREET_ADDRESS_SERVICE.validateSingleUSAddress(a, b, c, null);
     ValidatedAddressDTO[] expected = new ValidatedAddressDTO[2];
     expected[0] =
-        new ValidatedAddressDTO(
-            "106 Big Valley Rd", "Folsom", "CA", null, "95630", "2145", -121.13233, 38.64028, true);
+        new ValidatedAddressDTO("106 Big Valley Rd", "Folsom", "CA", null, "95630", "2145",
+            -121.13233, 38.64028, true);
     expected[1] =
-        new ValidatedAddressDTO(
-            "106 Big Valley Ct", "Folsom", "CA", null, "95630", "2145", -121.13232, 38.68207, true);
+        new ValidatedAddressDTO("106 Big Valley Ct", "Folsom", "CA", null, "95630", "2145",
+            -121.13232, 38.68207, true);
     assertThat(actual[0], is(equalTo(expected[0])));
     assertThat(actual[1], is(equalTo(expected[1])));
   }
+
 }

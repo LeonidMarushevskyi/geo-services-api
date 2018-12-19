@@ -1,17 +1,13 @@
 package gov.ca.cwds.geo.service;
 
-import com.google.inject.Inject;
-import com.jcabi.aspects.Cacheable;
-import com.jcabi.aspects.Loggable;
 import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
 import gov.ca.cwds.geo.persistence.model.Address;
 import gov.ca.cwds.geo.service.dto.DistanceDTO;
 import gov.ca.cwds.geo.service.dto.ValidatedAddressDTO;
 import gov.ca.cwds.rest.services.ServiceException;
-import java.util.ArrayList;
-import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import com.google.inject.Inject;
+import com.jcabi.aspects.Loggable;
 
 /**
  * Business layer object to work on {@link ValidatedAddressDTO}
@@ -27,12 +23,22 @@ public class AddressService {
   private final DistanceService distanceService;
 
   @Inject
-  AddressService(SmartyStreetsDAO smartyStreetsDAO, DistanceService distanceService) {
+  public AddressService(SmartyStreetsDAO smartyStreetsDAO, DistanceService distanceService) {
     this.smartyStreetsDAO = smartyStreetsDAO;
     this.distanceService = distanceService;
     this.usStreetAddressService = new USStreetAddressService(smartyStreetsDAO);
     this.usZipCodeService = new USZipCodeService(smartyStreetsDAO);
     this.usAutocompleteService = new USAutocompleteService(smartyStreetsDAO);
+  }
+
+  public AddressService(SmartyStreetsDAO smartyStreetsDAO, DistanceService distanceService,
+      USStreetAddressService usStreetAddressService, USZipCodeService usZipCodeService,
+      USAutocompleteService usAutocompleteService) {
+    this.smartyStreetsDAO = smartyStreetsDAO;
+    this.distanceService = distanceService;
+    this.usStreetAddressService = usStreetAddressService;
+    this.usZipCodeService = usZipCodeService;
+    this.usAutocompleteService = usAutocompleteService;
   }
 
   /**
@@ -44,8 +50,8 @@ public class AddressService {
    */
   @Loggable(Loggable.DEBUG)
   public ValidatedAddressDTO[] fetchValidatedAddresses(Address address) {
-    return usStreetAddressService.validateSingleUSAddress(
-        address.getStreetAddress(), address.getCity(), address.getState(), address.getZip());
+    return usStreetAddressService.validateSingleUSAddress(address.getStreetAddress(),
+        address.getCity(), address.getState(), address.getZip());
   }
 
   @Loggable(Loggable.DEBUG)
@@ -60,10 +66,9 @@ public class AddressService {
   @Loggable(Loggable.DEBUG)
   public ValidatedAddressDTO[] suggestAddress(String prefix) {
     try {
-      Address[] suggestions = usAutocompleteService
-          .suggestAddress(prefix, "CA", smartyStreetsDAO.getMaxCandidates());
-      ValidatedAddressDTO[] addresses = usStreetAddressService.validateBatchAddress(suggestions);
-      return addresses;
+      Address[] suggestions =
+          usAutocompleteService.suggestAddress(prefix, "CA", smartyStreetsDAO.getMaxCandidates());
+      return usStreetAddressService.validateBatchAddress(suggestions);
     } catch (Exception e) {
       throw new ServiceException("ERROR calling suggestAddress in usStreetAddressService", e);
     }
@@ -74,10 +79,8 @@ public class AddressService {
     try {
       final ValidatedAddressDTO[] validatedFirstAddress = fetchValidatedAddresses(firstAddress);
       final ValidatedAddressDTO[] validatedSecondAddress = fetchValidatedAddresses(secondAddress);
-      final Double distance = distanceService.calculateDistance(
-          validatedFirstAddress[0],
-          validatedSecondAddress[0]
-      );
+      final Double distance =
+          distanceService.calculateDistance(validatedFirstAddress[0], validatedSecondAddress[0]);
       return new DistanceDTO(distance);
     } catch (Exception e) {
       throw new ServiceException("ERROR calling calculateDistance service", e);
