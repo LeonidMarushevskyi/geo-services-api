@@ -1,7 +1,12 @@
 package gov.ca.cwds.geo.service;
 
+import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
+import gov.ca.cwds.geo.persistence.model.Address;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import com.google.inject.Inject;
-import com.jcabi.aspects.Cacheable;
 import com.jcabi.aspects.Loggable;
 import com.smartystreets.api.ClientBuilder;
 import com.smartystreets.api.StaticCredentials;
@@ -10,10 +15,6 @@ import com.smartystreets.api.us_autocomplete.Client;
 import com.smartystreets.api.us_autocomplete.GeolocateType;
 import com.smartystreets.api.us_autocomplete.Lookup;
 import com.smartystreets.api.us_autocomplete.Suggestion;
-import gov.ca.cwds.geo.persistence.dao.SmartyStreetsDAO;
-import gov.ca.cwds.geo.persistence.model.Address;
-import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Autocomplete address by calling the SmartyStreets API
@@ -34,6 +35,11 @@ public class USAutocompleteService {
 
   }
 
+  public USAutocompleteService(SmartyStreetsDAO smartyStreetsDAO, Client client) {
+    this.smartyStreetsDAO = smartyStreetsDAO;
+    this.client = client;
+  }
+
   @Loggable(Loggable.DEBUG)
   Address[] suggestAddress(String prefix, String preferredState, int maxSuggestions)
       throws IOException, SmartyException {
@@ -48,8 +54,8 @@ public class USAutocompleteService {
     ArrayList<Address> addresses = new ArrayList<>();
     for (Suggestion suggestion : suggestions) {
       Address address =
-          new Address(
-              suggestion.getStreetLine(), suggestion.getCity(), suggestion.getState(), null, null);
+          new Address(suggestion.getStreetLine(), suggestion.getCity(), suggestion.getState(),
+              null, null);
       addresses.add(address);
     }
     return addresses.toArray(new Address[addresses.size()]);
