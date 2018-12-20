@@ -53,10 +53,10 @@ node ('tpt2-slave'){
    stage('SonarQube analysis'){
        lint(rtGradle)
    }
+   stage ('Build Docker'){
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "createDockerImage -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
+   }
    if (env.BUILD_JOB_TYPE=="master" ) {
-        stage ('Build Docker'){
-           buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "createDockerImage -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
-        }
         stage('Tag Git') {
            tagGithubRepo(newTag, GITHUB_CREDENTIALS_ID)
         }
@@ -82,21 +82,21 @@ node ('tpt2-slave'){
            sleep (20)
         }
         stage('Integration Tests') {
-//          git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
-//          buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'integrationTest --stacktrace'
-//          publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
-//          cleanWs()
+          git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
+          buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'integrationTest --stacktrace'
+          publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
+          cleanWs()
         }
    } else {
         cleanWs()
    }
 
  } catch (e) {
-//       emailext attachLog: true, body: "Failed: ${e}", recipientProviders: [[$class: 'DevelopersRecipientProvider']],
-//       subject: "GEO Services API CI pipeline failed", to: "Leonid.Marushevskiy@osi.ca.gov, Alex.Kuznetsov@osi.ca.gov, Oleg.Korniichuk@osi.ca.gov, alexander.serbin@engagepoint.com, vladimir.petrusha@engagepoint.com"
-//       slackSend channel: "#geo-services-api", baseUrl: 'https://hooks.slack.com/services/', tokenCredentialId: 'slackmessagetpt2', message: "GEO Services API pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
-//       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
-//       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
+       emailext attachLog: true, body: "Failed: ${e}", recipientProviders: [[$class: 'DevelopersRecipientProvider']],
+       subject: "GEO Services API CI pipeline failed", to: "Leonid.Marushevskiy@osi.ca.gov, Alex.Kuznetsov@osi.ca.gov, Oleg.Korniichuk@osi.ca.gov, alexander.serbin@engagepoint.com, vladimir.petrusha@engagepoint.com"
+       slackSend channel: "#geo-services-api", baseUrl: 'https://hooks.slack.com/services/', tokenCredentialId: 'slackmessagetpt2', message: "GEO Services API pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
+       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
        currentBuild.result = "FAILURE"
        throw e
        } finally {
