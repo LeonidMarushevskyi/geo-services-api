@@ -54,7 +54,7 @@ node ('tpt2-slave'){
        lint(rtGradle)
    }
    stage ('Build Docker'){
-       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "createDockerImage -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
+       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "createDockerImage -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION".toString()
    }
    if (env.BUILD_JOB_TYPE=="master" ) {
         stage('Tag Git') {
