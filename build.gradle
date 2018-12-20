@@ -36,13 +36,6 @@ project.ext {
     projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
     projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
     projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
-    if (System.getProperty('newVersion')) {
-      def newVersion = "${System.getProperty('newVersion')}"
-      version = newVersion
-      projectVersion = newVersion
-    } else {
-      version = projectVersion
-    }
     dockerTag = projectVersion
 
     dropwizardVersion = '1.1.0'
@@ -58,7 +51,13 @@ project.ext {
 }
 
 group projectGroup
-version projectVersion
+if (System.getProperty('newVersion')) {
+      def newVersion = "${System.getProperty('newVersion')}"
+      version = newVersion
+      projectVersion = newVersion
+    } else {
+      version = projectVersion
+}
 
 repositories {
     mavenLocal()
