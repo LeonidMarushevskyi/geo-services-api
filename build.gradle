@@ -163,7 +163,7 @@ shadowJar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
-    version = ''
+    version = version
 }
 
 run {
