@@ -50,8 +50,15 @@ project.ext {
     
 }
 
-group projectGroup
-version projectVersion
+if (System.getProperty('newVersion')) {
+      def newVersion = "${System.getProperty('newVersion')}"
+      version = newVersion
+      projectVersion = newVersion
+      dockerTag = newVersion
+    } else {
+      version = projectVersion
+}
+group = projectGroup
 
 repositories {
     mavenLocal()

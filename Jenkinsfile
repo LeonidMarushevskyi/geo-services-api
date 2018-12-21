@@ -1,8 +1,11 @@
 @Library('jenkins-pipeline-utils') _
 
+GITHUB_CREDENTIALS_ID = '433ac100-b3c2-4519-b4d6-207c029a103b'
+
 node ('tpt2-slave'){
   def serverArti = Artifactory.server 'CWDS_DEV'
   def rtGradle = Artifactory.newGradleBuild()
+  def newTag
   if (env.BUILD_JOB_TYPE=="master" ) {
      triggerProperties = pullRequestMergedTriggerProperties('geo-services-api')
      properties([pipelineTriggers([triggerProperties]), buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
@@ -34,33 +37,41 @@ node ('tpt2-slave'){
    }
    stage('Unit Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
-       publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
+	   publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
    }
+
+   if (env.BUILD_JOB_TYPE=="master" ) {
+      stage('Increment Tag') {
+        newTag = newSemVer()
+      }
+   } else {
+     stage('Check for Label') {
+        checkForLabel("geo-services-api")
+     }
+   }
+   
    stage('SonarQube analysis'){
        lint(rtGradle)
    }
    stage ('Build Docker'){
-       buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'createDockerImage -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "createDockerImage -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
    }
    if (env.BUILD_JOB_TYPE=="master" ) {
         stage('Tag Git') {
-        // tagRepo('test-tags')
-        sshagent(credentials: ['433ac100-b3c2-4519-b4d6-207c029a103b']) {
-        def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
-           }
+           tagGithubRepo(newTag, GITHUB_CREDENTIALS_ID)
         }
         stage ('Push to artifactory'){
             rtGradle.deployer.deployArtifacts = true
-            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publish -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "publish -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
             rtGradle.deployer.deployArtifacts = false
         }
         stage('Push to Docker Image') {
             withDockerRegistry([credentialsId: '6ba8d05c-ca13-4818-8329-15d41a089ec0']) {
-            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'publishDocker -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+              buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "publishDocker -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
            }
         }
         stage('Clean Workspace') {
-            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'dropDockerImage -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+            buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "dropDockerImage -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
             archiveArtifacts artifacts: '**/geo-services-api-*.jar,readme.txt', fingerprint: true
             cleanWs()
         }
@@ -69,15 +80,15 @@ node ('tpt2-slave'){
            sh 'ansible-playbook -e NEW_RELIC_AGENT=$USE_NEWRELIC -e GEO_API_VERSION=$APP_VERSION -i $inventory deploy-geo-services-api.yml --vault-password-file ~/.ssh/vault.txt -vv'
            cleanWs()
            sleep (20)
-       }
-      stage('Integration Tests') {
+        }
+        stage('Integration Tests') {
           git branch: '$branch', url: 'https://github.com/ca-cwds/geo-services-api.git'
           buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'integrationTest --stacktrace'
           publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
-         cleanWs()
-      }
+          cleanWs()
+        }
    } else {
-      cleanWs()
+        cleanWs()
    }
 
  } catch (e) {
@@ -86,6 +97,9 @@ node ('tpt2-slave'){
        slackSend channel: "#geo-services-api", baseUrl: 'https://hooks.slack.com/services/', tokenCredentialId: 'slackmessagetpt2', message: "GEO Services API pipeline failed: ${env.JOB_NAME} ${env.BUILD_NUMBER}"
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
        publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/test', reportFiles: 'index.html', reportName: 'JUnitReports', reportTitles: 'JUnit tests summary'])
-       cleanWs()
-      }
+       currentBuild.result = "FAILURE"
+       throw e
+       } finally {
+           cleanWs()
+       }
 }
