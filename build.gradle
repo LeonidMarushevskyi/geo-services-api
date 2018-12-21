@@ -163,7 +163,7 @@ shadowJar {
     manifest {
         attributes 'Main-Class': mainClassName
     }
-    version = version
+    version = ''
 }
 
 run {
@@ -257,12 +257,12 @@ task pushGitTag(type:Exec, dependsOn: createGitTag) {
     }
 }
 
-processResources {
-    filter(ReplaceTokens, tokens:[
-            'build.version' : projectVersion,
-            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
-    ])
-}
+//processResources {
+//    filter(ReplaceTokens, tokens:[
+//            'build.version' : projectVersion,
+//            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
+//    ])
+//}
 
 publishing {
     publications {
@@ -270,7 +270,6 @@ publishing {
             from components.java
             groupId projectGroup
             artifactId rootProject.name
-            version version
         }
     }
     repositories {
