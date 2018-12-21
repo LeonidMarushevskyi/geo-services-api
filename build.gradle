@@ -36,7 +36,6 @@ project.ext {
     projectSnapshotVersion = projectMajorVersion + "-SNAPSHOT"
     projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? projectMajorVersion + '_' + buildNumber + '-RC' : customVersion )
     projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
-    dockerTag = projectVersion
 
     dropwizardVersion = '1.1.0'
     coreApiVersion = '1.9.4_867-RC'
@@ -54,10 +53,10 @@ if (System.getProperty('newVersion')) {
       def newVersion = "${System.getProperty('newVersion')}"
       version = newVersion
       projectVersion = newVersion
-      dockerTag = newVersion
     } else {
       version = projectVersion
 }
+def dockerTag = version
 group = projectGroup
 
 repositories {
@@ -271,6 +270,7 @@ publishing {
             from components.java
             groupId projectGroup
             artifactId rootProject.name
+            version version
         }
     }
     repositories {
