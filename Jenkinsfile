@@ -33,7 +33,7 @@ node ('tpt2-slave'){
        rtGradle.useWrapper = true
    }
    stage('Build'){
-       def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "readArguments jar -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION".toString()
+       def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'readArguments jar -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
    }
    stage('Unit Tests') {
        buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'test jacocoTestReport', switches: '--stacktrace'
