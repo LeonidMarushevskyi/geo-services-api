@@ -51,8 +51,10 @@ project.ext {
 
 if (System.getProperty('newVersion')) {
       def newVersion = "${System.getProperty('newVersion')}"
-      version = newVersion
-      projectVersion = newVersion
+      projectSnapshotVersion = newVersion + "-SNAPSHOT"
+      projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? newVersion + '_' + buildNumber + '-RC' : customVersion )
+      projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
+      version = projectVersion
     } else {
       version = projectVersion
 }
@@ -257,12 +259,12 @@ task pushGitTag(type:Exec, dependsOn: createGitTag) {
     }
 }
 
-//processResources {
-//    filter(ReplaceTokens, tokens:[
-//            'build.version' : projectVersion,
-//            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
-//    ])
-//}
+processResources {
+    filter(ReplaceTokens, tokens:[
+            'build.version' : projectVersion,
+            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
+    ])
+}
 
 publishing {
     publications {
@@ -270,7 +272,6 @@ publishing {
             from components.java
             groupId projectGroup
             artifactId rootProject.name
-            version projectVersion
         }
     }
     repositories {
