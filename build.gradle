@@ -180,6 +180,8 @@ test {
 jar {
     manifest {
         attributes 'Main-Class': mainClassName
+        attributes 'build.version': version
+        attributes 'build.number': (System.getenv("BUILD_NUMBER") ?: "IDE")
     }
 }
 
@@ -257,13 +259,6 @@ task pushGitTag(type:Exec, dependsOn: createGitTag) {
     doLast {
         println "Pushed tagged to Git origin"
     }
-}
-
-processResources {
-    filter(ReplaceTokens, tokens:[
-            'build.version' : projectVersion,
-            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
-    ])
 }
 
 publishing {
