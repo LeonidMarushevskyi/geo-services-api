@@ -59,7 +59,7 @@ node ('tpt2-slave'){
         stage('Tag Git') {
            //tagGithubRepo(newTag, GITHUB_CREDENTIALS_ID)
            sshagent(credentials: ['433ac100-b3c2-4519-b4d6-207c029a103b']) {
-               def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'pushGitTag -DRelease=$RELEASE_PROJECT -DBuildNumber=$BUILD_NUMBER -DCustomVersion=$OVERRIDE_VERSION'
+               def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: "pushGitTag -DRelease=\$RELEASE_PROJECT -DBuildNumber=\$BUILD_NUMBER -DCustomVersion=\$OVERRIDE_VERSION -DnewVersion=${newTag}".toString()
            }
         }
         stage ('Push to artifactory'){
