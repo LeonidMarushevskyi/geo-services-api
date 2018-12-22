@@ -259,12 +259,12 @@ task pushGitTag(type:Exec, dependsOn: createGitTag) {
     }
 }
 
-processResources {
-    filter(ReplaceTokens, tokens:[
-            'build.version' : projectVersion,
-            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
-    ])
-}
+//processResources {
+//    filter(ReplaceTokens, tokens:[
+//            'build.version' : projectVersion,
+//            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
+//    ])
+//}
 
 publishing {
     publications {
