@@ -49,7 +49,7 @@ project.ext {
     
 }
 
-if (System.getProperty('newVersion')) {
+if (System.getProperty('newVersion') && System.getProperty('newVersion')!='null') {
       def newVersion = "${System.getProperty('newVersion')}"
       projectSnapshotVersion = newVersion + "-SNAPSHOT"
       projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? newVersion + '_' + buildNumber + '-RC' : customVersion )
@@ -180,8 +180,8 @@ test {
 jar {
     manifest {
         attributes 'Main-Class': mainClassName
-        attributes 'build.version': version
-        attributes 'build.number': (System.getenv("BUILD_NUMBER") ?: "IDE")
+        attributes 'Geo-Services-Api-Version': version
+        attributes 'Geo-Services-Api-Build': (System.getenv("BUILD_NUMBER") ?: "IDE")
     }
 }
 
