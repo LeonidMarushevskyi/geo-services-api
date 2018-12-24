@@ -62,7 +62,6 @@ node ('tpt2-slave'){
    if (env.BUILD_JOB_TYPE=="master" ) {
         stage('Tag Git') {
            tagGithubRepo(newTag, github_credentials_id)
-           }
         }
         stage ('Push to artifactory'){
             rtGradle.deployer.deployArtifacts = true
