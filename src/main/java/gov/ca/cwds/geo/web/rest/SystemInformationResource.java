@@ -1,5 +1,14 @@
 package gov.ca.cwds.geo.web.rest;
 
+import gov.ca.cwds.geo.Constants.API;
+import gov.ca.cwds.geo.GeoServicesApiConfiguration;
+import gov.ca.cwds.rest.api.ApiException;
+import gov.ca.cwds.rest.resources.system.AbstractSystemInformationResource;
+import io.dropwizard.setup.Environment;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -15,15 +24,6 @@ import org.apache.http.HttpStatus;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
-import gov.ca.cwds.geo.Constants.API;
-import gov.ca.cwds.geo.GeoServicesApiConfiguration;
-import gov.ca.cwds.rest.api.ApiException;
-import gov.ca.cwds.rest.resources.system.AbstractSystemInformationResource;
-import io.dropwizard.setup.Environment;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-
 /**
  * @author CWDS TPT2 Team
  */
@@ -33,8 +33,8 @@ import io.swagger.annotations.ApiResponses;
 public class SystemInformationResource extends AbstractSystemInformationResource {
 
   private static final String VERSION_PROPERTIES_FILE = "version.properties";
-  private static final String BUILD_VERSION = "build.version";
-  private static final String BUILD_NUMBER = "build.number";
+  private static final String BUILD_VERSION = "Geo-Services-Api-Version";
+  private static final String BUILD_NUMBER = "Geo-Services-Api-Build";
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 

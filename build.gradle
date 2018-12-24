@@ -49,10 +49,12 @@ project.ext {
     
 }
 
-if (System.getProperty('newVersion')) {
+if (System.getProperty('newVersion') && System.getProperty('newVersion')!='null') {
       def newVersion = "${System.getProperty('newVersion')}"
-      version = newVersion
-      projectVersion = newVersion
+      projectSnapshotVersion = newVersion + "-SNAPSHOT"
+      projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? newVersion + '_' + buildNumber + '-RC' : customVersion )
+      projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
+      version = projectVersion
     } else {
       version = projectVersion
 }
@@ -178,6 +180,8 @@ test {
 jar {
     manifest {
         attributes 'Main-Class': mainClassName
+        attributes 'Geo-Services-Api-Version': version
+        attributes 'Geo-Services-Api-Build': (System.getenv("BUILD_NUMBER") ?: "IDE")
     }
 }
 
@@ -257,20 +261,12 @@ task pushGitTag(type:Exec, dependsOn: createGitTag) {
     }
 }
 
-processResources {
-    filter(ReplaceTokens, tokens:[
-            'build.version' : projectVersion,
-            'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
-    ])
-}
-
 publishing {
     publications {
         library(MavenPublication) {
             from components.java
             groupId projectGroup
             artifactId rootProject.name
-            version version
         }
     }
     repositories {
