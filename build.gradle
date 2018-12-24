@@ -51,10 +51,7 @@ project.ext {
 
 if (System.getProperty('newVersion') && System.getProperty('newVersion')!='null') {
       def newVersion = "${System.getProperty('newVersion')}"
-      projectSnapshotVersion = newVersion + "-SNAPSHOT"
-      projectReleaseVersion = (customVersion == null || customVersion == "" || customVersion.startsWith('$') ? newVersion + '_' + buildNumber + '-RC' : customVersion )
-      projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
-      version = projectVersion
+      version = newVersion
     } else {
       version = projectVersion
 }
