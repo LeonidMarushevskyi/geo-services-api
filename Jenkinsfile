@@ -106,7 +106,6 @@ node ('tpt2-slave'){
         stage('Update Integration Manifest') {
         updateManifest("geo-services-api", "integration", github_credentials_id, newTag)
         }
-
    } else {
         cleanWs()
    }
