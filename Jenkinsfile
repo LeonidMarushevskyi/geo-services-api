@@ -37,8 +37,7 @@ node ('tpt2-slave'){
         newTag = newSemVer()
         projectSnapshotVersion = newTag + "-SNAPSHOT"
         projectReleaseVersion = (env.OVERRIDE_VERSION == null || env.OVERRIDE_VERSION == ""  ? newTag + '_' + env.BUILD_NUMBER + '-RC' : env.OVERRIDE_VERSION )
-        isRelease = env.RELEASE_PROJECT == "true"
-        projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
+        projectVersion = (env.RELEASE_PROJECT == "true" ? projectReleaseVersion : projectSnapshotVersion )
         newTag = projectVersion
       }
    } else {
