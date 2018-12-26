@@ -177,6 +177,8 @@ test {
 jar {
     manifest {
         attributes 'Main-Class': mainClassName
+        attributes 'Geo-Services-Api-Version': version
+        attributes 'Geo-Services-Api-Build': (System.getenv("BUILD_NUMBER") ?: "IDE")
     }
 }
 
@@ -238,13 +240,6 @@ task publishDocker(dependsOn: [pushDockerVersionTagged, pushDockerLatest]) {
     doLast {
         println 'Published'
     }
-}
-
-processResources {
-  filter(ReplaceTokens, tokens:[
-          'build.version' : version,
-          'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
-  ])
 }
 
 publishing {
