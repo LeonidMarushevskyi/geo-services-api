@@ -177,8 +177,6 @@ test {
 jar {
     manifest {
         attributes 'Main-Class': mainClassName
-        attributes 'Geo-Services-Api-Version': version
-        attributes 'Geo-Services-Api-Build': (System.getenv("BUILD_NUMBER") ?: "IDE")
     }
 }
 
@@ -256,6 +254,13 @@ task pushGitTag(type:Exec, dependsOn: createGitTag) {
     doLast {
         println "Pushed tagged to Git origin"
     }
+}
+
+processResources {
+  filter(ReplaceTokens, tokens:[
+          'build.version' : version,
+          'build.number' : (System.getenv("BUILD_NUMBER") ?: "IDE")
+  ])
 }
 
 publishing {
