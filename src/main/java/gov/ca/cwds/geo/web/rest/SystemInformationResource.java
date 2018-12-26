@@ -33,8 +33,8 @@ import com.google.inject.Inject;
 public class SystemInformationResource extends AbstractSystemInformationResource {
 
   private static final String VERSION_PROPERTIES_FILE = "version.properties";
-  private static final String BUILD_VERSION = "Geo-Services-Api-Version";
-  private static final String BUILD_NUMBER = "Geo-Services-Api-Build";
+  private static final String BUILD_VERSION = "build.version";
+  private static final String BUILD_NUMBER = "build.number";
 
   private static final ObjectMapper MAPPER = new ObjectMapper();
 
