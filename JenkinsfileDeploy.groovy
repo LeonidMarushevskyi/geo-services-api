@@ -5,13 +5,6 @@ import groovy.transform.Field
 def githubCredentialsId = '433ac100-b3c2-4519-b4d6-20node7c029a103b'
 @Field
 def deAnsibleGithubUrl = 'git@github.com:ca-cwds/de-ansible.git'
-@Field
-triggerProperties = pullRequestMergedTriggerProperties('geo-services-api')
-   properties([pipelineTriggers([triggerProperties]), buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
-   parameters([
-      string(defaultValue: 'master', description: '', name: 'branch'),
-      booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
-      ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
 
 deploy('preint')
 deploy('integration')
