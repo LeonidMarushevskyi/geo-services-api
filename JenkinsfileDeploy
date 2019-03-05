@@ -9,9 +9,7 @@ def deAnsibleGithubUrl = 'git@github.com:ca-cwds/de-ansible.git'
 triggerProperties = pullRequestMergedTriggerProperties('geo-services-api')
    properties([pipelineTriggers([triggerProperties]), buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), disableConcurrentBuilds(), [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
    parameters([
-      string(defaultValue: 'latest', description: '', name: 'APP_VERSION'),
       string(defaultValue: 'master', description: '', name: 'branch'),
-      booleanParam(defaultValue: false, description: 'Default release version template is: <majorVersion>_<buildNumber>-RC', name: 'RELEASE_PROJECT'),
       booleanParam(defaultValue: true, description: '', name: 'USE_NEWRELIC'),
       ]), pipelineTriggers([pollSCM('H/5 * * * *')])])
 
