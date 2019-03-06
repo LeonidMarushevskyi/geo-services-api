@@ -15,7 +15,7 @@ def deploy(environment) {
       checkoutStage(environment)
       deployStage(environment, env.version)
       updateManifestStage(environment, env.version)
-      testsStage(environment, env.version)
+      testsStage(environment)
     } catch(Exception e) {
       currentBuild.result = 'FAILURE'
       throw e
