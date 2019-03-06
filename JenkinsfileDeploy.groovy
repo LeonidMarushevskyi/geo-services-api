@@ -68,6 +68,6 @@ def testsStage(environment) {
       writeFile file: "gradle.properties", text: gradlePropsText
     }
     rtGradle.run buildFile: 'build.gradle', tasks: 'clean smokeTest'
-    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/smokeTest', reportFiles: 'index.html', reportName: environment + 'Test Report', reportTitles: ''])
+    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/smokeTest', reportFiles: 'index.html', reportName: environment + ' Test Report', reportTitles: ''])
   }
 }

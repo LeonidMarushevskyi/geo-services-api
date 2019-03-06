@@ -29,7 +29,7 @@ public class RestClientTestRule implements TestRule {
 
   private static final Logger LOG = LoggerFactory.getLogger(RestClientTestRule.class);
 
-  public static final String GEO_API_URL = "geo.api.url";
+  public static final String GEO_API_URL = "geoservices.api.url";
   private final DropwizardAppRule<GeoServicesApiConfiguration> dropWizardApplication;
 
   private Client client;
