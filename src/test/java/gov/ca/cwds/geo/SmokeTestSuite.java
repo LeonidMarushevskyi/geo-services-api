@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({AddressResourceIT.class, SystemInformationResourceTest.class})
+@Suite.SuiteClasses({SystemInformationResourceTest.class})
 public class SmokeTestSuite {
 
 }
