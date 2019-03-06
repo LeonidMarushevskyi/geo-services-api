@@ -36,7 +36,7 @@ def deployStage(environment, version) {
   stage("Deploy to $environment") {
     ws {
       environmentDashboard(addColumns: false, buildJob: '', buildNumber: version, componentName: 'Geo-Services-API', data: [], nameOfEnv: 'PREINT', packageName: 'Geo-Services-API') {
-        git branch: 'master', credentialsId: githubCredentialsId, url: deAnsibleGithubUrl
+        git branch: 'FIT-364-smoke-tests-geo-services', credentialsId: githubCredentialsId, url: deAnsibleGithubUrl
         sh "ansible-playbook -e NEW_RELIC_AGENT=$env.USE_NEWRELIC -e GEO_API_VERSION=$version -i inventories/$environment/hosts.yml deploy-geo-services-api.yml --vault-password-file ~/.ssh/vault.txt"
       }
     }
@@ -51,6 +51,7 @@ def updateManifestStage(environment, version) {
 
 def testsStage(environment, version) {
   stage("Run Smoke tests on $environment") {
+    def rtGradle = Artifactory.newGradleBuild()
     def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean smokeTest'
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/smokeTest', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
   }
