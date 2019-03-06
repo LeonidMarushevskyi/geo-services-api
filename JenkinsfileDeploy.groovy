@@ -63,7 +63,7 @@ def testsStage(environment) {
       writeFile file: "gradle.properties", text: gradlePropsText
     } else {
       def gradlePropsText = """
-        geoservices.api.url=https://geo.integration.cwds.io/      
+        geoservices.api.url=https://geo.integration.cwds.io/
       """
       writeFile file: "gradle.properties", text: gradlePropsText
     }
