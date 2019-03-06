@@ -52,6 +52,9 @@ def updateManifestStage(environment, version) {
 def testsStage(environment, version) {
   stage("Run Smoke tests on $environment") {
     def rtGradle = Artifactory.newGradleBuild()
+    rtGradle.tool = "Gradle_35"
+    rtGradle.resolver server: serverArti
+    rtGradle.useWrapper = true
     def buildInfo = rtGradle.run buildFile: 'build.gradle', tasks: 'clean smokeTest'
     publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/smokeTest', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
   }
