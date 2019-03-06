@@ -51,6 +51,7 @@ def updateManifestStage(environment, version) {
 
 def testsStage(environment, version) {
   stage("Run Smoke tests on $environment") {
+    def serverArti = Artifactory.newServer url: 'http://pr.dev.cwds.io/artifactory'
     def rtGradle = Artifactory.newGradleBuild()
     rtGradle.tool = "Gradle_35"
     rtGradle.resolver server: serverArti
