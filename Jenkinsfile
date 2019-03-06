@@ -90,22 +90,6 @@ node ('tpt2-slave'){
           publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/integrationTest', reportFiles: 'index.html', reportName: 'Integration Tests Reports', reportTitles: 'Integration tests summary'])
           cleanWs()
         }
-        stage('Deploy to Pre-int') {
-          withCredentials([usernameColonPassword(credentialsId: 'fa186416-faac-44c0-a2fa-089aed50ca17', variable: 'jenkinsauth')]) {
-          sh "curl -u $jenkinsauth 'http://jenkins.mgmt.cwds.io:8080/job/preint/job/deploy-geo-services-api/buildWithParameters?token=deployGeoServicesApiToPreint&version=${newTag}'"
-          }
-        }
-        stage('Update Pre-int Manifest') {
-          updateManifest("geo-services-api", "preint", github_credentials_id, newTag)
-        }    
-        stage('Deploy to Integration') {
-          withCredentials([usernameColonPassword(credentialsId: 'fa186416-faac-44c0-a2fa-089aed50ca17', variable: 'jenkinsauth')]) {
-            sh "curl -u $jenkinsauth 'http://jenkins.mgmt.cwds.io:8080/job/Integration%20Environment/job/deploy-geo-services-api/buildWithParameters?token=deployGeoServicesApiToIntegration&version=${newTag}'"
-          }
-        }
-        stage('Update Integration Manifest') {
-        updateManifest("geo-services-api", "integration", github_credentials_id, newTag)
-        }
    } else {
         cleanWs()
    }
