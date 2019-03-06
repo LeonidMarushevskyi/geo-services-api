@@ -38,7 +38,7 @@ project.ext {
     projectVersion = (isRelease ? projectReleaseVersion : projectSnapshotVersion )
 
     dropwizardVersion = '1.1.0'
-    coreApiVersion = '1.9.4_867-RC'
+    coreApiVersion = '1.19.1_919-RC'
     mapstructVersion = '1.1.0.Final'
     mainClass = 'gov.ca.cwds.geo.GeoServicesApiApplication'
 
@@ -61,7 +61,7 @@ group = projectGroup
 repositories {
     mavenLocal()
     maven {
-        url "http://sonar.dev.cwds.io:8081/artifactory/repo"
+        url "http://pr.dev.cwds.io/artifactory/repo"
     }
 }
 
@@ -195,6 +195,12 @@ task integrationTest(type: Test, dependsOn: testClasses) {
     // URL where integration tests will be pointed to (may change it in gradle.properties)
     systemProperty 'geoservices.api.url', project.property('geoservices.api.url')
 
+}
+
+
+task smokeTest(type: Test) {
+    systemProperty 'geoservices.api.url', project.property('geoservices.api.url')
+    include '**/SmokeTestSuite.*'
 }
 
 task copyConfig(type: Copy) {
