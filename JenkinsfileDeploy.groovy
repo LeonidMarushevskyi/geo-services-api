@@ -56,7 +56,18 @@ def testsStage(environment) {
     rtGradle.tool = "Gradle_35"
     rtGradle.resolver server: serverArti
     rtGradle.useWrapper = true
+    if (environment == 'preint') {
+      def gradlePropsText = """
+        geoservices.api.url=https://geo.preint.cwds.io/
+      """
+      writeFile file: "gradle.properties", text: gradlePropsText
+    } else {
+      def gradlePropsText = """
+        geoservices.api.url=https://geo.integration.cwds.io/      
+      """
+      writeFile file: "gradle.properties", text: gradlePropsText
+    }
     rtGradle.run buildFile: 'build.gradle', tasks: 'clean smokeTest'
-    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/smokeTest', reportFiles: 'index.html', reportName: 'Integration Test Report', reportTitles: ''])
+    publishHTML([allowMissing: true, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'build/reports/tests/smokeTest', reportFiles: 'index.html', reportName: environment + ' Test Report', reportTitles: ''])
   }
 }
