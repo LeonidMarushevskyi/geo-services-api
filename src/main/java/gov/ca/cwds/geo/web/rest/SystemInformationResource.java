@@ -86,7 +86,7 @@ public class SystemInformationResource extends AbstractSystemInformationResource
     try (InputStream input = new URL(archivePath + "/META-INF/MANIFEST.MF").openStream()) {
       attributes = new Manifest(input).getMainAttributes();
     } catch (Exception e) {
-      LOGGER.error("Loading properties from MANIFEST failed! {}", e);
+      LOGGER.error("Loading properties from MANIFEST failed!", e);
     }
     return attributes;
   }
