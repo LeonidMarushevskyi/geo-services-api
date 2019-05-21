@@ -24,7 +24,6 @@ import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 
 /**
@@ -39,8 +38,6 @@ public class SystemInformationResource extends AbstractSystemInformationResource
   private static final String BUILD_VERSION = "Geo-Services-Api-Version";
   private static final String BUILD_NUMBER = "Geo-Services-Api-Build";
   private static final String N_A = "N/A";
-
-  private static final ObjectMapper MAPPER = new ObjectMapper();
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SystemInformationResource.class);
 
