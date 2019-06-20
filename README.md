@@ -1,7 +1,7 @@
 # CWDS GEO Services API
 
 The CWDS GEO Services API provides RESTful API to lookup, suggest, validate and get the distance for physical addresses.
-It uses  SmartyStreets: https://smartystreets.com/ under the hud
+It is an decorator for the SmartyStreets: https://smartystreets.com/ which is uses under the hud.
 
 ## Wiki
 
@@ -47,7 +47,7 @@ To run all unit tests, run `./gradlew test`. If the build is successful, all tes
 ## Development
 
 ### Running the Application
-_Make sure you have configured the valid client id and token for SmartyStreets as well as Perry.  
+_Make sure you have configured the valid client id and token for SmartyStreets as well as Perry (https://github.com/ca-cwds/perry).  
 Checkuot configuration in 'config/geo-services-api.yml'_
 
 To start the application by gradle use: `./gradlew run`
