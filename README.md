@@ -1,7 +1,7 @@
 # CWDS GEO Services API
 
 The CWDS GEO Services API provides RESTful API to lookup, suggest, validate and get the distance for physical addresses.
-It is an decorator for the SmartyStreets: https://smartystreets.com/ which is uses under the hud.
+It is an decorator for the SmartyStreets: https://smartystreets.com/ which is under the hud.
 
 ## Wiki
 
